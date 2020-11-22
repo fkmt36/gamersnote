@@ -12,7 +12,7 @@ type Article struct {
 	Base
 	ArticleID    string `gorm:"primaryKey"`
 	AuthorID     string
-	Author       User `gorm:"foreignKey:AuthorID"`
+	Author       User `gorm:"foreignKey:AuthorID; constraint:OnUpdate:CASCADE"`
 	ThumbnailURL string
 	Title        string
 	Body         string

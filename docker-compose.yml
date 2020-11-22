@@ -70,15 +70,15 @@ services:
     ports:
       - 8080:80
 
-  swagger_ui_service:
-    container_name: swagger-ui
-    image: swaggerapi/swagger-ui
-    volumes:
-      - ./swagger:/usr/src/swagger
-    environment:
-      - SWAGGER_JSON=/usr/src/swagger/swagger.yml
-    # ports:
-    #   - 1111:8080
+  # swagger_ui_service:
+  #   container_name: swagger-ui
+  #   image: swaggerapi/swagger-ui
+  #   volumes:
+  #     - ./swagger:/usr/src/swagger
+  #   environment:
+  #     - SWAGGER_JSON=/usr/src/swagger/swagger.yml
+  #   ports:
+  #     - 1111:8080
 
 volumes:
   pgadmin:
