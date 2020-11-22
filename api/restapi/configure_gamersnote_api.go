@@ -49,6 +49,10 @@ func configureAPI(api *operations.GamersnoteAPIAPI) http.Handler {
 
 	// users
 	api.UserPostUserHandler = user.PostUserHandlerFunc(handlers.GetUsersHandler().PostUser)
+	api.UserPutUserHandler = user.PutUserHandlerFunc(handlers.GetUsersHandler().PutMe)
+	api.UserGetUserHandler = user.GetUserHandlerFunc(handlers.GetUsersHandler().GetUser)
+	api.UserGetMeHandler = user.GetMeHandlerFunc(handlers.GetUsersHandler().GetMe)
+	api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(handlers.GetUsersHandler().DeleteMe)
 
 	// articles
 	api.ArticlePostArticleHandler = article.PostArticleHandlerFunc(handlers.GetArticlesHandler().PostArticle)
