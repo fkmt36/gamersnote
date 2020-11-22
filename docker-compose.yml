@@ -39,6 +39,7 @@ services:
     image: nginx:1.19-alpine
     volumes:
       - ./nginx:/etc/nginx/conf.d
+      - ./swagger:/etc/swagger
     environment:
       - API_HOST=api
       - API_PORT=3000
@@ -53,6 +54,7 @@ services:
     build: ./db
     volumes:
       - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - dbdata:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
@@ -75,8 +77,9 @@ services:
       - ./swagger:/usr/src/swagger
     environment:
       - SWAGGER_JSON=/usr/src/swagger/swagger.yml
-    ports:
-      - 1111:8080
+    # ports:
+    #   - 1111:8080
 
 volumes:
   pgadmin:
+  dbdata:

@@ -14,4 +14,8 @@ server {
   location /api/ {
     proxy_pass http://${API_HOST}:${API_PORT}/api/;
   }
+
+  location /swagger.yml {
+    root /etc/swagger;
+  }
 }
