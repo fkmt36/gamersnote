@@ -1,0 +1,50 @@
+#!/bin/bash
+
+cd `dirname $0`
+CMDNAME=`basename $0`
+if [ $# -ne 2 ]; then
+  echo "Usage: $CMDNAME COMMAND OPTIONS" 1>&2
+  exit 1
+fi
+
+if [ $1 = "dev" ]; then
+
+  if [ $2 = "up" ]; then
+    (cd app && npm install)
+    docker-compose up --build -d
+  fi
+
+  if [ $2 = "down" ]; then
+    docker-compose down
+  fi
+
+  if [ $1 = "clean" ]; then
+    docker-compose down
+    (cd app && rm -rf node_modules .nuxt)
+    (cd api && rm -rf gin-bin go.sum)
+  fi
+
+  if [ $2 = "log:api" ]; then
+    docker container logs api -f
+  fi
+
+  if [ $2 = "log:app" ]; then
+    docker container logs app -f
+  fi
+
+fi
+
+if [ $1 = "gen" ]; then
+
+  if [ $2 = "app" ]; then
+    openapi-generator generate -g typescript-fetch -i ./swagger/swagger.yml -o ./app/api-client --additional-properties=typescriptThreePlus=true
+  fi
+
+  if [ $2 = "api" ]; then
+    tmp="$( cat ./api/restapi/configure_gamersnote_api.go )"
+    rm -rf ./api/restapi ./api/models ./api/cmd
+    swagger generate server -A gamersnote-api -P utils.TokenPayload -t ./api -f ./swagger/swagger.yml --keep-spec-order
+    echo "$tmp" > ./api/restapi/configure_gamersnote_api.go
+  fi
+
+fi

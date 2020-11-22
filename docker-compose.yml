@@ -1,0 +1,82 @@
+version: "3"
+services:
+  app_service:
+    container_name: app
+    build:
+      context: ./app
+      target: dev
+    volumes:
+      - ./app:/usr/src/app
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3000
+      - API_URL=http://nginx # axiosのbaseURL
+      - API_URL_BROWSER=http://localhost:3000 # axiosのbrowserBaseURL
+    command: sh -c "touch node_modules && npm run dev"
+
+  api_service:
+    depends_on:
+      - db_service
+    container_name: api
+    build:
+      context: ./api
+      target: dev
+    volumes:
+      - ./api:/usr/src/api
+    environment:
+      - POSTGRES_HOST
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DBNAME
+      - POSTGRES_PORT
+    command: gin --build ./cmd/gamersnote-api-server --port=3000 --appPort=3001 -i main.go --port=3001
+
+  r_proxy_service:
+    depends_on:
+      - app_service
+      - api_service
+    container_name: nginx
+    image: nginx:1.19-alpine
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    environment:
+      - API_HOST=api
+      - API_PORT=3000
+      - CLIENT_HOST=app
+      - CLIENT_PORT=3000
+    ports:
+      - 3000:80
+    command: sh /etc/nginx/conf.d/init.sh
+
+  db_service:
+    container_name: postgresql
+    build: ./db
+    volumes:
+      - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+
+  db_client_service:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@domain.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - 8080:80
+
+  swagger_ui_service:
+    container_name: swagger-ui
+    image: swaggerapi/swagger-ui
+    volumes:
+      - ./swagger:/usr/src/swagger
+    environment:
+      - SWAGGER_JSON=/usr/src/swagger/swagger.yml
+    ports:
+      - 1111:8080
+
+volumes:
+  pgadmin:

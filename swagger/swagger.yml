@@ -1,0 +1,667 @@
+swagger: "2.0"
+info:
+  title: GamersNoteAPI
+  version: 1.0.0
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: "/api/v1"
+schemes:
+  - http
+
+paths:
+  ############################################################
+  ### user ###################################################
+  ############################################################
+  /users:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - user
+      operationId: postUser
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/user"
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: "#/definitions/user"
+        409:
+          description: Duplicated
+          schema:
+            $ref: "#/definitions/error"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /users/{gamersnote_id}:
+    parameters:
+      - type: string
+        name: gamersnote_id
+        in: path
+        required: true
+    get:
+      tags:
+        - user
+      operationId: getUser
+      responses:
+        200:
+          description: gamersnote_idを指定してユーザーを取得
+          schema:
+            $ref: "#/definitions/user"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+
+  /users/me:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - user
+      operationId: getMe
+      responses:
+        200:
+          description: get me
+          schema:
+            $ref: "#/definitions/user"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - user
+      operationId: putUser
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/user"
+      responses:
+        200:
+          description: Updated
+          schema:
+            $ref: "#/definitions/user"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - user
+      operationId: deleteUser
+      responses:
+        204:
+          description: Deleted
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  
+  ############################################################
+  ### article ################################################
+  ############################################################
+  /articles:
+    get:
+      tags:
+        - article
+      operationId: getArticles
+      parameters:
+        - type: string
+          name: since
+          in: query
+        - type: string
+          name: keyword
+          in: query
+      responses:
+        200:
+          description: Get articles
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/article"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - article
+      operationId: postArticle
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/article"
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: "#/definitions/article"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /articles/{article_id}:
+    parameters:
+      - type: string
+        name: article_id
+        in: path
+        required: true
+    get:
+      tags:
+        - article
+      operationId: getArticle
+      responses:
+        200:
+          description: Get article
+          schema:
+            $ref: "#/definitions/article"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - article
+      operationId: putArticle
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/article"
+      responses:
+        200:
+          description: Updated
+          schema:
+            $ref: "#/definitions/article"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - article
+      operationId: deleteArticle
+      responses:
+        204:
+          description: Deleted
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /users/{gamersnote_id}/articles:
+    get:
+      tags:
+        - article
+      parameters:
+        - type: string
+          name: gamersnote_id
+          in: path
+          required: true
+      operationId: getTheUsersArticles
+      responses:
+        200:
+          description: get articles by user
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/article"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /users/me/follows/articles:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - article
+      operationId: getFollowsArticles
+      parameters:
+        - name: since
+          in: query
+          type: string
+      responses:
+        200:
+          description: get follows articles
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/article"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  
+  ############################################################
+  ### comment ################################################
+  ############################################################
+  /articles/{article_id}/comments:
+    parameters:
+      - type: string
+        name: article_id
+        in: path
+        required: true
+    get:
+      tags:
+        - comment
+      operationId: getComments
+      responses:
+        200:
+          description: Successed
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/comment"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - comment
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/comment"
+      operationId: postComment
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: "#/definitions/article"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /articles/{article_id}/comments/{comment_id}:
+    parameters:
+      - type: string
+        name: article_id
+        in: path
+        required: true
+      - type: string
+        name: comment_id
+        in: path
+        required: true
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - comment
+      operationId: putComment
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/comment"
+      responses:
+        200:
+          description: Updated
+          schema:
+            $ref: "#/definitions/comment"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - comment
+      operationId: deleteComment
+      responses:
+        204:
+          description: Deleted
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+
+  ############################################################
+  ### follow #################################################
+  ############################################################
+  /users/me/follows:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - follow
+      operationId: getFollows
+      responses:
+        200:
+          description: get follows
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/user"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /users/me/follows/{user_id}:
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - follow
+      operationId: putFollow
+      parameters:
+        - type: string
+          name: user_id
+          in: path
+          required: true
+      responses:
+        200:
+          description: Successed
+
+  ############################################################
+  ### notification ###########################################
+  ############################################################
+  /users/me/notifications:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - notification
+      operationId: getNotifications
+      responses:
+        200:
+          description: get notifications
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/notification"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /users/me/notifications/{notification_id}/read:
+    parameters:
+      - type: string
+        name: notification_id
+        in: path
+        required: true
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - notification
+      operationId: putNotificationRead
+      responses:
+        200:
+          description: Successed
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+
+  ############################################################
+  ### stock ##################################################
+  ############################################################
+  /users/me/stocks:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - stock
+      operationId: getStockedArticles
+      responses:
+        200:
+          description: get stocks
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/article"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /users/me/stocks/{article_id}:
+    parameters:
+      - type: string
+        name: article_id
+        in: path
+        required: true
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - stock
+      operationId: putStock
+      responses:
+        200:
+          description: Successed
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - stock
+      operationId: deleteStock
+      responses:
+        204:
+          description: Deleted
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+
+  ############################################################
+  ### like ###################################################
+  ############################################################
+  /users/me/likes:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - like
+      operationId: getLikedArticles
+      responses:
+        200:
+          description: get liked articles
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/article"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /users/me/likes/{article_id}:
+    parameters:
+      - type: string
+        name: article_id
+        in: path
+        required: true
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - like
+      operationId: putLike
+      responses:
+        200:
+          description: Successed
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - like
+      operationId: deleteLike
+      responses:
+        204:
+          description: Deleted
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+
+
+
+  
+definitions:
+  user:
+    type: object
+    required:
+      - gamersnote_id
+      - username
+      - avatar_url
+      - message
+    properties:
+      user_id:
+        type: string
+        readOnly: true
+      gamersnote_id:
+        type: string
+        pattern: "[A-Za-z0-9\_]{4,12}"
+        minLength: 4
+        maxLength: 12
+      username:
+        type: string
+        minLength: 4
+        maxLength: 20
+      avatar_url:
+        type: string
+      message:
+        type: string
+        minLength: 0
+        maxLength: 200
+      registered_at:
+        type: string
+        format: date
+        readOnly: true
+  article:
+    type: object
+    required:
+      - thumbnail_url
+      - title
+      - body
+      - is_published
+    properties:
+      article_id:
+        type: string
+        readOnly: true
+      author:
+        readOnly: true
+        allOf:
+          - $ref: '#/definitions/user'
+      thumbnail_url:
+        type: string
+      title:
+        type: string
+      body:
+        type: string
+      like_count:
+        type: integer
+        readOnly: true
+      comments:
+        readOnly: true
+        type: array
+        items:
+          $ref: "#/definitions/comment"
+      is_published:
+        type: boolean
+      published_at:
+        type: string
+        format: date
+        readOnly: true
+      created_at:
+        type: string
+        format: date
+        readOnly: true
+      updated_at:
+        type: string
+        format: date
+        readOnly: true
+  notification:
+    type: object
+    properties:
+      notification_id:
+        type: string
+        readOnly: true
+      sender:
+        $ref: "#/definitions/user"
+      category:
+        type: string
+        readOnly: true
+      body:
+        type: string
+        readOnly: true
+      is_read:
+        type: boolean
+        readOnly: true
+      created_at:
+        type: string
+        format: date
+        readOnly: true
+  comment:
+    type: object
+    required:
+      - body
+    properties:
+      comment_id:
+        type: string
+        readOnly: true
+      replies:
+        readOnly: true
+        type: array
+        items:
+          $ref: "#/definitions/comment"
+      author:
+        readOnly: true
+        allOf:
+          - $ref: "#/definitions/user"
+      body:
+        type: string
+      created_at:
+        type: string
+        format: date
+        readOnly: true
+  error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int64
+      message:
+        type: string
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
