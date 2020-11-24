@@ -1,7 +1,7 @@
 import { Module, VuexModule, Mutation } from 'vuex-module-decorators'
 
 @Module({
-  name: 'components/the-menu-state',
+  name: 'states/the-menu-state',
   stateFactory: true,
   namespaced: true,
 })

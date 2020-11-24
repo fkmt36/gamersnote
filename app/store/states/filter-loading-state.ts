@@ -1,7 +1,7 @@
 import { Module, VuexModule, Mutation } from 'vuex-module-decorators'
 
 @Module({
-  name: 'components/filter-loading-state',
+  name: 'states/filter-loading-state',
   stateFactory: true,
   namespaced: true,
 })

@@ -4,16 +4,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { filterLoadingState } from '@/store'
+import { filterLoadingState, meStore, authState } from '@/store'
 
 export default Vue.extend({
-  data() {
-    return {
-      showInputEmail: false,
-      inputEmail: '',
-    }
-  },
-
   middleware({ route, redirect, $fire }) {
     if (!$fire.auth.isSignInWithEmailLink(route.fullPath)) {
       redirect('/')
@@ -25,30 +18,30 @@ export default Vue.extend({
   },
 
   async mounted() {
-    try {
-      const email =
+    await authState.verifyEmailFromEmailLink(
+      this.getEmail(),
+      window.location.href
+    )
+    await meStore.fetchMe()
+    if (authState.getToken && meStore.getMe) {
+      this.$router.push('/')
+    } else if (authState.getToken && !meStore.getMe) {
+      this.$router.push('/welcome')
+    } else {
+      // エラースタックの処理
+      this.$router.push('/')
+    }
+    filterLoadingState.clearLoading()
+  },
+  methods: {
+    getEmail(): string {
+      // TODO: メールアドレス再入力を強化
+      return (
         window.localStorage.getItem('emailForSignIn') ||
         window.prompt('確認のためにメールアドレスを入力してください') ||
         ''
-      const user = await this.$fire.auth.signInWithEmailLink(
-        email,
-        window.location.href
       )
-      window.localStorage.removeItem('emailForSignIn')
-      if (
-        user &&
-        user.additionalUserInfo &&
-        user.additionalUserInfo.isNewUser
-      ) {
-        // TODO: user作成APIを叩く
-        // TODO: 帰ってくるuserをstoreに保存
-      }
-    } catch (err) {
-      console.error(err)
-    } finally {
-      this.$router.push('/')
-      filterLoadingState.clearLoading()
-    }
+    },
   },
 })
 </script>

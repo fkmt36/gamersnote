@@ -5,7 +5,7 @@
         <div>ゲームの楽しさを</div>
         <div>文章で共有しよう</div>
       </h1>
-      <div>
+      <div v-show="!isLogin">
         <p>今すぐはじめる</p>
         <div id="login-btn">
           <nuxt-link to="/login">ログイン・新規登録</nuxt-link>
@@ -21,10 +21,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import ListArticle from '@/components/ListArticle.vue'
+import { meStore } from '@/store'
 
 export default Vue.extend({
   components: {
     ListArticle,
+  },
+  computed: {
+    isLogin(): boolean {
+      return !!meStore.getMe
+    },
   },
 })
 </script>

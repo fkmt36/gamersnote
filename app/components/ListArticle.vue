@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Article } from '@/api-client'
+import { Article } from '@/api-client-axios'
 import { articlesStore } from '@/store'
 import CardArticle from './CardArticle.vue'
 
@@ -33,7 +33,6 @@ export default Vue.extend({
   },
 
   mounted() {
-    console.log('hit')
     articlesStore.fetchAllArticles()
   },
 })

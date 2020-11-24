@@ -1,7 +1,7 @@
 import { Module, VuexModule, Mutation } from 'vuex-module-decorators'
 
 @Module({
-  name: 'components/filter-darken-state',
+  name: 'states/filter-darken-state',
   stateFactory: true,
   namespaced: true,
 })
