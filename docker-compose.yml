@@ -29,6 +29,7 @@ services:
       - POSTGRES_PASSWORD
       - POSTGRES_DBNAME
       - POSTGRES_PORT
+      - GOOGLE_APPLICATION_CREDENTIALS=/usr/src/api/firebase.json
     command: gin --build ./cmd/gamersnote-api-server --port=3000 --appPort=3001 -i main.go --port=3001
 
   r_proxy_service:
