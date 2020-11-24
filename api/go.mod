@@ -3,6 +3,7 @@ module gamersnote.com/v1
 go 1.15
 
 require (
+	firebase.google.com/go/v4 v4.1.0
 	github.com/go-openapi/errors v0.19.8
 	github.com/go-openapi/loads v0.19.5
 	github.com/go-openapi/runtime v0.19.23
