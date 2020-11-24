@@ -18,7 +18,7 @@ if [ $1 = "dev" ]; then
     docker-compose down
   fi
 
-  if [ $1 = "clean" ]; then
+  if [ $2 = "clean" ]; then
     docker-compose down
     (cd app && rm -rf node_modules .nuxt)
     (cd api && rm -rf gin-bin go.sum)
@@ -37,7 +37,11 @@ fi
 if [ $1 = "gen" ]; then
 
   if [ $2 = "app" ]; then
-    openapi-generator generate -g typescript-fetch -i ./swagger/swagger.yml -o ./app/api-client --additional-properties=typescriptThreePlus=true
+    docker run --rm -v "${PWD}:/gamersnote" openapitools/openapi-generator-cli:v5.0.0-beta2 generate \
+      -g typescript-axios \
+      -i /gamersnote/swagger/swagger.yml \
+      -o /gamersnote/app/api-client-axios \
+      # --additional-properties=modelPropertyNaming=camelCase
   fi
 
   if [ $2 = "api" ]; then
