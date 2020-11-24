@@ -29,19 +29,26 @@ export default Vue.extend({
   },
 
   methods: {
-    async send(): Promise<void> {
+    async send() {
+      filterLoadingState.setLoading({ isLoading: true, message: '処理中...' })
+      if (await this.sendEmailLink()) {
+        window.localStorage.setItem('emailForSignIn', this.email)
+        this.$router.push('/login/emailed')
+      } else {
+        // TODO: エラー処理
+      }
+      filterLoadingState.clearLoading()
+    },
+
+    async sendEmailLink(): Promise<boolean> {
       try {
-        filterLoadingState.setLoading({ isLoading: true, message: '処理中...' })
         await this.$fire.auth.sendSignInLinkToEmail(this.email, {
           url: 'http://localhost:3000/login/callback',
           handleCodeInApp: true,
         })
-        window.localStorage.setItem('emailForSignIn', this.email)
-        this.$router.push('/login/emailed')
-      } catch (err) {
-        console.error(err)
-      } finally {
-        filterLoadingState.clearLoading()
+        return true
+      } catch (e) {
+        return false
       }
     },
   },

@@ -19,7 +19,7 @@ export default {
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [{ src: '@/plugins/api.ts' }],
+  plugins: [{ src: '@/plugins/fire.ts' }],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -36,6 +36,7 @@ export default {
     '@nuxtjs/axios',
     'nuxt-fontawesome',
     '@nuxtjs/firebase',
+    '@nuxtjs/pwa',
   ],
 
   firebase: {
@@ -52,10 +53,30 @@ export default {
     services: {
       auth: {
         persistence: 'local',
-        ssr: false, // default
-        // emulatorPort: 9099,
-        // emulatorHost: 'http://localhost',
+        initialize: {
+          onAuthStateChangedAction: 'states/auth-state/onAuthStateChanged',
+          subscribeManually: false,
+        },
+        ssr: true,
       },
+    },
+  },
+
+  pwa: {
+    // disable the modules you don't need
+    meta: false,
+    icon: false,
+    // if you omit a module key form configuration sensible defaults will be applied
+    // manifest: false,
+
+    workbox: {
+      importScripts: [
+        // ...
+        '/firebase-auth-sw.js',
+      ],
+      // by default the workbox module will not install the service worker in dev environment to avoid conflicts with HMR
+      // only set this true for testing and remember to always clear your browser cache in development
+      dev: true,
     },
   },
 
@@ -76,5 +97,8 @@ export default {
         icons: ['fab'],
       },
     ],
+  },
+  router: {
+    middleware: ['new-user'],
   },
 }

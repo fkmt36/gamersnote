@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { Article } from '@/api-client'
+import { Article } from '@/api-client-axios'
 
 export default Vue.extend({
   name: 'CardArticle',

@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
-import { Article } from '@/api-client'
+import { Article } from '@/api-client-axios'
 import { $articleApi } from '@/plugins/api'
 
 @Module({
@@ -22,9 +22,8 @@ export default class ArticlesStore extends VuexModule {
   @Action
   async fetchAllArticles() {
     try {
-      console.log('getAllArticles 実行')
-      const articles = await $articleApi().getArticlesByKeyword({})
-      this.setArticles(articles)
+      const res = await $articleApi.getArticles()
+      this.setArticles(res.data)
     } catch (err) {}
   }
 }

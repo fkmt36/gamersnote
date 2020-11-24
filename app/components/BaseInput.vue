@@ -12,6 +12,7 @@ import Vue, { PropOptions } from 'vue'
 export enum InputType {
   Email = 'email',
   Password = 'password',
+  Text = 'text',
 }
 
 export default Vue.extend({
