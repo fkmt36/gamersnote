@@ -1,6 +1,9 @@
 package utils
 
 import (
+	"context"
+
+	"gamersnote.com/v1/configs"
 	"github.com/go-openapi/errors"
 )
 
@@ -9,12 +12,20 @@ type TokenPayload struct {
 }
 
 func AuthHandler(token string) (*TokenPayload, error) {
-	if token != "" {
-		println(token)
-		payload := &TokenPayload{
-			Uid: token,
-		}
-		return payload, nil
+	ctx := context.Background()
+	client, err := configs.GetFirebaseApp().Auth(ctx)
+	if err != nil {
+		return nil, errors.Unauthenticated("invalid token")
 	}
-	return nil, errors.Unauthenticated("invalid token")
+	result, err := client.VerifyIDToken(ctx, token)
+	if err != nil {
+		return nil, errors.Unauthenticated("invalid token")
+	}
+	if result == nil {
+		return nil, errors.Unauthenticated("invalid token")
+	}
+	payload := &TokenPayload{
+		Uid: result.UID,
+	}
+	return payload, nil
 }

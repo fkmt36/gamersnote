@@ -76,6 +76,7 @@ func configureTLS(tlsConfig *tls.Config) {
 // scheme value will be set accordingly: "http", "https" or "unix"
 func configureServer(s *http.Server, scheme, addr string) {
 	configs.GetDB()
+	configs.GetFirebaseApp()
 }
 
 // The middleware configuration is for the handler executors. These do not apply to the swagger.json document.
