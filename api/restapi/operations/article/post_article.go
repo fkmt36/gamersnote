@@ -9,21 +9,19 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
-
-	"gamersnote.com/v1/utils"
 )
 
 // PostArticleHandlerFunc turns a function with the right signature into a post article handler
-type PostArticleHandlerFunc func(PostArticleParams, *utils.TokenPayload) middleware.Responder
+type PostArticleHandlerFunc func(PostArticleParams) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn PostArticleHandlerFunc) Handle(params PostArticleParams, principal *utils.TokenPayload) middleware.Responder {
-	return fn(params, principal)
+func (fn PostArticleHandlerFunc) Handle(params PostArticleParams) middleware.Responder {
+	return fn(params)
 }
 
 // PostArticleHandler interface for that can handle valid post article params
 type PostArticleHandler interface {
-	Handle(PostArticleParams, *utils.TokenPayload) middleware.Responder
+	Handle(PostArticleParams) middleware.Responder
 }
 
 // NewPostArticle creates a new http.Handler for the post article operation
@@ -48,25 +46,12 @@ func (o *PostArticle) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 	var Params = NewPostArticleParams()
 
-	uprinc, aCtx, err := o.Context.Authorize(r, route)
-	if err != nil {
-		o.Context.Respond(rw, r, route.Produces, route, err)
-		return
-	}
-	if aCtx != nil {
-		r = aCtx
-	}
-	var principal *utils.TokenPayload
-	if uprinc != nil {
-		principal = uprinc.(*utils.TokenPayload) // this is really a utils.TokenPayload, I promise
-	}
-
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params, principal) // actually handle the request
+	res := o.Handler.Handle(Params) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 

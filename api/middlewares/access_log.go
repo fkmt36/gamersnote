@@ -26,7 +26,6 @@ func (lrw *captureResponseWriter) WriteHeader(code int) {
 // AccessLog アクセスログミドルウェア
 func AccessLog(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		start := time.Now()
 
 		log.Infof("[ACCESS] START %v %v\n", r.Method, r.URL)

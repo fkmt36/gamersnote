@@ -9,21 +9,19 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
-
-	"gamersnote.com/v1/utils"
 )
 
 // PutFollowHandlerFunc turns a function with the right signature into a put follow handler
-type PutFollowHandlerFunc func(PutFollowParams, *utils.TokenPayload) middleware.Responder
+type PutFollowHandlerFunc func(PutFollowParams) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn PutFollowHandlerFunc) Handle(params PutFollowParams, principal *utils.TokenPayload) middleware.Responder {
-	return fn(params, principal)
+func (fn PutFollowHandlerFunc) Handle(params PutFollowParams) middleware.Responder {
+	return fn(params)
 }
 
 // PutFollowHandler interface for that can handle valid put follow params
 type PutFollowHandler interface {
-	Handle(PutFollowParams, *utils.TokenPayload) middleware.Responder
+	Handle(PutFollowParams) middleware.Responder
 }
 
 // NewPutFollow creates a new http.Handler for the put follow operation
@@ -48,25 +46,12 @@ func (o *PutFollow) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 	var Params = NewPutFollowParams()
 
-	uprinc, aCtx, err := o.Context.Authorize(r, route)
-	if err != nil {
-		o.Context.Respond(rw, r, route.Produces, route, err)
-		return
-	}
-	if aCtx != nil {
-		r = aCtx
-	}
-	var principal *utils.TokenPayload
-	if uprinc != nil {
-		principal = uprinc.(*utils.TokenPayload) // this is really a utils.TokenPayload, I promise
-	}
-
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params, principal) // actually handle the request
+	res := o.Handler.Handle(Params) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 

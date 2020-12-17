@@ -29,7 +29,7 @@ func NewGetUser(ctx *middleware.Context, handler GetUserHandler) *GetUser {
 	return &GetUser{Context: ctx, Handler: handler}
 }
 
-/*GetUser swagger:route GET /users/{gamersnote_id} user getUser
+/*GetUser swagger:route GET /users/{username} user getUser
 
 GetUser get user API
 

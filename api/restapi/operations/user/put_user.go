@@ -9,21 +9,19 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
-
-	"gamersnote.com/v1/utils"
 )
 
 // PutUserHandlerFunc turns a function with the right signature into a put user handler
-type PutUserHandlerFunc func(PutUserParams, *utils.TokenPayload) middleware.Responder
+type PutUserHandlerFunc func(PutUserParams) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn PutUserHandlerFunc) Handle(params PutUserParams, principal *utils.TokenPayload) middleware.Responder {
-	return fn(params, principal)
+func (fn PutUserHandlerFunc) Handle(params PutUserParams) middleware.Responder {
+	return fn(params)
 }
 
 // PutUserHandler interface for that can handle valid put user params
 type PutUserHandler interface {
-	Handle(PutUserParams, *utils.TokenPayload) middleware.Responder
+	Handle(PutUserParams) middleware.Responder
 }
 
 // NewPutUser creates a new http.Handler for the put user operation
@@ -48,25 +46,12 @@ func (o *PutUser) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 	var Params = NewPutUserParams()
 
-	uprinc, aCtx, err := o.Context.Authorize(r, route)
-	if err != nil {
-		o.Context.Respond(rw, r, route.Produces, route, err)
-		return
-	}
-	if aCtx != nil {
-		r = aCtx
-	}
-	var principal *utils.TokenPayload
-	if uprinc != nil {
-		principal = uprinc.(*utils.TokenPayload) // this is really a utils.TokenPayload, I promise
-	}
-
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params, principal) // actually handle the request
+	res := o.Handler.Handle(Params) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 

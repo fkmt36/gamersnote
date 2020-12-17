@@ -1,19 +1,11 @@
 <template>
-  <div>
-    <div id="header-section">
-      <h1>
-        <div>ゲームの楽しさを</div>
-        <div>文章で共有しよう</div>
-      </h1>
-      <div v-show="!isLogin">
-        <p>今すぐはじめる</p>
-        <div id="login-btn">
-          <nuxt-link to="/login">ログイン・新規登録</nuxt-link>
-        </div>
-      </div>
+  <div class="home">
+    <div class="action">
+      <span class="sort-title">最新</span>
+      <font-awesome-icon :icon="['fas', 'sort']" />
     </div>
-    <div id="list-article-section">
-      <ListArticle />
+    <div class="article-list">
+      <ListArticle :articles="articles" />
     </div>
   </div>
 </template>
@@ -21,16 +13,28 @@
 <script lang="ts">
 import Vue from 'vue'
 import ListArticle from '@/components/ListArticle.vue'
-import { meStore } from '@/store'
+import { $articleApi } from '@/plugins/api'
+import { Article } from '~/api-client-axios'
+
+interface Data {
+  articles: Array<Article>
+}
 
 export default Vue.extend({
   components: {
     ListArticle,
   },
-  computed: {
-    isLogin(): boolean {
-      return !!meStore.getMe
-    },
+  async asyncData(): Promise<Data> {
+    try {
+      const result = await $articleApi().getArticles()
+      return {
+        articles: result.data,
+      }
+    } catch (e) {
+      return {
+        articles: [],
+      }
+    }
   },
 })
 </script>
@@ -38,55 +42,26 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import 'assets/global';
 
-#header-section {
+.home {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 40px;
+  font-weight: bold;
+  color: $dark-grey;
   padding: 0 15px;
 
-  h1 {
-    font-size: $fs-title;
-    font-weight: bold;
-    color: white;
-    margin: 20px auto;
-    max-width: 310px;
-
-    div:nth-of-type(1) {
-      text-align: left;
-      margin-bottom: 20px;
-    }
-
-    div:nth-of-type(2) {
-      text-align: right;
-    }
-  }
-
-  > div:nth-of-type(1) {
-    max-width: 310px;
-    margin: 50px auto;
-
-    p {
-      color: white;
-      font-weight: bold;
-    }
-
-    #login-btn {
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: $btn-yellow;
-      margin: 10px auto 0 auto;
-      border-radius: 20px;
-      width: 100%;
-      height: 35px;
-      max-width: 350px;
-      font-weight: bold;
-      padding: 5px;
-      box-shadow: $normal-shadow;
-    }
+  .sort-title {
+    margin-right: 5px;
   }
 }
 
-#list-article-section {
-  background-color: white;
-  border-radius: 10px 10px 0 0;
+.article-list {
+  padding: 0 15px;
 }
 </style>

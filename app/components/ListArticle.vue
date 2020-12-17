@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="list-article">
     <CardArticle
       v-for="article in articles"
       :key="article.articleId"
@@ -9,9 +9,8 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropOptions } from 'vue'
 import { Article } from '@/api-client-axios'
-import { articlesStore } from '@/store'
 import CardArticle from './CardArticle.vue'
 
 export default Vue.extend({
@@ -21,19 +20,11 @@ export default Vue.extend({
     CardArticle,
   },
 
-  // asyncData() {
-  //   console.log('hit')
-  //   articlesStore.fetchAllArticles()
-  // },
-
-  computed: {
-    articles(): Array<Article> {
-      return articlesStore.getAllArticles
-    },
-  },
-
-  mounted() {
-    articlesStore.fetchAllArticles()
+  props: {
+    articles: {
+      type: Array,
+      required: true,
+    } as PropOptions<Array<Article>>,
   },
 })
 </script>

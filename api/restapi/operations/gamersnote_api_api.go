@@ -22,11 +22,11 @@ import (
 	"gamersnote.com/v1/restapi/operations/article"
 	"gamersnote.com/v1/restapi/operations/comment"
 	"gamersnote.com/v1/restapi/operations/follow"
+	"gamersnote.com/v1/restapi/operations/image"
 	"gamersnote.com/v1/restapi/operations/like"
 	"gamersnote.com/v1/restapi/operations/notification"
 	"gamersnote.com/v1/restapi/operations/stock"
 	"gamersnote.com/v1/restapi/operations/user"
-	"gamersnote.com/v1/utils"
 )
 
 // NewGamersnoteAPIAPI creates a new GamersnoteAPI instance
@@ -47,23 +47,24 @@ func NewGamersnoteAPIAPI(spec *loads.Document) *GamersnoteAPIAPI {
 		APIKeyAuthenticator: security.APIKeyAuth,
 		BearerAuthenticator: security.BearerAuth,
 
-		JSONConsumer: runtime.JSONConsumer(),
+		JSONConsumer:          runtime.JSONConsumer(),
+		MultipartformConsumer: runtime.DiscardConsumer,
 
 		JSONProducer: runtime.JSONProducer(),
 
-		ArticleDeleteArticleHandler: article.DeleteArticleHandlerFunc(func(params article.DeleteArticleParams, principal *utils.TokenPayload) middleware.Responder {
+		ArticleDeleteArticleHandler: article.DeleteArticleHandlerFunc(func(params article.DeleteArticleParams) middleware.Responder {
 			return middleware.NotImplemented("operation article.DeleteArticle has not yet been implemented")
 		}),
-		CommentDeleteCommentHandler: comment.DeleteCommentHandlerFunc(func(params comment.DeleteCommentParams, principal *utils.TokenPayload) middleware.Responder {
+		CommentDeleteCommentHandler: comment.DeleteCommentHandlerFunc(func(params comment.DeleteCommentParams) middleware.Responder {
 			return middleware.NotImplemented("operation comment.DeleteComment has not yet been implemented")
 		}),
-		LikeDeleteLikeHandler: like.DeleteLikeHandlerFunc(func(params like.DeleteLikeParams, principal *utils.TokenPayload) middleware.Responder {
+		LikeDeleteLikeHandler: like.DeleteLikeHandlerFunc(func(params like.DeleteLikeParams) middleware.Responder {
 			return middleware.NotImplemented("operation like.DeleteLike has not yet been implemented")
 		}),
-		StockDeleteStockHandler: stock.DeleteStockHandlerFunc(func(params stock.DeleteStockParams, principal *utils.TokenPayload) middleware.Responder {
+		StockDeleteStockHandler: stock.DeleteStockHandlerFunc(func(params stock.DeleteStockParams) middleware.Responder {
 			return middleware.NotImplemented("operation stock.DeleteStock has not yet been implemented")
 		}),
-		UserDeleteUserHandler: user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, principal *utils.TokenPayload) middleware.Responder {
+		UserDeleteUserHandler: user.DeleteUserHandlerFunc(func(params user.DeleteUserParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.DeleteUser has not yet been implemented")
 		}),
 		ArticleGetArticleHandler: article.GetArticleHandlerFunc(func(params article.GetArticleParams) middleware.Responder {
@@ -75,22 +76,22 @@ func NewGamersnoteAPIAPI(spec *loads.Document) *GamersnoteAPIAPI {
 		CommentGetCommentsHandler: comment.GetCommentsHandlerFunc(func(params comment.GetCommentsParams) middleware.Responder {
 			return middleware.NotImplemented("operation comment.GetComments has not yet been implemented")
 		}),
-		FollowGetFollowsHandler: follow.GetFollowsHandlerFunc(func(params follow.GetFollowsParams, principal *utils.TokenPayload) middleware.Responder {
+		FollowGetFollowsHandler: follow.GetFollowsHandlerFunc(func(params follow.GetFollowsParams) middleware.Responder {
 			return middleware.NotImplemented("operation follow.GetFollows has not yet been implemented")
 		}),
-		ArticleGetFollowsArticlesHandler: article.GetFollowsArticlesHandlerFunc(func(params article.GetFollowsArticlesParams, principal *utils.TokenPayload) middleware.Responder {
+		ArticleGetFollowsArticlesHandler: article.GetFollowsArticlesHandlerFunc(func(params article.GetFollowsArticlesParams) middleware.Responder {
 			return middleware.NotImplemented("operation article.GetFollowsArticles has not yet been implemented")
 		}),
-		LikeGetLikedArticlesHandler: like.GetLikedArticlesHandlerFunc(func(params like.GetLikedArticlesParams, principal *utils.TokenPayload) middleware.Responder {
+		LikeGetLikedArticlesHandler: like.GetLikedArticlesHandlerFunc(func(params like.GetLikedArticlesParams) middleware.Responder {
 			return middleware.NotImplemented("operation like.GetLikedArticles has not yet been implemented")
 		}),
-		UserGetMeHandler: user.GetMeHandlerFunc(func(params user.GetMeParams, principal *utils.TokenPayload) middleware.Responder {
+		UserGetMeHandler: user.GetMeHandlerFunc(func(params user.GetMeParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetMe has not yet been implemented")
 		}),
-		NotificationGetNotificationsHandler: notification.GetNotificationsHandlerFunc(func(params notification.GetNotificationsParams, principal *utils.TokenPayload) middleware.Responder {
+		NotificationGetNotificationsHandler: notification.GetNotificationsHandlerFunc(func(params notification.GetNotificationsParams) middleware.Responder {
 			return middleware.NotImplemented("operation notification.GetNotifications has not yet been implemented")
 		}),
-		StockGetStockedArticlesHandler: stock.GetStockedArticlesHandlerFunc(func(params stock.GetStockedArticlesParams, principal *utils.TokenPayload) middleware.Responder {
+		StockGetStockedArticlesHandler: stock.GetStockedArticlesHandlerFunc(func(params stock.GetStockedArticlesParams) middleware.Responder {
 			return middleware.NotImplemented("operation stock.GetStockedArticles has not yet been implemented")
 		}),
 		ArticleGetTheUsersArticlesHandler: article.GetTheUsersArticlesHandlerFunc(func(params article.GetTheUsersArticlesParams) middleware.Responder {
@@ -99,43 +100,48 @@ func NewGamersnoteAPIAPI(spec *loads.Document) *GamersnoteAPIAPI {
 		UserGetUserHandler: user.GetUserHandlerFunc(func(params user.GetUserParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetUser has not yet been implemented")
 		}),
-		ArticlePostArticleHandler: article.PostArticleHandlerFunc(func(params article.PostArticleParams, principal *utils.TokenPayload) middleware.Responder {
+		UserPatchUserSigninedHandler: user.PatchUserSigninedHandlerFunc(func(params user.PatchUserSigninedParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.PatchUserSignined has not yet been implemented")
+		}),
+		UserPatchUserSignoutedHandler: user.PatchUserSignoutedHandlerFunc(func(params user.PatchUserSignoutedParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.PatchUserSignouted has not yet been implemented")
+		}),
+		UserPatchUserVerifiedHandler: user.PatchUserVerifiedHandlerFunc(func(params user.PatchUserVerifiedParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.PatchUserVerified has not yet been implemented")
+		}),
+		ArticlePostArticleHandler: article.PostArticleHandlerFunc(func(params article.PostArticleParams) middleware.Responder {
 			return middleware.NotImplemented("operation article.PostArticle has not yet been implemented")
 		}),
-		CommentPostCommentHandler: comment.PostCommentHandlerFunc(func(params comment.PostCommentParams, principal *utils.TokenPayload) middleware.Responder {
+		CommentPostCommentHandler: comment.PostCommentHandlerFunc(func(params comment.PostCommentParams) middleware.Responder {
 			return middleware.NotImplemented("operation comment.PostComment has not yet been implemented")
 		}),
-		UserPostUserHandler: user.PostUserHandlerFunc(func(params user.PostUserParams, principal *utils.TokenPayload) middleware.Responder {
+		UserPostUserHandler: user.PostUserHandlerFunc(func(params user.PostUserParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.PostUser has not yet been implemented")
 		}),
-		ArticlePutArticleHandler: article.PutArticleHandlerFunc(func(params article.PutArticleParams, principal *utils.TokenPayload) middleware.Responder {
+		ArticlePutArticleHandler: article.PutArticleHandlerFunc(func(params article.PutArticleParams) middleware.Responder {
 			return middleware.NotImplemented("operation article.PutArticle has not yet been implemented")
 		}),
-		CommentPutCommentHandler: comment.PutCommentHandlerFunc(func(params comment.PutCommentParams, principal *utils.TokenPayload) middleware.Responder {
+		CommentPutCommentHandler: comment.PutCommentHandlerFunc(func(params comment.PutCommentParams) middleware.Responder {
 			return middleware.NotImplemented("operation comment.PutComment has not yet been implemented")
 		}),
-		FollowPutFollowHandler: follow.PutFollowHandlerFunc(func(params follow.PutFollowParams, principal *utils.TokenPayload) middleware.Responder {
+		FollowPutFollowHandler: follow.PutFollowHandlerFunc(func(params follow.PutFollowParams) middleware.Responder {
 			return middleware.NotImplemented("operation follow.PutFollow has not yet been implemented")
 		}),
-		LikePutLikeHandler: like.PutLikeHandlerFunc(func(params like.PutLikeParams, principal *utils.TokenPayload) middleware.Responder {
+		LikePutLikeHandler: like.PutLikeHandlerFunc(func(params like.PutLikeParams) middleware.Responder {
 			return middleware.NotImplemented("operation like.PutLike has not yet been implemented")
 		}),
-		NotificationPutNotificationReadHandler: notification.PutNotificationReadHandlerFunc(func(params notification.PutNotificationReadParams, principal *utils.TokenPayload) middleware.Responder {
+		NotificationPutNotificationReadHandler: notification.PutNotificationReadHandlerFunc(func(params notification.PutNotificationReadParams) middleware.Responder {
 			return middleware.NotImplemented("operation notification.PutNotificationRead has not yet been implemented")
 		}),
-		StockPutStockHandler: stock.PutStockHandlerFunc(func(params stock.PutStockParams, principal *utils.TokenPayload) middleware.Responder {
+		StockPutStockHandler: stock.PutStockHandlerFunc(func(params stock.PutStockParams) middleware.Responder {
 			return middleware.NotImplemented("operation stock.PutStock has not yet been implemented")
 		}),
-		UserPutUserHandler: user.PutUserHandlerFunc(func(params user.PutUserParams, principal *utils.TokenPayload) middleware.Responder {
+		UserPutUserHandler: user.PutUserHandlerFunc(func(params user.PutUserParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.PutUser has not yet been implemented")
 		}),
-
-		// Applies when the "Authorization" header is set
-		BearerAuth: func(token string) (*utils.TokenPayload, error) {
-			return nil, errors.NotImplemented("api key auth (Bearer) Authorization from header param [Authorization] has not yet been implemented")
-		},
-		// default authorizer is authorized meaning no requests are blocked
-		APIAuthorizer: security.Authorized(),
+		ImageUploadImageHandler: image.UploadImageHandlerFunc(func(params image.UploadImageParams) middleware.Responder {
+			return middleware.NotImplemented("operation image.UploadImage has not yet been implemented")
+		}),
 	}
 }
 
@@ -165,17 +171,13 @@ type GamersnoteAPIAPI struct {
 	// JSONConsumer registers a consumer for the following mime types:
 	//   - application/json
 	JSONConsumer runtime.Consumer
+	// MultipartformConsumer registers a consumer for the following mime types:
+	//   - multipart/form-data
+	MultipartformConsumer runtime.Consumer
 
 	// JSONProducer registers a producer for the following mime types:
 	//   - application/json
 	JSONProducer runtime.Producer
-
-	// BearerAuth registers a function that takes a token and returns a principal
-	// it performs authentication based on an api key Authorization provided in the header
-	BearerAuth func(string) (*utils.TokenPayload, error)
-
-	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
-	APIAuthorizer runtime.Authorizer
 
 	// ArticleDeleteArticleHandler sets the operation handler for the delete article operation
 	ArticleDeleteArticleHandler article.DeleteArticleHandler
@@ -209,6 +211,12 @@ type GamersnoteAPIAPI struct {
 	ArticleGetTheUsersArticlesHandler article.GetTheUsersArticlesHandler
 	// UserGetUserHandler sets the operation handler for the get user operation
 	UserGetUserHandler user.GetUserHandler
+	// UserPatchUserSigninedHandler sets the operation handler for the patch user signined operation
+	UserPatchUserSigninedHandler user.PatchUserSigninedHandler
+	// UserPatchUserSignoutedHandler sets the operation handler for the patch user signouted operation
+	UserPatchUserSignoutedHandler user.PatchUserSignoutedHandler
+	// UserPatchUserVerifiedHandler sets the operation handler for the patch user verified operation
+	UserPatchUserVerifiedHandler user.PatchUserVerifiedHandler
 	// ArticlePostArticleHandler sets the operation handler for the post article operation
 	ArticlePostArticleHandler article.PostArticleHandler
 	// CommentPostCommentHandler sets the operation handler for the post comment operation
@@ -229,6 +237,8 @@ type GamersnoteAPIAPI struct {
 	StockPutStockHandler stock.PutStockHandler
 	// UserPutUserHandler sets the operation handler for the put user operation
 	UserPutUserHandler user.PutUserHandler
+	// ImageUploadImageHandler sets the operation handler for the upload image operation
+	ImageUploadImageHandler image.UploadImageHandler
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
 	ServeError func(http.ResponseWriter, *http.Request, error)
@@ -300,13 +310,12 @@ func (o *GamersnoteAPIAPI) Validate() error {
 	if o.JSONConsumer == nil {
 		unregistered = append(unregistered, "JSONConsumer")
 	}
+	if o.MultipartformConsumer == nil {
+		unregistered = append(unregistered, "MultipartformConsumer")
+	}
 
 	if o.JSONProducer == nil {
 		unregistered = append(unregistered, "JSONProducer")
-	}
-
-	if o.BearerAuth == nil {
-		unregistered = append(unregistered, "AuthorizationAuth")
 	}
 
 	if o.ArticleDeleteArticleHandler == nil {
@@ -357,6 +366,15 @@ func (o *GamersnoteAPIAPI) Validate() error {
 	if o.UserGetUserHandler == nil {
 		unregistered = append(unregistered, "user.GetUserHandler")
 	}
+	if o.UserPatchUserSigninedHandler == nil {
+		unregistered = append(unregistered, "user.PatchUserSigninedHandler")
+	}
+	if o.UserPatchUserSignoutedHandler == nil {
+		unregistered = append(unregistered, "user.PatchUserSignoutedHandler")
+	}
+	if o.UserPatchUserVerifiedHandler == nil {
+		unregistered = append(unregistered, "user.PatchUserVerifiedHandler")
+	}
 	if o.ArticlePostArticleHandler == nil {
 		unregistered = append(unregistered, "article.PostArticleHandler")
 	}
@@ -387,6 +405,9 @@ func (o *GamersnoteAPIAPI) Validate() error {
 	if o.UserPutUserHandler == nil {
 		unregistered = append(unregistered, "user.PutUserHandler")
 	}
+	if o.ImageUploadImageHandler == nil {
+		unregistered = append(unregistered, "image.UploadImageHandler")
+	}
 
 	if len(unregistered) > 0 {
 		return fmt.Errorf("missing registration: %s", strings.Join(unregistered, ", "))
@@ -402,23 +423,12 @@ func (o *GamersnoteAPIAPI) ServeErrorFor(operationID string) func(http.ResponseW
 
 // AuthenticatorsFor gets the authenticators for the specified security schemes
 func (o *GamersnoteAPIAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]runtime.Authenticator {
-	result := make(map[string]runtime.Authenticator)
-	for name := range schemes {
-		switch name {
-		case "Bearer":
-			scheme := schemes[name]
-			result[name] = o.APIKeyAuthenticator(scheme.Name, scheme.In, func(token string) (interface{}, error) {
-				return o.BearerAuth(token)
-			})
-
-		}
-	}
-	return result
+	return nil
 }
 
 // Authorizer returns the registered authorizer
 func (o *GamersnoteAPIAPI) Authorizer() runtime.Authorizer {
-	return o.APIAuthorizer
+	return nil
 }
 
 // ConsumersFor gets the consumers for the specified media types.
@@ -429,6 +439,8 @@ func (o *GamersnoteAPIAPI) ConsumersFor(mediaTypes []string) map[string]runtime.
 		switch mt {
 		case "application/json":
 			result["application/json"] = o.JSONConsumer
+		case "multipart/form-data":
+			result["multipart/form-data"] = o.MultipartformConsumer
 		}
 
 		if c, ok := o.customConsumers[mt]; ok {
@@ -549,7 +561,19 @@ func (o *GamersnoteAPIAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/users/{gamersnote_id}"] = user.NewGetUser(o.context, o.UserGetUserHandler)
+	o.handlers["GET"]["/users/{username}"] = user.NewGetUser(o.context, o.UserGetUserHandler)
+	if o.handlers["PATCH"] == nil {
+		o.handlers["PATCH"] = make(map[string]http.Handler)
+	}
+	o.handlers["PATCH"]["/users/me/signined"] = user.NewPatchUserSignined(o.context, o.UserPatchUserSigninedHandler)
+	if o.handlers["PATCH"] == nil {
+		o.handlers["PATCH"] = make(map[string]http.Handler)
+	}
+	o.handlers["PATCH"]["/users/me/signouted"] = user.NewPatchUserSignouted(o.context, o.UserPatchUserSignoutedHandler)
+	if o.handlers["PATCH"] == nil {
+		o.handlers["PATCH"] = make(map[string]http.Handler)
+	}
+	o.handlers["PATCH"]["/users/me/verified"] = user.NewPatchUserVerified(o.context, o.UserPatchUserVerifiedHandler)
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
@@ -590,6 +614,10 @@ func (o *GamersnoteAPIAPI) initHandlerCache() {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
 	o.handlers["PUT"]["/users/me"] = user.NewPutUser(o.context, o.UserPutUserHandler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/users/me/images"] = image.NewUploadImage(o.context, o.ImageUploadImageHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

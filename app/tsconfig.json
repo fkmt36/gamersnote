@@ -26,9 +26,8 @@
     "types": [
       "@types/node",
       "@nuxt/types",
-      "@nuxtjs/axios",
-      "@nuxtjs/firebase",
-      "@types/jest"
+      "@types/jest",
+      "@types/quill"
     ]
   },
   "exclude": [

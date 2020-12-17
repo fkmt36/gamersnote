@@ -8,22 +8,25 @@ package user
 import (
 	"net/http"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 
-	"gamersnote.com/v1/utils"
+	"gamersnote.com/v1/models"
 )
 
 // PostUserHandlerFunc turns a function with the right signature into a post user handler
-type PostUserHandlerFunc func(PostUserParams, *utils.TokenPayload) middleware.Responder
+type PostUserHandlerFunc func(PostUserParams) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn PostUserHandlerFunc) Handle(params PostUserParams, principal *utils.TokenPayload) middleware.Responder {
-	return fn(params, principal)
+func (fn PostUserHandlerFunc) Handle(params PostUserParams) middleware.Responder {
+	return fn(params)
 }
 
 // PostUserHandler interface for that can handle valid post user params
 type PostUserHandler interface {
-	Handle(PostUserParams, *utils.TokenPayload) middleware.Responder
+	Handle(PostUserParams) middleware.Responder
 }
 
 // NewPostUser creates a new http.Handler for the post user operation
@@ -48,26 +51,107 @@ func (o *PostUser) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 	var Params = NewPostUserParams()
 
-	uprinc, aCtx, err := o.Context.Authorize(r, route)
-	if err != nil {
-		o.Context.Respond(rw, r, route.Produces, route, err)
-		return
-	}
-	if aCtx != nil {
-		r = aCtx
-	}
-	var principal *utils.TokenPayload
-	if uprinc != nil {
-		principal = uprinc.(*utils.TokenPayload) // this is really a utils.TokenPayload, I promise
-	}
-
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params, principal) // actually handle the request
+	res := o.Handler.Handle(Params) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
+}
+
+// PostUserBody post user body
+//
+// swagger:model PostUserBody
+type PostUserBody struct {
+
+	// email
+	// Required: true
+	Email models.Email `json:"email"`
+
+	// password
+	// Required: true
+	Password models.Password `json:"password"`
+
+	// username
+	// Required: true
+	Username models.Username `json:"username"`
+}
+
+// Validate validates this post user body
+func (o *PostUserBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := o.validateEmail(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := o.validatePassword(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := o.validateUsername(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (o *PostUserBody) validateEmail(formats strfmt.Registry) error {
+
+	if err := o.Email.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("body" + "." + "email")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (o *PostUserBody) validatePassword(formats strfmt.Registry) error {
+
+	if err := o.Password.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("body" + "." + "password")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (o *PostUserBody) validateUsername(formats strfmt.Registry) error {
+
+	if err := o.Username.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("body" + "." + "username")
+		}
+		return err
+	}
+
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (o *PostUserBody) MarshalBinary() ([]byte, error) {
+	if o == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(o)
+}
+
+// UnmarshalBinary interface implementation
+func (o *PostUserBody) UnmarshalBinary(b []byte) error {
+	var res PostUserBody
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*o = res
+	return nil
 }

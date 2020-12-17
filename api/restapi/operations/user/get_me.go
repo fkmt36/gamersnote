@@ -9,21 +9,19 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
-
-	"gamersnote.com/v1/utils"
 )
 
 // GetMeHandlerFunc turns a function with the right signature into a get me handler
-type GetMeHandlerFunc func(GetMeParams, *utils.TokenPayload) middleware.Responder
+type GetMeHandlerFunc func(GetMeParams) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetMeHandlerFunc) Handle(params GetMeParams, principal *utils.TokenPayload) middleware.Responder {
-	return fn(params, principal)
+func (fn GetMeHandlerFunc) Handle(params GetMeParams) middleware.Responder {
+	return fn(params)
 }
 
 // GetMeHandler interface for that can handle valid get me params
 type GetMeHandler interface {
-	Handle(GetMeParams, *utils.TokenPayload) middleware.Responder
+	Handle(GetMeParams) middleware.Responder
 }
 
 // NewGetMe creates a new http.Handler for the get me operation
@@ -48,25 +46,12 @@ func (o *GetMe) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 	var Params = NewGetMeParams()
 
-	uprinc, aCtx, err := o.Context.Authorize(r, route)
-	if err != nil {
-		o.Context.Respond(rw, r, route.Produces, route, err)
-		return
-	}
-	if aCtx != nil {
-		r = aCtx
-	}
-	var principal *utils.TokenPayload
-	if uprinc != nil {
-		principal = uprinc.(*utils.TokenPayload) // this is really a utils.TokenPayload, I promise
-	}
-
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params, principal) // actually handle the request
+	res := o.Handler.Handle(Params) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 

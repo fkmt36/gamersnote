@@ -27,7 +27,7 @@ type Comments []*Comment
 func (c Comment) ToModel() *models.Comment {
 	m := &models.Comment{
 		Body:      &c.Body,
-		CommentID: c.CommentID,
+		CommentID: models.BaseID(c.CommentID),
 		CreatedAt: strfmt.Date(c.CreatedAt),
 		Replies:   *c.Replies.ToModels(),
 	}

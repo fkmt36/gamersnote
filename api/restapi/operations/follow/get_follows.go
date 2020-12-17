@@ -9,21 +9,19 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
-
-	"gamersnote.com/v1/utils"
 )
 
 // GetFollowsHandlerFunc turns a function with the right signature into a get follows handler
-type GetFollowsHandlerFunc func(GetFollowsParams, *utils.TokenPayload) middleware.Responder
+type GetFollowsHandlerFunc func(GetFollowsParams) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetFollowsHandlerFunc) Handle(params GetFollowsParams, principal *utils.TokenPayload) middleware.Responder {
-	return fn(params, principal)
+func (fn GetFollowsHandlerFunc) Handle(params GetFollowsParams) middleware.Responder {
+	return fn(params)
 }
 
 // GetFollowsHandler interface for that can handle valid get follows params
 type GetFollowsHandler interface {
-	Handle(GetFollowsParams, *utils.TokenPayload) middleware.Responder
+	Handle(GetFollowsParams) middleware.Responder
 }
 
 // NewGetFollows creates a new http.Handler for the get follows operation
@@ -48,25 +46,12 @@ func (o *GetFollows) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 	var Params = NewGetFollowsParams()
 
-	uprinc, aCtx, err := o.Context.Authorize(r, route)
-	if err != nil {
-		o.Context.Respond(rw, r, route.Produces, route, err)
-		return
-	}
-	if aCtx != nil {
-		r = aCtx
-	}
-	var principal *utils.TokenPayload
-	if uprinc != nil {
-		principal = uprinc.(*utils.TokenPayload) // this is really a utils.TokenPayload, I promise
-	}
-
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params, principal) // actually handle the request
+	res := o.Handler.Handle(Params) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 

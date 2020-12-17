@@ -12,7 +12,7 @@ WORKDIR /usr/src/api
 
 COPY . .
 
-RUN go build -o a.out
+RUN go build -o a.out /usr/src/api/cmd/gamersnote-api-server
 
 FROM alpine
 

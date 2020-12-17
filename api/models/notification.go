@@ -18,8 +18,7 @@ import (
 type Notification struct {
 
 	// notification id
-	// Read Only: true
-	NotificationID string `json:"notification_id,omitempty"`
+	NotificationID BaseID `json:"notification_id,omitempty"`
 
 	// sender
 	Sender *User `json:"sender,omitempty"`
@@ -46,6 +45,10 @@ type Notification struct {
 func (m *Notification) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateNotificationID(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateSender(formats); err != nil {
 		res = append(res, err)
 	}
@@ -57,6 +60,22 @@ func (m *Notification) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Notification) validateNotificationID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.NotificationID) { // not required
+		return nil
+	}
+
+	if err := m.NotificationID.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("notification_id")
+		}
+		return err
+	}
+
 	return nil
 }
 

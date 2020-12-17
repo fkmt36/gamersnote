@@ -6,12 +6,9 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
-	"strconv"
-
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // Article article
@@ -20,8 +17,7 @@ import (
 type Article struct {
 
 	// article id
-	// Read Only: true
-	ArticleID string `json:"article_id,omitempty"`
+	ArticleID BaseID `json:"article_id,omitempty"`
 
 	// author
 	// Read Only: true
@@ -31,47 +27,38 @@ type Article struct {
 
 	// thumbnail url
 	// Required: true
-	ThumbnailURL *string `json:"thumbnail_url"`
+	ThumbnailURL ImgURL `json:"thumbnail_url"`
 
 	// title
 	// Required: true
-	Title *string `json:"title"`
+	Title ArticleTitle `json:"title"`
 
 	// body
 	// Required: true
-	Body *string `json:"body"`
+	Body BaseHTML `json:"body"`
 
 	// like count
-	// Read Only: true
-	LikeCount int64 `json:"like_count,omitempty"`
+	LikeCount BaseCount `json:"like_count,omitempty"`
 
 	// comments
-	// Read Only: true
-	Comments []*Comment `json:"comments"`
-
-	// is published
-	// Required: true
-	IsPublished *bool `json:"is_published"`
-
-	// published at
-	// Read Only: true
-	// Format: date
-	PublishedAt strfmt.Date `json:"published_at,omitempty"`
+	Comments Comments `json:"comments,omitempty"`
 
 	// created at
-	// Read Only: true
 	// Format: date
-	CreatedAt strfmt.Date `json:"created_at,omitempty"`
+	CreatedAt BaseDate `json:"created_at,omitempty"`
 
 	// updated at
-	// Read Only: true
 	// Format: date
-	UpdatedAt strfmt.Date `json:"updated_at,omitempty"`
+	UpdatedAt BaseDate `json:"updated_at,omitempty"`
 }
 
 // Validate validates this article
 func (m *Article) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateArticleID(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateAuthor(formats); err != nil {
 		res = append(res, err)
@@ -89,15 +76,11 @@ func (m *Article) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateLikeCount(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateComments(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateIsPublished(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validatePublishedAt(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -115,6 +98,22 @@ func (m *Article) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Article) validateArticleID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.ArticleID) { // not required
+		return nil
+	}
+
+	if err := m.ArticleID.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("article_id")
+		}
+		return err
+	}
+
+	return nil
+}
+
 func (m *Article) validateAuthor(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Author) { // not required
@@ -126,7 +125,10 @@ func (m *Article) validateAuthor(formats strfmt.Registry) error {
 
 func (m *Article) validateThumbnailURL(formats strfmt.Registry) error {
 
-	if err := validate.Required("thumbnail_url", "body", m.ThumbnailURL); err != nil {
+	if err := m.ThumbnailURL.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("thumbnail_url")
+		}
 		return err
 	}
 
@@ -135,7 +137,10 @@ func (m *Article) validateThumbnailURL(formats strfmt.Registry) error {
 
 func (m *Article) validateTitle(formats strfmt.Registry) error {
 
-	if err := validate.Required("title", "body", m.Title); err != nil {
+	if err := m.Title.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("title")
+		}
 		return err
 	}
 
@@ -144,7 +149,26 @@ func (m *Article) validateTitle(formats strfmt.Registry) error {
 
 func (m *Article) validateBody(formats strfmt.Registry) error {
 
-	if err := validate.Required("body", "body", m.Body); err != nil {
+	if err := m.Body.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("body")
+		}
+		return err
+	}
+
+	return nil
+}
+
+func (m *Article) validateLikeCount(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.LikeCount) { // not required
+		return nil
+	}
+
+	if err := m.LikeCount.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("like_count")
+		}
 		return err
 	}
 
@@ -157,41 +181,10 @@ func (m *Article) validateComments(formats strfmt.Registry) error {
 		return nil
 	}
 
-	for i := 0; i < len(m.Comments); i++ {
-		if swag.IsZero(m.Comments[i]) { // not required
-			continue
+	if err := m.Comments.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("comments")
 		}
-
-		if m.Comments[i] != nil {
-			if err := m.Comments[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName("comments" + "." + strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-func (m *Article) validateIsPublished(formats strfmt.Registry) error {
-
-	if err := validate.Required("is_published", "body", m.IsPublished); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *Article) validatePublishedAt(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.PublishedAt) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("published_at", "body", "date", m.PublishedAt.String(), formats); err != nil {
 		return err
 	}
 
@@ -204,7 +197,10 @@ func (m *Article) validateCreatedAt(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if err := validate.FormatOf("created_at", "body", "date", m.CreatedAt.String(), formats); err != nil {
+	if err := m.CreatedAt.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("created_at")
+		}
 		return err
 	}
 
@@ -217,7 +213,10 @@ func (m *Article) validateUpdatedAt(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if err := validate.FormatOf("updated_at", "body", "date", m.UpdatedAt.String(), formats); err != nil {
+	if err := m.UpdatedAt.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("updated_at")
+		}
 		return err
 	}
 

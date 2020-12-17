@@ -71,11 +71,6 @@ func init() {
         }
       },
       "post": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "article"
         ],
@@ -128,11 +123,6 @@ func init() {
         }
       },
       "put": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "article"
         ],
@@ -163,11 +153,6 @@ func init() {
         }
       },
       "delete": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "article"
         ],
@@ -218,11 +203,6 @@ func init() {
         }
       },
       "post": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "comment"
         ],
@@ -263,11 +243,6 @@ func init() {
     },
     "/articles/{article_id}/comments/{comment_id}": {
       "put": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "comment"
         ],
@@ -298,11 +273,6 @@ func init() {
         }
       },
       "delete": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "comment"
         ],
@@ -336,11 +306,6 @@ func init() {
     },
     "/users": {
       "post": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "user"
         ],
@@ -351,7 +316,23 @@ func init() {
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/user"
+              "type": "object",
+              "required": [
+                "email",
+                "password",
+                "username"
+              ],
+              "properties": {
+                "email": {
+                  "$ref": "#/definitions/email"
+                },
+                "password": {
+                  "$ref": "#/definitions/password"
+                },
+                "username": {
+                  "$ref": "#/definitions/username"
+                }
+              }
             }
           }
         ],
@@ -379,11 +360,6 @@ func init() {
     },
     "/users/me": {
       "get": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "user"
         ],
@@ -404,11 +380,6 @@ func init() {
         }
       },
       "put": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "user"
         ],
@@ -439,11 +410,6 @@ func init() {
         }
       },
       "delete": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "user"
         ],
@@ -463,11 +429,6 @@ func init() {
     },
     "/users/me/follows": {
       "get": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "follow"
         ],
@@ -493,11 +454,6 @@ func init() {
     },
     "/users/me/follows/articles": {
       "get": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "article"
         ],
@@ -530,11 +486,6 @@ func init() {
     },
     "/users/me/follows/{user_id}": {
       "put": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "follow"
         ],
@@ -554,13 +505,48 @@ func init() {
         }
       }
     },
-    "/users/me/likes": {
-      "get": {
-        "security": [
+    "/users/me/images": {
+      "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "tags": [
+          "image"
+        ],
+        "operationId": "uploadImage",
+        "parameters": [
           {
-            "Bearer": []
+            "type": "file",
+            "name": "image",
+            "in": "formData"
           }
         ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "required": [
+                "url"
+              ],
+              "properties": {
+                "url": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/me/likes": {
+      "get": {
         "tags": [
           "like"
         ],
@@ -586,11 +572,6 @@ func init() {
     },
     "/users/me/likes/{article_id}": {
       "put": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "like"
         ],
@@ -608,11 +589,6 @@ func init() {
         }
       },
       "delete": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "like"
         ],
@@ -640,11 +616,6 @@ func init() {
     },
     "/users/me/notifications": {
       "get": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "notification"
         ],
@@ -670,11 +641,6 @@ func init() {
     },
     "/users/me/notifications/{notification_id}/read": {
       "put": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "notification"
         ],
@@ -700,13 +666,71 @@ func init() {
         }
       ]
     },
-    "/users/me/stocks": {
-      "get": {
-        "security": [
+    "/users/me/signined": {
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "patchUserSignined",
+        "parameters": [
           {
-            "Bearer": []
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "password"
+              ],
+              "properties": {
+                "email": {
+                  "$ref": "#/definitions/email"
+                },
+                "password": {
+                  "$ref": "#/definitions/password"
+                }
+              }
+            }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/me/signouted": {
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "patchUserSignouted",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/me/stocks": {
+      "get": {
         "tags": [
           "stock"
         ],
@@ -732,11 +756,6 @@ func init() {
     },
     "/users/me/stocks/{article_id}": {
       "put": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "stock"
         ],
@@ -754,11 +773,6 @@ func init() {
         }
       },
       "delete": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "stock"
         ],
@@ -784,15 +798,37 @@ func init() {
         }
       ]
     },
-    "/users/{gamersnote_id}": {
-      "get": {
+    "/users/me/verified": {
+      "patch": {
         "tags": [
           "user"
         ],
-        "operationId": "getUser",
+        "operationId": "patchUserVerified",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "code",
+                "username"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "gamersnote_idを指定してユーザーを取得",
+            "description": "Success",
             "schema": {
               "$ref": "#/definitions/user"
             }
@@ -804,15 +840,7 @@ func init() {
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "type": "string",
-          "name": "gamersnote_id",
-          "in": "path",
-          "required": true
-        }
-      ]
+      }
     },
     "/users/{gamersnote_id}/articles": {
       "get": {
@@ -846,6 +874,36 @@ func init() {
           }
         }
       }
+    },
+    "/users/{username}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "getUser",
+        "responses": {
+          "200": {
+            "description": "gamersnote_idを指定してユーザーを取得",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "username",
+          "in": "path",
+          "required": true
+        }
+      ]
     }
   },
   "definitions": {
@@ -854,14 +912,12 @@ func init() {
       "required": [
         "thumbnail_url",
         "title",
-        "body",
-        "is_published"
+        "body"
       ],
       "properties": {
         "article_id": {
-          "type": "string",
           "x-order": 0,
-          "readOnly": true
+          "$ref": "#/definitions/base_id"
         },
         "author": {
           "allOf": [
@@ -873,53 +929,55 @@ func init() {
           "readOnly": true
         },
         "body": {
-          "type": "string",
-          "x-order": 4
+          "x-order": 4,
+          "$ref": "#/definitions/base_html"
         },
         "comments": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/comment"
-          },
           "x-order": 6,
-          "readOnly": true
+          "$ref": "#/definitions/comments"
         },
         "created_at": {
-          "type": "string",
-          "format": "date",
-          "x-order": 9,
-          "readOnly": true
-        },
-        "is_published": {
-          "type": "boolean",
-          "x-order": 7
+          "x-order": 7,
+          "$ref": "#/definitions/base_date"
         },
         "like_count": {
-          "type": "integer",
           "x-order": 5,
-          "readOnly": true
-        },
-        "published_at": {
-          "type": "string",
-          "format": "date",
-          "x-order": 8,
-          "readOnly": true
+          "$ref": "#/definitions/base_count"
         },
         "thumbnail_url": {
-          "type": "string",
-          "x-order": 2
+          "x-order": 2,
+          "$ref": "#/definitions/img_url"
         },
         "title": {
-          "type": "string",
-          "x-order": 3
+          "x-order": 3,
+          "$ref": "#/definitions/article_title"
         },
         "updated_at": {
-          "type": "string",
-          "format": "date",
-          "x-order": 10,
-          "readOnly": true
+          "x-order": 8,
+          "$ref": "#/definitions/base_date"
         }
       }
+    },
+    "article_title": {
+      "type": "string",
+      "maxLength": 50,
+      "minLength": 1
+    },
+    "base_count": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "base_date": {
+      "type": "string",
+      "format": "date",
+      "readOnly": true
+    },
+    "base_html": {
+      "type": "string"
+    },
+    "base_id": {
+      "type": "string",
+      "readOnly": true
     },
     "comment": {
       "type": "object",
@@ -941,9 +999,8 @@ func init() {
           "x-order": 3
         },
         "comment_id": {
-          "type": "string",
           "x-order": 0,
-          "readOnly": true
+          "$ref": "#/definitions/base_id"
         },
         "created_at": {
           "type": "string",
@@ -961,6 +1018,17 @@ func init() {
         }
       }
     },
+    "comments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/comment"
+      },
+      "readOnly": true
+    },
+    "email": {
+      "type": "string",
+      "pattern": "[A-Za-z0-9\\-\\.\\_]+@[A-Za-z0-9\\-\\._]+\\.[A-Za-z]+"
+    },
     "error": {
       "type": "object",
       "properties": {
@@ -974,6 +1042,9 @@ func init() {
           "x-order": 1
         }
       }
+    },
+    "img_url": {
+      "type": "string"
     },
     "notification": {
       "type": "object",
@@ -1000,9 +1071,8 @@ func init() {
           "readOnly": true
         },
         "notification_id": {
-          "type": "string",
           "x-order": 0,
-          "readOnly": true
+          "$ref": "#/definitions/base_id"
         },
         "sender": {
           "x-order": 1,
@@ -1010,56 +1080,50 @@ func init() {
         }
       }
     },
+    "password": {
+      "type": "string",
+      "pattern": "[A-Za-z0-9 ]{6,20}"
+    },
+    "profile_message": {
+      "type": "string",
+      "maxLength": 200
+    },
     "user": {
       "type": "object",
       "required": [
-        "gamersnote_id",
         "username",
-        "avatar_url",
-        "message"
+        "email"
       ],
       "properties": {
         "avatar_url": {
-          "type": "string",
-          "x-order": 3
+          "x-order": 3,
+          "$ref": "#/definitions/img_url"
         },
-        "gamersnote_id": {
-          "type": "string",
-          "maxLength": 12,
-          "minLength": 4,
-          "pattern": "[A-Za-z0-9 ]{4,12}",
-          "x-order": 1
+        "email": {
+          "x-order": 2,
+          "$ref": "#/definitions/email"
         },
         "message": {
-          "type": "string",
-          "maxLength": 200,
-          "x-order": 4
+          "x-order": 4,
+          "$ref": "#/definitions/profile_message"
         },
         "registered_at": {
-          "type": "string",
-          "format": "date",
           "x-order": 5,
-          "readOnly": true
+          "$ref": "#/definitions/base_date"
         },
         "user_id": {
-          "type": "string",
           "x-order": 0,
-          "readOnly": true
+          "$ref": "#/definitions/base_id"
         },
         "username": {
-          "type": "string",
-          "maxLength": 20,
-          "minLength": 4,
-          "x-order": 2
+          "x-order": 1,
+          "$ref": "#/definitions/username"
         }
       }
-    }
-  },
-  "securityDefinitions": {
-    "Bearer": {
-      "type": "apiKey",
-      "name": "Authorization",
-      "in": "header"
+    },
+    "username": {
+      "type": "string",
+      "pattern": "[A-Za-z0-9\\_]{4,12}"
     }
   }
 }`))
@@ -1117,11 +1181,6 @@ func init() {
         }
       },
       "post": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "article"
         ],
@@ -1174,11 +1233,6 @@ func init() {
         }
       },
       "put": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "article"
         ],
@@ -1209,11 +1263,6 @@ func init() {
         }
       },
       "delete": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "article"
         ],
@@ -1264,11 +1313,6 @@ func init() {
         }
       },
       "post": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "comment"
         ],
@@ -1309,11 +1353,6 @@ func init() {
     },
     "/articles/{article_id}/comments/{comment_id}": {
       "put": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "comment"
         ],
@@ -1344,11 +1383,6 @@ func init() {
         }
       },
       "delete": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "comment"
         ],
@@ -1382,11 +1416,6 @@ func init() {
     },
     "/users": {
       "post": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "user"
         ],
@@ -1397,7 +1426,23 @@ func init() {
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/user"
+              "type": "object",
+              "required": [
+                "email",
+                "password",
+                "username"
+              ],
+              "properties": {
+                "email": {
+                  "$ref": "#/definitions/email"
+                },
+                "password": {
+                  "$ref": "#/definitions/password"
+                },
+                "username": {
+                  "$ref": "#/definitions/username"
+                }
+              }
             }
           }
         ],
@@ -1425,11 +1470,6 @@ func init() {
     },
     "/users/me": {
       "get": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "user"
         ],
@@ -1450,11 +1490,6 @@ func init() {
         }
       },
       "put": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "user"
         ],
@@ -1485,11 +1520,6 @@ func init() {
         }
       },
       "delete": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "user"
         ],
@@ -1509,11 +1539,6 @@ func init() {
     },
     "/users/me/follows": {
       "get": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "follow"
         ],
@@ -1539,11 +1564,6 @@ func init() {
     },
     "/users/me/follows/articles": {
       "get": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "article"
         ],
@@ -1576,11 +1596,6 @@ func init() {
     },
     "/users/me/follows/{user_id}": {
       "put": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "follow"
         ],
@@ -1600,13 +1615,48 @@ func init() {
         }
       }
     },
-    "/users/me/likes": {
-      "get": {
-        "security": [
+    "/users/me/images": {
+      "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "tags": [
+          "image"
+        ],
+        "operationId": "uploadImage",
+        "parameters": [
           {
-            "Bearer": []
+            "type": "file",
+            "name": "image",
+            "in": "formData"
           }
         ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "required": [
+                "url"
+              ],
+              "properties": {
+                "url": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/me/likes": {
+      "get": {
         "tags": [
           "like"
         ],
@@ -1632,11 +1682,6 @@ func init() {
     },
     "/users/me/likes/{article_id}": {
       "put": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "like"
         ],
@@ -1654,11 +1699,6 @@ func init() {
         }
       },
       "delete": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "like"
         ],
@@ -1686,11 +1726,6 @@ func init() {
     },
     "/users/me/notifications": {
       "get": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "notification"
         ],
@@ -1716,11 +1751,6 @@ func init() {
     },
     "/users/me/notifications/{notification_id}/read": {
       "put": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "notification"
         ],
@@ -1746,13 +1776,71 @@ func init() {
         }
       ]
     },
-    "/users/me/stocks": {
-      "get": {
-        "security": [
+    "/users/me/signined": {
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "patchUserSignined",
+        "parameters": [
           {
-            "Bearer": []
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "password"
+              ],
+              "properties": {
+                "email": {
+                  "$ref": "#/definitions/email"
+                },
+                "password": {
+                  "$ref": "#/definitions/password"
+                }
+              }
+            }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/me/signouted": {
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "patchUserSignouted",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/me/stocks": {
+      "get": {
         "tags": [
           "stock"
         ],
@@ -1778,11 +1866,6 @@ func init() {
     },
     "/users/me/stocks/{article_id}": {
       "put": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "stock"
         ],
@@ -1800,11 +1883,6 @@ func init() {
         }
       },
       "delete": {
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "tags": [
           "stock"
         ],
@@ -1830,15 +1908,37 @@ func init() {
         }
       ]
     },
-    "/users/{gamersnote_id}": {
-      "get": {
+    "/users/me/verified": {
+      "patch": {
         "tags": [
           "user"
         ],
-        "operationId": "getUser",
+        "operationId": "patchUserVerified",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "code",
+                "username"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "gamersnote_idを指定してユーザーを取得",
+            "description": "Success",
             "schema": {
               "$ref": "#/definitions/user"
             }
@@ -1850,15 +1950,7 @@ func init() {
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "type": "string",
-          "name": "gamersnote_id",
-          "in": "path",
-          "required": true
-        }
-      ]
+      }
     },
     "/users/{gamersnote_id}/articles": {
       "get": {
@@ -1892,6 +1984,36 @@ func init() {
           }
         }
       }
+    },
+    "/users/{username}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "getUser",
+        "responses": {
+          "200": {
+            "description": "gamersnote_idを指定してユーザーを取得",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "username",
+          "in": "path",
+          "required": true
+        }
+      ]
     }
   },
   "definitions": {
@@ -1900,14 +2022,12 @@ func init() {
       "required": [
         "thumbnail_url",
         "title",
-        "body",
-        "is_published"
+        "body"
       ],
       "properties": {
         "article_id": {
-          "type": "string",
           "x-order": 0,
-          "readOnly": true
+          "$ref": "#/definitions/base_id"
         },
         "author": {
           "allOf": [
@@ -1919,53 +2039,55 @@ func init() {
           "readOnly": true
         },
         "body": {
-          "type": "string",
-          "x-order": 4
+          "x-order": 4,
+          "$ref": "#/definitions/base_html"
         },
         "comments": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/comment"
-          },
           "x-order": 6,
-          "readOnly": true
+          "$ref": "#/definitions/comments"
         },
         "created_at": {
-          "type": "string",
-          "format": "date",
-          "x-order": 9,
-          "readOnly": true
-        },
-        "is_published": {
-          "type": "boolean",
-          "x-order": 7
+          "x-order": 7,
+          "$ref": "#/definitions/base_date"
         },
         "like_count": {
-          "type": "integer",
           "x-order": 5,
-          "readOnly": true
-        },
-        "published_at": {
-          "type": "string",
-          "format": "date",
-          "x-order": 8,
-          "readOnly": true
+          "$ref": "#/definitions/base_count"
         },
         "thumbnail_url": {
-          "type": "string",
-          "x-order": 2
+          "x-order": 2,
+          "$ref": "#/definitions/img_url"
         },
         "title": {
-          "type": "string",
-          "x-order": 3
+          "x-order": 3,
+          "$ref": "#/definitions/article_title"
         },
         "updated_at": {
-          "type": "string",
-          "format": "date",
-          "x-order": 10,
-          "readOnly": true
+          "x-order": 8,
+          "$ref": "#/definitions/base_date"
         }
       }
+    },
+    "article_title": {
+      "type": "string",
+      "maxLength": 50,
+      "minLength": 1
+    },
+    "base_count": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "base_date": {
+      "type": "string",
+      "format": "date",
+      "readOnly": true
+    },
+    "base_html": {
+      "type": "string"
+    },
+    "base_id": {
+      "type": "string",
+      "readOnly": true
     },
     "comment": {
       "type": "object",
@@ -1987,9 +2109,8 @@ func init() {
           "x-order": 3
         },
         "comment_id": {
-          "type": "string",
           "x-order": 0,
-          "readOnly": true
+          "$ref": "#/definitions/base_id"
         },
         "created_at": {
           "type": "string",
@@ -2007,6 +2128,17 @@ func init() {
         }
       }
     },
+    "comments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/comment"
+      },
+      "readOnly": true
+    },
+    "email": {
+      "type": "string",
+      "pattern": "[A-Za-z0-9\\-\\.\\_]+@[A-Za-z0-9\\-\\._]+\\.[A-Za-z]+"
+    },
     "error": {
       "type": "object",
       "properties": {
@@ -2020,6 +2152,9 @@ func init() {
           "x-order": 1
         }
       }
+    },
+    "img_url": {
+      "type": "string"
     },
     "notification": {
       "type": "object",
@@ -2046,9 +2181,8 @@ func init() {
           "readOnly": true
         },
         "notification_id": {
-          "type": "string",
           "x-order": 0,
-          "readOnly": true
+          "$ref": "#/definitions/base_id"
         },
         "sender": {
           "x-order": 1,
@@ -2056,57 +2190,51 @@ func init() {
         }
       }
     },
+    "password": {
+      "type": "string",
+      "pattern": "[A-Za-z0-9 ]{6,20}"
+    },
+    "profile_message": {
+      "type": "string",
+      "maxLength": 200,
+      "minLength": 0
+    },
     "user": {
       "type": "object",
       "required": [
-        "gamersnote_id",
         "username",
-        "avatar_url",
-        "message"
+        "email"
       ],
       "properties": {
         "avatar_url": {
-          "type": "string",
-          "x-order": 3
+          "x-order": 3,
+          "$ref": "#/definitions/img_url"
         },
-        "gamersnote_id": {
-          "type": "string",
-          "maxLength": 12,
-          "minLength": 4,
-          "pattern": "[A-Za-z0-9 ]{4,12}",
-          "x-order": 1
+        "email": {
+          "x-order": 2,
+          "$ref": "#/definitions/email"
         },
         "message": {
-          "type": "string",
-          "maxLength": 200,
-          "minLength": 0,
-          "x-order": 4
+          "x-order": 4,
+          "$ref": "#/definitions/profile_message"
         },
         "registered_at": {
-          "type": "string",
-          "format": "date",
           "x-order": 5,
-          "readOnly": true
+          "$ref": "#/definitions/base_date"
         },
         "user_id": {
-          "type": "string",
           "x-order": 0,
-          "readOnly": true
+          "$ref": "#/definitions/base_id"
         },
         "username": {
-          "type": "string",
-          "maxLength": 20,
-          "minLength": 4,
-          "x-order": 2
+          "x-order": 1,
+          "$ref": "#/definitions/username"
         }
       }
-    }
-  },
-  "securityDefinitions": {
-    "Bearer": {
-      "type": "apiKey",
-      "name": "Authorization",
-      "in": "header"
+    },
+    "username": {
+      "type": "string",
+      "pattern": "[A-Za-z0-9\\_]{4,12}"
     }
   }
 }`))

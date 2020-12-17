@@ -1,7 +1,7 @@
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    title: 'app',
+    title: 'GamersNote',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -19,7 +19,7 @@ export default {
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [{ src: '@/plugins/fire.ts' }],
+  plugins: [{ src: '@/plugins/api.ts' }],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -31,54 +31,7 @@ export default {
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
-    'nuxt-fontawesome',
-    '@nuxtjs/firebase',
-    '@nuxtjs/pwa',
-  ],
-
-  firebase: {
-    config: {
-      apiKey: 'AIzaSyBMH9h_mtwYv3rgaDCLMSoheA8XHxS_VJA',
-      authDomain: 'gamersnote-dev.firebaseapp.com',
-      databaseURL: 'https://gamersnote-dev.firebaseio.com',
-      projectId: 'gamersnote-dev',
-      storageBucket: 'gamersnote-dev.appspot.com',
-      messagingSenderId: '218913277344',
-      appId: '1:218913277344:web:e84d70e30ecd392001d0c5',
-      measurementId: 'G-K1CCGSY5CQ',
-    },
-    services: {
-      auth: {
-        persistence: 'local',
-        initialize: {
-          onAuthStateChangedAction: 'states/auth-state/onAuthStateChanged',
-          subscribeManually: false,
-        },
-        ssr: true,
-      },
-    },
-  },
-
-  pwa: {
-    // disable the modules you don't need
-    meta: false,
-    icon: false,
-    // if you omit a module key form configuration sensible defaults will be applied
-    // manifest: false,
-
-    workbox: {
-      importScripts: [
-        // ...
-        '/firebase-auth-sw.js',
-      ],
-      // by default the workbox module will not install the service worker in dev environment to avoid conflicts with HMR
-      // only set this true for testing and remember to always clear your browser cache in development
-      dev: true,
-    },
-  },
+  modules: ['nuxt-fontawesome'],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},
@@ -98,7 +51,10 @@ export default {
       },
     ],
   },
-  router: {
-    middleware: ['new-user'],
+  // router: {
+  //   middleware: [],
+  // },
+  env: {
+    API_URL_BROWSER: process.env.API_URL_BROWSER,
   },
 }

@@ -9,7 +9,6 @@ import (
 
 // Article ArticleGORMモデル
 type Article struct {
-	Base
 	ArticleID    string `gorm:"primaryKey"`
 	AuthorID     string
 	Author       User `gorm:"foreignKey:AuthorID; constraint:OnUpdate:CASCADE"`
@@ -30,16 +29,14 @@ type Articles []*Article
 // ToModel DBモデルをモデルに変換します。
 func (a Article) ToModel() *models.Article {
 	m := &models.Article{
-		ArticleID:    a.ArticleID,
-		Body:         &a.Body,
+		ArticleID:    models.BaseID(a.ArticleID),
+		Body:         models.BaseHTML(a.Body),
 		Comments:     *a.Comments.ToModels(),
-		CreatedAt:    strfmt.Date(a.CreatedAt),
-		IsPublished:  &a.IsPublished,
-		LikeCount:    a.LikeCount,
-		PublishedAt:  strfmt.Date(a.PublishedAt),
-		ThumbnailURL: &a.ThumbnailURL,
-		Title:        &a.Title,
-		UpdatedAt:    strfmt.Date(a.UpdatedAt),
+		CreatedAt:    models.BaseDate(strfmt.Date(a.CreatedAt)),
+		LikeCount:    models.BaseCount(a.LikeCount),
+		ThumbnailURL: models.ImgURL(a.ThumbnailURL),
+		Title:        models.ArticleTitle(a.Title),
+		UpdatedAt:    models.BaseDate(strfmt.Date(a.UpdatedAt)),
 	}
 	m.Author.User = *a.Author.ToModel()
 	return m

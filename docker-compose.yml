@@ -10,9 +10,9 @@ services:
     environment:
       - HOST=0.0.0.0
       - PORT=3000
-      - API_URL=http://nginx # axiosのbaseURL
-      - API_URL_BROWSER=http://localhost:3000 # axiosのbrowserBaseURL
-    command: sh -c "touch node_modules && npm run dev"
+      - API_URL=http://nginx/api/v1
+      - API_URL_BROWSER=http://localhost:3000/api/v1
+    command: npm run dev
 
   api_service:
     depends_on:
@@ -29,7 +29,13 @@ services:
       - POSTGRES_PASSWORD
       - POSTGRES_DBNAME
       - POSTGRES_PORT
-      - GOOGLE_APPLICATION_CREDENTIALS=/usr/src/api/firebase.json
+      - EMAIL_FROM_ADDRESS
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_KEY
+      - AWS_REGION
+      - BASE_URL=http://localhost:3000
+      - S3_BUCKET
+      - S3_BASEURL
     command: gin --build ./cmd/gamersnote-api-server --port=3000 --appPort=3001 -i main.go --port=3001
 
   r_proxy_service:
@@ -59,6 +65,7 @@ services:
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
+      - TZ=Asia/Tokyo
 
   db_client_service:
     container_name: pgadmin

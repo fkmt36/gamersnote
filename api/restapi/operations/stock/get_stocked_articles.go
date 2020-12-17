@@ -9,21 +9,19 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
-
-	"gamersnote.com/v1/utils"
 )
 
 // GetStockedArticlesHandlerFunc turns a function with the right signature into a get stocked articles handler
-type GetStockedArticlesHandlerFunc func(GetStockedArticlesParams, *utils.TokenPayload) middleware.Responder
+type GetStockedArticlesHandlerFunc func(GetStockedArticlesParams) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetStockedArticlesHandlerFunc) Handle(params GetStockedArticlesParams, principal *utils.TokenPayload) middleware.Responder {
-	return fn(params, principal)
+func (fn GetStockedArticlesHandlerFunc) Handle(params GetStockedArticlesParams) middleware.Responder {
+	return fn(params)
 }
 
 // GetStockedArticlesHandler interface for that can handle valid get stocked articles params
 type GetStockedArticlesHandler interface {
-	Handle(GetStockedArticlesParams, *utils.TokenPayload) middleware.Responder
+	Handle(GetStockedArticlesParams) middleware.Responder
 }
 
 // NewGetStockedArticles creates a new http.Handler for the get stocked articles operation
@@ -48,25 +46,12 @@ func (o *GetStockedArticles) ServeHTTP(rw http.ResponseWriter, r *http.Request) 
 	}
 	var Params = NewGetStockedArticlesParams()
 
-	uprinc, aCtx, err := o.Context.Authorize(r, route)
-	if err != nil {
-		o.Context.Respond(rw, r, route.Produces, route, err)
-		return
-	}
-	if aCtx != nil {
-		r = aCtx
-	}
-	var principal *utils.TokenPayload
-	if uprinc != nil {
-		principal = uprinc.(*utils.TokenPayload) // this is really a utils.TokenPayload, I promise
-	}
-
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params, principal) // actually handle the request
+	res := o.Handler.Handle(Params) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 

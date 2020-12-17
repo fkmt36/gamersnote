@@ -14,12 +14,17 @@ if [ $1 = "dev" ]; then
     docker-compose up --build -d
   fi
 
+  if [ $2 = "up:app" ]; then
+    (cd app && npm install)
+    docker-compose up --build -d app_service
+  fi
+
   if [ $2 = "down" ]; then
     docker-compose down
   fi
 
   if [ $2 = "clean" ]; then
-    docker-compose down
+    docker-compose down --rmi all --volumes --remove-orphans
     (cd app && rm -rf node_modules .nuxt)
     (cd api && rm -rf gin-bin go.sum)
   fi

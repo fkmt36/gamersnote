@@ -9,7 +9,6 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // User user
@@ -18,47 +17,40 @@ import (
 type User struct {
 
 	// user id
-	// Read Only: true
-	UserID string `json:"user_id,omitempty"`
-
-	// gamersnote id
-	// Required: true
-	// Max Length: 12
-	// Min Length: 4
-	// Pattern: [A-Za-z0-9 ]{4,12}
-	GamersnoteID *string `json:"gamersnote_id"`
+	UserID BaseID `json:"user_id,omitempty"`
 
 	// username
 	// Required: true
-	// Max Length: 20
-	// Min Length: 4
-	Username *string `json:"username"`
+	Username Username `json:"username"`
+
+	// email
+	// Required: true
+	Email Email `json:"email"`
 
 	// avatar url
-	// Required: true
-	AvatarURL *string `json:"avatar_url"`
+	AvatarURL ImgURL `json:"avatar_url,omitempty"`
 
 	// message
-	// Required: true
-	// Max Length: 200
-	// Min Length: 0
-	Message *string `json:"message"`
+	Message ProfileMessage `json:"message,omitempty"`
 
 	// registered at
-	// Read Only: true
 	// Format: date
-	RegisteredAt strfmt.Date `json:"registered_at,omitempty"`
+	RegisteredAt BaseDate `json:"registered_at,omitempty"`
 }
 
 // Validate validates this user
 func (m *User) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateGamersnoteID(formats); err != nil {
+	if err := m.validateUserID(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateUsername(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateEmail(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -80,21 +72,16 @@ func (m *User) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *User) validateGamersnoteID(formats strfmt.Registry) error {
+func (m *User) validateUserID(formats strfmt.Registry) error {
 
-	if err := validate.Required("gamersnote_id", "body", m.GamersnoteID); err != nil {
-		return err
+	if swag.IsZero(m.UserID) { // not required
+		return nil
 	}
 
-	if err := validate.MinLength("gamersnote_id", "body", string(*m.GamersnoteID), 4); err != nil {
-		return err
-	}
-
-	if err := validate.MaxLength("gamersnote_id", "body", string(*m.GamersnoteID), 12); err != nil {
-		return err
-	}
-
-	if err := validate.Pattern("gamersnote_id", "body", string(*m.GamersnoteID), `[A-Za-z0-9 ]{4,12}`); err != nil {
+	if err := m.UserID.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("user_id")
+		}
 		return err
 	}
 
@@ -103,15 +90,22 @@ func (m *User) validateGamersnoteID(formats strfmt.Registry) error {
 
 func (m *User) validateUsername(formats strfmt.Registry) error {
 
-	if err := validate.Required("username", "body", m.Username); err != nil {
+	if err := m.Username.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("username")
+		}
 		return err
 	}
 
-	if err := validate.MinLength("username", "body", string(*m.Username), 4); err != nil {
-		return err
-	}
+	return nil
+}
 
-	if err := validate.MaxLength("username", "body", string(*m.Username), 20); err != nil {
+func (m *User) validateEmail(formats strfmt.Registry) error {
+
+	if err := m.Email.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("email")
+		}
 		return err
 	}
 
@@ -120,7 +114,14 @@ func (m *User) validateUsername(formats strfmt.Registry) error {
 
 func (m *User) validateAvatarURL(formats strfmt.Registry) error {
 
-	if err := validate.Required("avatar_url", "body", m.AvatarURL); err != nil {
+	if swag.IsZero(m.AvatarURL) { // not required
+		return nil
+	}
+
+	if err := m.AvatarURL.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("avatar_url")
+		}
 		return err
 	}
 
@@ -129,15 +130,14 @@ func (m *User) validateAvatarURL(formats strfmt.Registry) error {
 
 func (m *User) validateMessage(formats strfmt.Registry) error {
 
-	if err := validate.Required("message", "body", m.Message); err != nil {
-		return err
+	if swag.IsZero(m.Message) { // not required
+		return nil
 	}
 
-	if err := validate.MinLength("message", "body", string(*m.Message), 0); err != nil {
-		return err
-	}
-
-	if err := validate.MaxLength("message", "body", string(*m.Message), 200); err != nil {
+	if err := m.Message.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("message")
+		}
 		return err
 	}
 
@@ -150,7 +150,10 @@ func (m *User) validateRegisteredAt(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if err := validate.FormatOf("registered_at", "body", "date", m.RegisteredAt.String(), formats); err != nil {
+	if err := m.RegisteredAt.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("registered_at")
+		}
 		return err
 	}
 

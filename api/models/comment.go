@@ -20,8 +20,7 @@ import (
 type Comment struct {
 
 	// comment id
-	// Read Only: true
-	CommentID string `json:"comment_id,omitempty"`
+	CommentID BaseID `json:"comment_id,omitempty"`
 
 	// replies
 	// Read Only: true
@@ -47,6 +46,10 @@ type Comment struct {
 func (m *Comment) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateCommentID(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateReplies(formats); err != nil {
 		res = append(res, err)
 	}
@@ -66,6 +69,22 @@ func (m *Comment) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Comment) validateCommentID(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.CommentID) { // not required
+		return nil
+	}
+
+	if err := m.CommentID.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("comment_id")
+		}
+		return err
+	}
+
 	return nil
 }
 

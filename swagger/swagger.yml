@@ -16,8 +16,6 @@ paths:
   ############################################################
   /users:
     post:
-      security:
-        - Bearer: []
       tags:
         - user
       operationId: postUser
@@ -26,7 +24,18 @@ paths:
           in: body
           required: true
           schema:
-            $ref: "#/definitions/user"
+            type: object
+            required:
+              - email
+              - password
+              - username
+            properties:
+              email:
+                $ref: "#/definitions/email"
+              password:
+                $ref: "#/definitions/password"
+              username:
+                $ref: "#/definitions/username"
       responses:
         201:
           description: Created
@@ -40,10 +49,10 @@ paths:
           description: error
           schema:
             $ref: "#/definitions/error"
-  /users/{gamersnote_id}:
+  /users/{username}:
     parameters:
       - type: string
-        name: gamersnote_id
+        name: username
         in: path
         required: true
     get:
@@ -62,8 +71,6 @@ paths:
 
   /users/me:
     get:
-      security:
-        - Bearer: []
       tags:
         - user
       operationId: getMe
@@ -77,8 +84,6 @@ paths:
           schema:
             $ref: "#/definitions/error"
     put:
-      security:
-        - Bearer: []
       tags:
         - user
       operationId: putUser
@@ -98,14 +103,80 @@ paths:
           schema:
             $ref: "#/definitions/error"
     delete:
-      security:
-        - Bearer: []
       tags:
         - user
       operationId: deleteUser
       responses:
         204:
           description: Deleted
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /users/me/verified:
+    patch:
+      tags:
+        - user
+      operationId: patchUserVerified
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            required:
+              - code
+              - username
+            type: object
+            properties:
+              code:
+                type: string
+              username:
+                type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/user"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /users/me/signined:
+    patch:
+      tags:
+        - user
+      operationId: patchUserSignined
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required:
+              - email
+              - password
+            properties:
+              email:
+                $ref: "#/definitions/email"
+              password:
+                $ref: "#/definitions/password"
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/user"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /users/me/signouted:
+    patch:
+      tags:
+        - user
+      operationId: patchUserSignouted
+      responses:
+        200:
+          description: Success
         default:
           description: error
           schema:
@@ -138,8 +209,6 @@ paths:
           schema:
             $ref: "#/definitions/error"
     post:
-      security:
-        - Bearer: []
       tags:
         - article
       operationId: postArticle
@@ -178,8 +247,6 @@ paths:
           schema:
             $ref: "#/definitions/error"
     put:
-      security:
-        - Bearer: []
       tags:
         - article
       operationId: putArticle
@@ -199,8 +266,6 @@ paths:
           schema:
             $ref: "#/definitions/error"
     delete:
-      security:
-        - Bearer: []
       tags:
         - article
       operationId: deleteArticle
@@ -234,8 +299,6 @@ paths:
             $ref: "#/definitions/error"
   /users/me/follows/articles:
     get:
-      security:
-        - Bearer: []
       tags:
         - article
       operationId: getFollowsArticles
@@ -254,6 +317,37 @@ paths:
           description: error
           schema:
             $ref: "#/definitions/error"
+
+  ############################################################
+  ### image ##################################################
+  ############################################################
+  /users/me/images:
+    post:
+      tags:
+        - image
+      operationId: uploadImage
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: image
+          type: file
+      responses:
+        201:
+          description: Created
+          schema:
+            required:
+              - url
+            type: object
+            properties:
+              url:
+                type: string
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  
+  
   
   ############################################################
   ### comment ################################################
@@ -280,8 +374,6 @@ paths:
           schema:
             $ref: "#/definitions/error"
     post:
-      security:
-        - Bearer: []
       tags:
         - comment
       parameters:
@@ -311,8 +403,6 @@ paths:
         in: path
         required: true
     put:
-      security:
-        - Bearer: []
       tags:
         - comment
       operationId: putComment
@@ -332,8 +422,6 @@ paths:
           schema:
             $ref: "#/definitions/error"
     delete:
-      security:
-        - Bearer: []
       tags:
         - comment
       operationId: deleteComment
@@ -350,8 +438,6 @@ paths:
   ############################################################
   /users/me/follows:
     get:
-      security:
-        - Bearer: []
       tags:
         - follow
       operationId: getFollows
@@ -368,8 +454,6 @@ paths:
             $ref: "#/definitions/error"
   /users/me/follows/{user_id}:
     put:
-      security:
-        - Bearer: []
       tags:
         - follow
       operationId: putFollow
@@ -387,8 +471,6 @@ paths:
   ############################################################
   /users/me/notifications:
     get:
-      security:
-        - Bearer: []
       tags:
         - notification
       operationId: getNotifications
@@ -410,8 +492,6 @@ paths:
         in: path
         required: true
     put:
-      security:
-        - Bearer: []
       tags:
         - notification
       operationId: putNotificationRead
@@ -428,8 +508,6 @@ paths:
   ############################################################
   /users/me/stocks:
     get:
-      security:
-        - Bearer: []
       tags:
         - stock
       operationId: getStockedArticles
@@ -451,8 +529,6 @@ paths:
         in: path
         required: true
     put:
-      security:
-        - Bearer: []
       tags:
         - stock
       operationId: putStock
@@ -464,8 +540,6 @@ paths:
           schema:
             $ref: "#/definitions/error"
     delete:
-      security:
-        - Bearer: []
       tags:
         - stock
       operationId: deleteStock
@@ -482,8 +556,6 @@ paths:
   ############################################################
   /users/me/likes:
     get:
-      security:
-        - Bearer: []
       tags:
         - like
       operationId: getLikedArticles
@@ -505,8 +577,6 @@ paths:
         in: path
         required: true
     put:
-      security:
-        - Bearer: []
       tags:
         - like
       operationId: putLike
@@ -518,8 +588,6 @@ paths:
           schema:
             $ref: "#/definitions/error"
     delete:
-      security:
-        - Bearer: []
       tags:
         - like
       operationId: deleteLike
@@ -535,85 +603,94 @@ paths:
 
   
 definitions:
+  base_id:
+    type: string
+    readOnly: true
+  username:
+    type: string
+    pattern: "[A-Za-z0-9\\_]{4,12}"
+  email:
+    type: string
+    pattern: "[A-Za-z0-9\\-\\.\\_]+@[A-Za-z0-9\\-\\._]+\\.[A-Za-z]+"
+  password:
+    type: string
+    pattern: "[A-Za-z0-9\_]{6,20}"
+  base_date:
+    type: string
+    format: date
+    readOnly: true
+  img_url:
+    type: string
+  profile_message:
+    type: string
+    minLength: 0
+    maxLength: 200
+  article_title:
+    type: string
+    minLength: 1
+    maxLength: 50
+  base_html:
+    type: string
+  base_count:
+    type: integer
+    readOnly: true
+    
+  comments:
+    readOnly: true
+    type: array
+    items:
+      $ref: "#/definitions/comment"
+
   user:
     type: object
     required:
-      - gamersnote_id
       - username
-      - avatar_url
-      - message
+      - email
     properties:
       user_id:
-        type: string
-        readOnly: true
-      gamersnote_id:
-        type: string
-        pattern: "[A-Za-z0-9\_]{4,12}"
-        minLength: 4
-        maxLength: 12
+        $ref: "#/definitions/base_id"
       username:
-        type: string
-        minLength: 4
-        maxLength: 20
+        $ref: "#/definitions/username"
+      email:
+        $ref: "#/definitions/email"
       avatar_url:
-        type: string
+        $ref: "#/definitions/img_url"
       message:
-        type: string
-        minLength: 0
-        maxLength: 200
+        $ref: "#/definitions/profile_message"
       registered_at:
-        type: string
-        format: date
-        readOnly: true
+        $ref: "#/definitions/base_date"
   article:
     type: object
     required:
       - thumbnail_url
       - title
       - body
-      - is_published
     properties:
       article_id:
-        type: string
-        readOnly: true
+        $ref: "#/definitions/base_id"
       author:
         readOnly: true
         allOf:
           - $ref: '#/definitions/user'
       thumbnail_url:
-        type: string
+        $ref: "#/definitions/img_url"
       title:
-        type: string
+        $ref: "#/definitions/article_title"
       body:
-        type: string
+        $ref: "#/definitions/base_html"
       like_count:
-        type: integer
-        readOnly: true
+        $ref: "#/definitions/base_count"
       comments:
-        readOnly: true
-        type: array
-        items:
-          $ref: "#/definitions/comment"
-      is_published:
-        type: boolean
-      published_at:
-        type: string
-        format: date
-        readOnly: true
+        $ref: "#/definitions/comments"
       created_at:
-        type: string
-        format: date
-        readOnly: true
+        $ref: "#/definitions/base_date"
       updated_at:
-        type: string
-        format: date
-        readOnly: true
+        $ref: "#/definitions/base_date"
   notification:
     type: object
     properties:
       notification_id:
-        type: string
-        readOnly: true
+        $ref: "#/definitions/base_id"
       sender:
         $ref: "#/definitions/user"
       category:
@@ -635,8 +712,7 @@ definitions:
       - body
     properties:
       comment_id:
-        type: string
-        readOnly: true
+        $ref: "#/definitions/base_id"
       replies:
         readOnly: true
         type: array
@@ -660,8 +736,3 @@ definitions:
         format: int64
       message:
         type: string
-securityDefinitions:
-  Bearer:
-    type: apiKey
-    name: Authorization
-    in: header

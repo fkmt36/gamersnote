@@ -9,21 +9,19 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
-
-	"gamersnote.com/v1/utils"
 )
 
 // DeleteCommentHandlerFunc turns a function with the right signature into a delete comment handler
-type DeleteCommentHandlerFunc func(DeleteCommentParams, *utils.TokenPayload) middleware.Responder
+type DeleteCommentHandlerFunc func(DeleteCommentParams) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn DeleteCommentHandlerFunc) Handle(params DeleteCommentParams, principal *utils.TokenPayload) middleware.Responder {
-	return fn(params, principal)
+func (fn DeleteCommentHandlerFunc) Handle(params DeleteCommentParams) middleware.Responder {
+	return fn(params)
 }
 
 // DeleteCommentHandler interface for that can handle valid delete comment params
 type DeleteCommentHandler interface {
-	Handle(DeleteCommentParams, *utils.TokenPayload) middleware.Responder
+	Handle(DeleteCommentParams) middleware.Responder
 }
 
 // NewDeleteComment creates a new http.Handler for the delete comment operation
@@ -48,25 +46,12 @@ func (o *DeleteComment) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 	var Params = NewDeleteCommentParams()
 
-	uprinc, aCtx, err := o.Context.Authorize(r, route)
-	if err != nil {
-		o.Context.Respond(rw, r, route.Produces, route, err)
-		return
-	}
-	if aCtx != nil {
-		r = aCtx
-	}
-	var principal *utils.TokenPayload
-	if uprinc != nil {
-		principal = uprinc.(*utils.TokenPayload) // this is really a utils.TokenPayload, I promise
-	}
-
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params, principal) // actually handle the request
+	res := o.Handler.Handle(Params) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 

@@ -33,7 +33,7 @@ type GetUserParams struct {
 	  Required: true
 	  In: path
 	*/
-	GamersnoteID string
+	Username string
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -45,8 +45,8 @@ func (o *GetUserParams) BindRequest(r *http.Request, route *middleware.MatchedRo
 
 	o.HTTPRequest = r
 
-	rGamersnoteID, rhkGamersnoteID, _ := route.Params.GetOK("gamersnote_id")
-	if err := o.bindGamersnoteID(rGamersnoteID, rhkGamersnoteID, route.Formats); err != nil {
+	rUsername, rhkUsername, _ := route.Params.GetOK("username")
+	if err := o.bindUsername(rUsername, rhkUsername, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -56,8 +56,8 @@ func (o *GetUserParams) BindRequest(r *http.Request, route *middleware.MatchedRo
 	return nil
 }
 
-// bindGamersnoteID binds and validates parameter GamersnoteID from path.
-func (o *GetUserParams) bindGamersnoteID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+// bindUsername binds and validates parameter Username from path.
+func (o *GetUserParams) bindUsername(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
@@ -66,7 +66,7 @@ func (o *GetUserParams) bindGamersnoteID(rawData []string, hasKey bool, formats 
 	// Required: true
 	// Parameter is provided by construction from the route
 
-	o.GamersnoteID = raw
+	o.Username = raw
 
 	return nil
 }
