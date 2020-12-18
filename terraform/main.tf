@@ -12,10 +12,10 @@ terraform {
   }
 
   backend "remote" {
-    organization = var.organization
+    organization = "happyfukumoto"
 
     workspaces {
-      name = var.name
+      name = "gamersnote"
     }
   }
 }
