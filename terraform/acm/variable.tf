@@ -1,3 +1,3 @@
-variable domain {
+variable "domain" {
   type = string
 }

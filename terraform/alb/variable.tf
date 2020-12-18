@@ -1,19 +1,19 @@
-variable name {
+variable "name" {
   type = string
 }
 
-variable vpc_id {
+variable "vpc_id" {
   type = string
 }
 
-variable public_subnets {
+variable "public_subnets" {
   type = list(string)
 }
 
-variable domain {
+variable "domain" {
   type = string
 }
 
-variable certificate_arn {
+variable "certificate_arn" {
   type = string
 }
