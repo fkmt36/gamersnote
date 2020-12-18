@@ -4,11 +4,19 @@ variable "organization" {}
 
 provider "aws" {}
 
-backend "remote" {
-  organization = var.organization
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+  }
 
-  workspaces {
-    name = var.name
+  backend "remote" {
+    organization = var.organization
+
+    workspaces {
+      name = var.name
+    }
   }
 }
 
