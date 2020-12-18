@@ -1,6 +1,5 @@
 variable "name" {}
 variable "domain" {}
-variable "organization" {}
 
 provider "aws" {}
 
