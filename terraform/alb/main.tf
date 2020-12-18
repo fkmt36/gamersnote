@@ -1,20 +1,20 @@
 # ALB用のSecurityGroup
 resource "aws_security_group" "alb" {
-  name = "${var.name}-alb"
+  name        = "${var.name}-alb"
   description = "${var.name} alb"
-  vpc_id = var.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress {
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -26,11 +26,11 @@ resource "aws_security_group" "alb" {
 # SecurityGroupにhttps用のルールを追加
 resource "aws_security_group_rule" "alb_https" {
   security_group_id = aws_security_group.alb.id
-  type = "ingress"
-  from_port = 443
-  to_port   = 443
-  protocol  = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 # ドメインの紐付け
@@ -61,9 +61,9 @@ module "aws_alb" {
 
   load_balancer_type = "application"
 
-  vpc_id             = var.vpc_id
-  subnets            = var.public_subnets
-  security_groups    = [aws_security_group.alb.id]
+  vpc_id          = var.vpc_id
+  subnets         = var.public_subnets
+  security_groups = [aws_security_group.alb.id]
 
   # access_logs = {
   #   bucket = "my-alb-logs"
