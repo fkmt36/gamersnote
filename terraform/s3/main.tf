@@ -27,3 +27,17 @@ resource "aws_s3_bucket_policy" "main" {
 POLICY
 }
 
+data "aws_route53_zone" "main" {
+  name = var.domain
+}
+
+resource "aws_route53_record" "main" {
+  zone_id = data.aws_route53_zone.main.id
+  name    = "img"
+  type    = "A"
+
+  alias {
+    name    = data.aws_s3_bucket.main.website_domain
+    zone_id = data.aws_s3_bucket.main.hosted_zone_id
+  }
+}
