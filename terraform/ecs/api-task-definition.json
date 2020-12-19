@@ -1,4 +1,4 @@
-{
+[{
   "taskRoleArn": "arn:aws:iam::455000526485:role/ecsTaskExecutionRole",
   "executionRoleArn": "arn:aws:iam::455000526485:role/ecsTaskExecutionRole",
   "cpu": "256",
@@ -64,4 +64,4 @@
       ]
     }
   ]
-}
+}]
