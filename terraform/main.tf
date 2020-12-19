@@ -62,6 +62,7 @@ module "rds" {
 module "s3" {
   source = "./s3"
   name   = var.name
+  domain = var.domain
 }
 
 # ECS
