@@ -16,7 +16,9 @@ resource "aws_s3_bucket_policy" "main" {
   "Version": "2012-10-17",
   "Statement": [
     {
+      "Sid": "${var.name}-get-object",
       "Action": "s3:GetObject",
+      "Principal": "*",
       "Effect": "Allow",
       "Resource": "${aws_s3_bucket.main.arn}/*"
     }
