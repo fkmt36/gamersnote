@@ -1,5 +1,7 @@
 variable "name" {}
 variable "domain" {}
+variable "db_username" {}
+variable "db_password" {}
 
 provider "aws" {}
 
@@ -47,6 +49,14 @@ module "alb" {
   certificate_arn = module.acm.certificate_arn
 }
 
+# RDS
+module "rds" {
+  source          = "./rds"
+  db_username     = var.db_username
+  db_password     = var.db_password
+  private_subnets = module.vpc.private_subnets
+}
+
 # ECS
 module "ecs" {
   source           = "./ecs"
@@ -55,3 +65,4 @@ module "ecs" {
   target_group_arn = module.alb.target_group_arns[0]
   vpc_id           = module.vpc.vpc_id
 }
+
