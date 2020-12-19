@@ -44,6 +44,27 @@ resource "aws_iam_role" "ecs_task_role" {
 EOF
 }
 
+# タスク実行用のRole
+resource "aws_iam_role" "ecs_task_ex_role" {
+  name = "ecs_task_ex_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
 # タスク用のポリシー
 resource "aws_iam_policy" "ecs_task_policy" {
   name = "ecs_task_policy"
@@ -64,11 +85,41 @@ resource "aws_iam_policy" "ecs_task_policy" {
 EOF
 }
 
+# タスク実行用のポリシー
+resource "aws_iam_policy" "ecs_task_ex_policy" {
+  name = "ecs_task_ex_policy"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:GetAuthorizationToken",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
 # ロールにポリシーをアタッチ
-resource "aws_iam_policy_attachment" "attach" {
-  name       = "attach"
+resource "aws_iam_policy_attachment" "ecs_task_policy_attach" {
+  name       = "ecs_task_policy_attach"
   roles      = [aws_iam_role.ecs_task_role.name]
   policy_arn = aws_iam_policy.ecs_task_policy.arn
+}
+resource "aws_iam_policy_attachment" "ecs_task_ex_policy_attach" {
+  name       = "ecs_task_ex_policy_attach"
+  roles      = [aws_iam_role.ecs_task_ex_role.name]
+  policy_arn = aws_iam_policy.ecs_task_ex_policy.arn
 }
 
 
