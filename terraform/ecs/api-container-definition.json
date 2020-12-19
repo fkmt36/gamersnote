@@ -1,0 +1,57 @@
+[
+  {
+    "name": "api",
+    "image": "nginx:1.14",
+    "containerPort": 80,
+    "secrets": [
+      {
+        "valueFrom": "gamersnote-postgres-host",
+        "name": "POSTGRES_HOST"
+      },
+      {
+        "valueFrom": "gamersnote-postgres-user",
+        "name": "POSTGRES_USER"
+      },
+      {
+        "valueFrom": "gamersnote-postgres-password",
+        "name": "POSTGRES_PASSWORD"
+      },
+      {
+        "valueFrom": "gamersnote-postgres-dbname",
+        "name": "POSTGRES_DBNAME"
+      },
+      {
+        "valueFrom": "gamersnote-postgres-port",
+        "name": "POSTGRES_PORT"
+      },
+      {
+        "valueFrom": "gamersnote-email-from-address",
+        "name": "EMAIL_FROM_ADDRESS"
+      },
+      {
+        "valueFrom": "gamersnote-aws-access-key-id",
+        "name": "AWS_ACCESS_KEY_ID"
+      },
+      {
+        "valueFrom": "gamersnote-aws-secret-key",
+        "name": "AWS_SECRET_KEY"
+      },
+      {
+        "valueFrom": "gamersnote-aws-region",
+        "name": "AWS_REGION"
+      },
+      {
+        "valueFrom": "gamersnote-base-url",
+        "name": "BASE_URL"
+      },
+      {
+        "valueFrom": "gamersnote-s3-bucket",
+        "name": "S3_BUCKET"
+      },
+      {
+        "valueFrom": "gamersnote-s3-base-url",
+        "name": "S3_BASEURL"
+      }
+    ]
+  }
+]
