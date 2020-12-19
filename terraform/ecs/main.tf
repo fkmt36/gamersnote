@@ -6,7 +6,7 @@ resource "aws_security_group" "this" {
 
   ingress {
     from_port   = 80
-    to_port     = 80
+    to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["10.0.0.0/16"] # 同一IPのみ
   }
@@ -123,7 +123,6 @@ resource "aws_iam_policy_attachment" "ecs_task_ex_policy_attach" {
   policy_arn = aws_iam_policy.ecs_task_ex_policy.arn
 }
 
-
 # ECS Cluster
 resource "aws_ecs_cluster" "main" {
   name = var.name
@@ -138,7 +137,70 @@ resource "aws_ecs_task_definition" "api" {
   cpu                      = 256
   memory                   = 512
   requires_compatibilities = ["FARGATE"]
-  container_definitions    = file("${path.module}/api-container-definition.json")
+  container_definitions    = <<TASK_DEFINITION
+[
+  {
+    "name": "api",
+    "image": "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/${var.name}-api",
+    "portMappings": [
+      {
+          "containerPort": 3000,
+          "hostPort": 3000
+      }
+    ],
+    "secrets": [
+      {
+        "valueFrom": "gamersnote-postgres-host",
+        "name": "POSTGRES_HOST"
+      },
+      {
+        "valueFrom": "gamersnote-postgres-user",
+        "name": "POSTGRES_USER"
+      },
+      {
+        "valueFrom": "gamersnote-postgres-password",
+        "name": "POSTGRES_PASSWORD"
+      },
+      {
+        "valueFrom": "gamersnote-postgres-dbname",
+        "name": "POSTGRES_DBNAME"
+      },
+      {
+        "valueFrom": "gamersnote-postgres-port",
+        "name": "POSTGRES_PORT"
+      },
+      {
+        "valueFrom": "gamersnote-email-from-address",
+        "name": "EMAIL_FROM_ADDRESS"
+      },
+      {
+        "valueFrom": "gamersnote-aws-access-key-id",
+        "name": "AWS_ACCESS_KEY_ID"
+      },
+      {
+        "valueFrom": "gamersnote-aws-secret-key",
+        "name": "AWS_SECRET_KEY"
+      },
+      {
+        "valueFrom": "gamersnote-aws-region",
+        "name": "AWS_REGION"
+      },
+      {
+        "valueFrom": "gamersnote-base-url",
+        "name": "BASE_URL"
+      },
+      {
+        "valueFrom": "gamersnote-s3-bucket",
+        "name": "S3_BUCKET"
+      },
+      {
+        "valueFrom": "gamersnote-s3-base-url",
+        "name": "S3_BASEURL"
+      }
+    ]
+  }
+]
+TASK_DEFINITION
 }
 
 # ECS Service

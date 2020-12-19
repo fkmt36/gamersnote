@@ -23,16 +23,6 @@ resource "aws_security_group" "alb" {
   }
 }
 
-# # SecurityGroupにhttps用のルールを追加
-# resource "aws_security_group_rule" "alb_https" {
-#   security_group_id = aws_security_group.alb.id
-#   type              = "ingress"
-#   from_port         = 443
-#   to_port           = 443
-#   protocol          = "tcp"
-#   cidr_blocks       = ["0.0.0.0/0"]
-# }
-
 # ドメインの紐付け
 data "aws_route53_zone" "this" {
   name         = var.domain
@@ -88,6 +78,10 @@ module "aws_alb" {
       protocol           = "HTTPS"
       certificate_arn    = var.certificate_arn
       target_group_index = 0
+
+      conditions = [{
+        path_patterns = ["/api"]
+      }]
     }
   ]
 
