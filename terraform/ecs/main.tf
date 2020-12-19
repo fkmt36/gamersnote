@@ -132,6 +132,7 @@ resource "aws_ecs_cluster" "main" {
 resource "aws_ecs_task_definition" "api" {
   family                   = "${var.name}-api"
   task_role_arn            = aws_iam_role.ecs_task_role.arn
+  execution_role_arn       = aws_iam_role.ecs_task_ex_role.arn
   network_mode             = "awsvpc"
   cpu                      = 256
   memory                   = 512
