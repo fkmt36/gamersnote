@@ -10,6 +10,6 @@ variable "db_password" {
   type = string
 }
 
-variable "public_subnets" {
+variable "database_subnet_group_name" {
   type = list(string)
 }

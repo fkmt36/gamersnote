@@ -53,11 +53,11 @@ module "alb" {
 
 # RDS
 module "rds" {
-  source         = "./rds"
-  name           = var.name
-  db_username    = var.db_username
-  db_password    = var.db_password
-  public_subnets = module.vpc.public_subnets
+  source                     = "./rds"
+  name                       = var.name
+  db_username                = var.db_username
+  db_password                = var.db_password
+  database_subnet_group_name = module.vpc.database_subnet_group.name
 }
 
 # S3
