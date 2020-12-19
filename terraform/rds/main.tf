@@ -14,7 +14,7 @@ resource "aws_db_instance" "main" {
   username                  = var.db_username
   password                  = var.db_password
   parameter_group_name      = "default.postgres12"
-  db_subnet_group_name      = database_subnet_group_name
+  db_subnet_group_name      = var.database_subnet_group_name
   skip_final_snapshot       = false
   final_snapshot_identifier = "${var.name}-db-snapshot"
   publicly_accessible       = true
