@@ -57,6 +57,12 @@ module "rds" {
   private_subnets = module.vpc.private_subnets
 }
 
+# S3
+module "s3" {
+  source = "./s3"
+  name   = var.name
+}
+
 # ECS
 module "ecs" {
   source           = "./ecs"

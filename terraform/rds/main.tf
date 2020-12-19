@@ -4,16 +4,17 @@ resource "aws_db_subnet_group" "main" {
 }
 
 resource "aws_db_instance" "main" {
-  # identifier           = "gamersnote-db"
-  allocated_storage    = 20
-  storage_type         = "gp2"
-  engine               = "postgres"
-  engine_version       = "12.4"
-  instance_class       = "db.t2.micro"
-  name                 = "gamersnote"
-  username             = var.db_username
-  password             = var.db_password
-  parameter_group_name = "default.postgres12"
-  db_subnet_group_name = aws_db_subnet_group.main.name
-  skip_final_snapshot  = true
+  identifier                = "gamersnote-db"
+  allocated_storage         = 20
+  storage_type              = "gp2"
+  engine                    = "postgres"
+  engine_version            = "12.4"
+  instance_class            = "db.t2.micro"
+  name                      = "gamersnote"
+  username                  = var.db_username
+  password                  = var.db_password
+  parameter_group_name      = "default.postgres12"
+  db_subnet_group_name      = aws_db_subnet_group.main.name
+  skip_final_snapshot       = false
+  final_snapshot_identifier = "${var.name}-db-snapshot"
 }
