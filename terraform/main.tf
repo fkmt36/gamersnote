@@ -75,6 +75,6 @@ module "ecs" {
   target_group_arn = module.alb.target_group_arns[0]
   vpc_id           = module.vpc.vpc_id
   aws_account_id   = var.aws_account_id
-  aws_region = var.aws_region
+  aws_region       = var.aws_region
 }
 
