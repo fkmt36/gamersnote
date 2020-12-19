@@ -28,50 +28,29 @@ resource "aws_ecs_cluster" "main" {
   name = var.name
 }
 
-# # Task Definition
-# resource "aws_ecs_task_definition" "main" {
-#   family = "${var.name}"
+# Task Definition
+resource "aws_ecs_task_definition" "api" {
+  family = "${var.name}-api"
+  container_definitions = file("api-task-definition.json")
+}
 
-#   requires_compatibilities = ["FARGATE"]
+# ECS Service
+resource "aws_ecs_service" "main" {
+  name = "${var.name}"
 
-#   cpu    = "256"
-#   memory = "512"
+  cluster = aws_ecs_cluster.main.name
+  launch_type = "FARGATE"
+  desired_count = "1"
+  task_definition = aws_ecs_task_definition.api.arn
 
-#   network_mode = "awsvpc"
+  network_configuration {
+    subnets         = var.subnets
+    security_groups = [aws_security_group.this.id]
+  }
 
-#   container_definitions = <<EOL
-# [
-#   {
-#     "name": "nginx",
-#     "image": "nginx:1.14",
-#     "portMappings": [
-#       {
-#         "containerPort": 80,
-#         "hostPort": 80
-#       }
-#     ]
-#   }
-# ]
-# EOL
-# }
-
-# # ECS Service
-# resource "aws_ecs_service" "main" {
-#   name = "${var.name}"
-
-#   cluster = aws_ecs_cluster.main.name
-#   launch_type = "FARGATE"
-#   desired_count = "1"
-#   task_definition = aws_ecs_task_definition.main.arn
-
-#   network_configuration {
-#     subnets         = var.subnets
-#     security_groups = [aws_security_group.this.id]
-#   }
-
-#   load_balancer {
-#     target_group_arn = var.target_group_arn
-#     container_name   = "nginx"
-#     container_port   = "80"
-#   }
-# }
+  load_balancer {
+    target_group_arn = var.target_group_arn
+    container_name   = "api"
+    container_port   = "80"
+  }
+}
