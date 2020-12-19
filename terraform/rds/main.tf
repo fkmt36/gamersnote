@@ -1,6 +1,6 @@
 resource "aws_db_subnet_group" "main" {
   name       = "gamersnote-subnet-group"
-  subnet_ids = var.private_subnets
+  subnet_ids = var.public_subnets
 }
 
 resource "aws_db_instance" "main" {
