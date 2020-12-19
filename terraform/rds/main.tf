@@ -1,5 +1,5 @@
 resource "aws_db_subnet_group" "main" {
-  name       = "main"
+  name       = "gamersnote-subnet-group"
   subnet_ids = var.private_subnets
 }
 
@@ -13,5 +13,5 @@ resource "aws_db_instance" "main" {
   username             = var.db_username
   password             = var.db_password
   parameter_group_name = "default.postgres12"
-  db_subnet_group_name = aws_db_subnet_group.main
+  db_subnet_group_name = aws_db_subnet_group.main.name
 }
