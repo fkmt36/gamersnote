@@ -8,6 +8,11 @@ terraform apply
 ## 環境変数
 Terraform用の環境変数には`TF_VAR_`の接頭辞をつければ良い。例えば、`TF_VAR_NAME=hoge`とすると、Terraform内で`name=hoge`を参照できる。
 
+## フォーマットを忘れない
+```
+terraform fmt -recursive
+```
+
 ## モジュールを指定する方法
 `-target`オプションを使う。例えば、`terraform plan -targert=module.ecr`。
 

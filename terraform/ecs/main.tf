@@ -30,17 +30,17 @@ resource "aws_ecs_cluster" "main" {
 
 # Task Definition
 resource "aws_ecs_task_definition" "api" {
-  family = "${var.name}-api"
+  family                = "${var.name}-api"
   container_definitions = file("api-task-definition.json")
 }
 
 # ECS Service
 resource "aws_ecs_service" "main" {
-  name = "${var.name}"
+  name = var.name
 
-  cluster = aws_ecs_cluster.main.name
-  launch_type = "FARGATE"
-  desired_count = "1"
+  cluster         = aws_ecs_cluster.main.name
+  launch_type     = "FARGATE"
+  desired_count   = "1"
   task_definition = aws_ecs_task_definition.api.arn
 
   network_configuration {
