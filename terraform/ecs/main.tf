@@ -31,7 +31,7 @@ resource "aws_ecs_cluster" "main" {
 # Task Definition
 resource "aws_ecs_task_definition" "api" {
   family                = "${var.name}-api"
-  container_definitions = file("./api-task-definition.json")
+  container_definitions = file("${path.module}/api-task-definition.json")
 }
 
 # ECS Service
