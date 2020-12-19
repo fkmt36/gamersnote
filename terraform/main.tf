@@ -52,6 +52,7 @@ module "alb" {
 # RDS
 module "rds" {
   source          = "./rds"
+  name            = var.name
   db_username     = var.db_username
   db_password     = var.db_password
   private_subnets = module.vpc.private_subnets
