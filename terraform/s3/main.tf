@@ -18,7 +18,7 @@ resource "aws_s3_bucket_policy" "main" {
     {
       "Action": "s3:GetObject",
       "Effect": "Allow",
-      "Resource": "${aws_s3_bucket.bucket.arn}/*"
+      "Resource": "${aws_s3_bucket.main.arn}/*"
     }
   ]
 }
