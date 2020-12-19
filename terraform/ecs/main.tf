@@ -30,14 +30,14 @@ resource "aws_ecs_cluster" "main" {
 
 # Task Definition
 resource "aws_ecs_task_definition" "api" {
-  family                = "${var.name}-api"
-  task_role_arn = "arn:aws:iam::455000526485:role/ecsTaskExecutionRole"
-  execution_role_arn = "arn:aws:iam::455000526485:role/ecsTaskExecutionRole"
-  network_mode = "awsvpc"
-  cpu = 256
-  memory = 512
+  family                   = "${var.name}-api"
+  task_role_arn            = "arn:aws:iam::455000526485:role/ecsTaskExecutionRole"
+  execution_role_arn       = "arn:aws:iam::455000526485:role/ecsTaskExecutionRole"
+  network_mode             = "awsvpc"
+  cpu                      = 256
+  memory                   = 512
   requires_compatibilities = ["FARGATE"]
-  container_definitions = file("${path.module}/api-container-definition.json")
+  container_definitions    = file("${path.module}/api-container-definition.json")
 }
 
 # ECS Service
