@@ -35,8 +35,7 @@ resource "aws_iam_role" "ecs_task_role" {
         "Effect": "Allow",
         "Action": [
             "ssm:GetParameters"
-        ],
-        "Resource": "*"
+        ]
     }
   ]
 }
@@ -64,8 +63,7 @@ resource "aws_iam_role" "ecs_task_ex_role" {
             "ecr:BatchGetImage",
             "logs:CreateLogStream",
             "logs:PutLogEvents"
-        ],
-        "Resource": "*"
+        ]
     }
   ]
 }
