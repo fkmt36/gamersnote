@@ -9,3 +9,7 @@ output "public_subnets" {
 output "private_subnets" {
   value = module.aws_vpc.private_subnets
 }
+
+output "database_subnets" {
+  value = module.aws_vpc.database_subnets
+}
