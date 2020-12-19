@@ -96,6 +96,7 @@ resource "aws_iam_policy" "ecs_task_ex_policy" {
     {
       "Effect": "Allow",
       "Action": [
+        "ssm:GetParameters",
         "ecr:GetAuthorizationToken",
         "ecr:BatchCheckLayerAvailability",
         "ecr:GetDownloadUrlForLayer",
