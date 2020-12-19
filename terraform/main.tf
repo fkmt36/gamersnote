@@ -57,7 +57,7 @@ module "rds" {
   name                       = var.name
   db_username                = var.db_username
   db_password                = var.db_password
-  database_subnet_group_name = module.vpc.database_subnet_group.name
+  database_subnet_group_name = module.vpc.database_subnet_group
 }
 
 # S3
