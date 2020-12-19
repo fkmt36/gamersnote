@@ -75,10 +75,10 @@ module "aws_alb" {
       backend_protocol = "HTTP"
       backend_port     = 80
       target_type      = "ip"
-      health_check = {
-        port = 80
-        path = "/"
-      }
+      # health_check = {
+      #   port = 80
+      #   path = "/"
+      # }
     }
   ]
 
@@ -90,19 +90,6 @@ module "aws_alb" {
       target_group_index = 0
     }
   ]
-
-  # https_listener_rules = [{
-  #   https_listener_index = 0
-
-  #   actions = [{
-  #     type               = "forward"
-  #     target_group_index = 0
-  #   }]
-
-  #   conditions = [{
-  #     path_patterns = ["*"]
-  #   }]
-  # }]
 
   http_tcp_listeners = [
     {

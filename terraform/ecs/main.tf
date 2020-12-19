@@ -23,6 +23,60 @@ resource "aws_security_group" "this" {
   }
 }
 
+# タスク用のRole
+resource "aws_iam_role" "ecs_task_role" {
+  name = "ecs_task_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+        "Effect": "Allow",
+        "Action": [
+            "ssm:GetParameters"
+        ],
+        "Resource": "*"
+    }
+  ]
+}
+EOF
+
+  tags = {
+    tag-key = "${var.name}-ecs-task-role"
+  }
+}
+
+# タスク実行用のRole
+resource "aws_iam_role" "ecs_task_ex_role" {
+  name = "ecs_task_ex_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+        "Effect": "Allow",
+        "Action": [
+            "ecr:GetAuthorizationToken",
+            "ecr:BatchCheckLayerAvailability",
+            "ecr:GetDownloadUrlForLayer",
+            "ecr:BatchGetImage",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents"
+        ],
+        "Resource": "*"
+    }
+  ]
+}
+EOF
+
+  tags = {
+    tag-key = "${var.name}-ecs-task-ex-role"
+  }
+}
+
+
 # ECS Cluster
 resource "aws_ecs_cluster" "main" {
   name = var.name
@@ -31,8 +85,8 @@ resource "aws_ecs_cluster" "main" {
 # Task Definition
 resource "aws_ecs_task_definition" "api" {
   family                   = "${var.name}-api"
-  task_role_arn            = "arn:aws:iam::455000526485:role/ecsTaskExecutionRole"
-  execution_role_arn       = "arn:aws:iam::455000526485:role/ecsTaskExecutionRole"
+  task_role_arn            = aws_iam_role.ecs_task_role.arn
+  execution_role_arn       = aws_iam_role.ecs_task_ex_role.arn
   network_mode             = "awsvpc"
   cpu                      = 256
   memory                   = 512
@@ -41,8 +95,8 @@ resource "aws_ecs_task_definition" "api" {
 }
 
 # ECS Service
-resource "aws_ecs_service" "main" {
-  name = var.name
+resource "aws_ecs_service" "api" {
+  name = "${var.name}-api"
 
   cluster         = aws_ecs_cluster.main.name
   launch_type     = "FARGATE"
