@@ -2,6 +2,8 @@ variable "name" {}
 variable "domain" {}
 variable "db_username" {}
 variable "db_password" {}
+variable "aws_account_id" {}
+variable "aws_region" {}
 
 provider "aws" {}
 
@@ -72,5 +74,7 @@ module "ecs" {
   subnets          = [module.vpc.private_subnets[0]] # 節約のために一つのサブネットのみ使う
   target_group_arn = module.alb.target_group_arns[0]
   vpc_id           = module.vpc.vpc_id
+  aws_account_id   = var.aws_account_id
+  aws_region       = var.aws_region
 }
 
