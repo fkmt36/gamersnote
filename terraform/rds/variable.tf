@@ -11,5 +11,5 @@ variable "db_password" {
 }
 
 variable "database_subnet_group_name" {
-  type = list(string)
+  type = string
 }
