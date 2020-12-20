@@ -304,7 +304,7 @@ resource "aws_service_discovery_private_dns_namespace" "main" {
   vpc  = var.vpc_id
 }
 resource "aws_service_discovery_service" "main" {
-  name = "${var.nanme}-api"
+  name = "${var.name}-api"
 
   dns_config {
     namespace_id = aws_service_discovery_private_dns_namespace.main.id
