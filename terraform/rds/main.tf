@@ -1,7 +1,27 @@
-# resource "aws_db_subnet_group" "main" {
-#   name       = "gamersnote-subnet-group"
-#   subnet_ids = var.public_subnets
-# }
+# RDS用のSecurityGroup
+resource "aws_security_group" "rds" {
+  name        = "${var.name}-rds"
+  description = "${var.name} rds"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.name}-rds"
+  }
+}
 
 resource "aws_db_instance" "main" {
   identifier                = "${var.name}-db"
@@ -18,4 +38,5 @@ resource "aws_db_instance" "main" {
   skip_final_snapshot       = false
   final_snapshot_identifier = "${var.name}-db-snapshot"
   publicly_accessible       = true
+  security_group_names      = aws_security_group.rds.name
 }

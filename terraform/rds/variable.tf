@@ -13,3 +13,7 @@ variable "db_password" {
 variable "database_subnet_group_name" {
   type = string
 }
+
+variable "vpc_id" {
+  type = string
+}
