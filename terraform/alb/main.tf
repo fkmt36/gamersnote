@@ -84,8 +84,8 @@ module "aws_alb" {
 
   https_listeners = [
     {
-      port            = 443
-      certificate_arn = var.certificate_arn
+      port               = 443
+      certificate_arn    = var.certificate_arn
       target_group_index = 1
     }
   ]
