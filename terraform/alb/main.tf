@@ -74,13 +74,22 @@ module "aws_alb" {
 
   https_listeners = [
     {
-      port               = 443
-      protocol           = "HTTPS"
-      certificate_arn    = var.certificate_arn
-      target_group_index = 0
+      port            = 443
+      certificate_arn = var.certificate_arn
+    }
+  ]
+
+  https_listener_rules = [
+    {
+      https_listener_index = 0
+
+      actions = [{
+        type               = "forward"
+        target_group_index = 0
+      }]
 
       conditions = [{
-        path_patterns = ["/api"]
+        path_patterns = ["/api/*"]
       }]
     }
   ]
