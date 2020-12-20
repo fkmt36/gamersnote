@@ -155,7 +155,7 @@ resource "aws_ecs_task_definition" "api" {
         "awslogs-group": "${var.log_group_name}",
         "awslogs-stream-prefix": "${var.name}-api"
       }
-    }
+    },
     "secrets": [
       {
         "valueFrom": "gamersnote-postgres-host",
