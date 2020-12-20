@@ -56,7 +56,12 @@ jobs:
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
-        run: terraform plan -no-color -var 'image_tag=${{github.sha}}'
+        run: |
+          touch a.auto.tfvars
+          echo ${{github.sha}} >> a.auto.tfvars
+          ls
+          cat a.auto.tfvars
+          terraform plan -no-color
         continue-on-error: true
         working-directory: ./terraform
 
