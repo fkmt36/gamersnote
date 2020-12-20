@@ -21,7 +21,6 @@ type GetMeHandler struct {
 
 // Handle 自分のユーザー情報を取得します。
 func (h GetMeHandler) Handle(params o.GetMeParams) middleware.Responder {
-	println("bbb")
 	uid := h.ctxuidSvc.GetUID(params.HTTPRequest)
 	if uid == "" {
 		return o.NewGetUserDefault(401)

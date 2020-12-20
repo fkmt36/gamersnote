@@ -61,24 +61,22 @@ module "aws_alb" {
 
   target_groups = [
     {
-      name_prefix      = "gn-"
+      name_prefix      = "gn-api-"
       backend_protocol = "HTTP"
       backend_port     = 80
       target_type      = "ip"
-      # health_check = {
-      #   port = 80
-      #   path = "/"
-      # }
+      health_check = {
+        path = "/api/v1/health"
+      }
     },
     {
-      name_prefix      = "gn-"
+      name_prefix      = "gn-app-"
       backend_protocol = "HTTP"
       backend_port     = 80
       target_type      = "ip"
-      # health_check = {
-      #   port = 80
-      #   path = "/"
-      # }
+      health_check = {
+        path = "/"
+      }
     }
   ]
 

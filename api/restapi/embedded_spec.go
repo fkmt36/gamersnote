@@ -304,6 +304,19 @@ func init() {
         }
       ]
     },
+    "/status": {
+      "get": {
+        "tags": [
+          "healthcheck"
+        ],
+        "operationId": "healthcheck",
+        "responses": {
+          "200": {
+            "description": "healthy"
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "tags": [
@@ -1413,6 +1426,19 @@ func init() {
           "required": true
         }
       ]
+    },
+    "/status": {
+      "get": {
+        "tags": [
+          "healthcheck"
+        ],
+        "operationId": "healthcheck",
+        "responses": {
+          "200": {
+            "description": "healthy"
+          }
+        }
+      }
     },
     "/users": {
       "post": {
