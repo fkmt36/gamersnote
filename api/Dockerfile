@@ -20,4 +20,4 @@ WORKDIR /usr/src/api
 
 COPY --from=build /usr/src/api/a.out .
 
-CMD [ "./a.out" ]
+CMD [ "./a.out --port=3000" ]
