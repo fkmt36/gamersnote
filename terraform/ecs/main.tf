@@ -148,6 +148,14 @@ resource "aws_ecs_task_definition" "api" {
           "hostPort": 3000
       }
     ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "${var.aws_region}",
+        "awslogs-group": "${var.log_group_name}",
+        "awslogs-stream-prefix": "${var.name}-api"
+      }
+    }
     "secrets": [
       {
         "valueFrom": "gamersnote-postgres-host",
