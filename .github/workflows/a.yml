@@ -58,7 +58,7 @@ jobs:
         if: github.event_name == 'pull_request'
         run: |
           touch a.auto.tfvars
-          echo '"image_tag = ${{github.sha}}"' >> a.auto.tfvars
+          echo 'image_tag = "${{github.sha}}"' >> a.auto.tfvars
           cat a.auto.tfvars
           terraform plan -no-color
         continue-on-error: true
