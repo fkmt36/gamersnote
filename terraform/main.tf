@@ -4,6 +4,7 @@ variable "db_username" {}
 variable "db_password" {}
 variable "aws_account_id" {}
 variable "aws_region" {}
+variable "image_tag" {}
 
 provider "aws" {}
 
@@ -84,5 +85,6 @@ module "ecs" {
   aws_account_id   = var.aws_account_id
   aws_region       = var.aws_region
   log_group_name   = module.cw.log_group_name_api
+  image_tag        = var.image_tag
 }
 

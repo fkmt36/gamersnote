@@ -141,7 +141,7 @@ resource "aws_ecs_task_definition" "api" {
 [
   {
     "name": "api",
-    "image": "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/${var.name}-api",
+    "image": "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/${var.name}-api:${var.image_tag}",
     "portMappings": [
       {
           "containerPort": 3000,
