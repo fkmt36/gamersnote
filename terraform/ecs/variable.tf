@@ -16,3 +16,6 @@ variable "aws_account_id" {
 variable "aws_region" {
   type = string
 }
+variable "log_group_name" {
+  type = string
+}

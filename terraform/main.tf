@@ -83,5 +83,6 @@ module "ecs" {
   vpc_id           = module.vpc.vpc_id
   aws_account_id   = var.aws_account_id
   aws_region       = var.aws_region
+  log_group_name   = module.cw.log_group_name_api
 }
 
