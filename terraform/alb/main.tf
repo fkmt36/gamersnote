@@ -86,6 +86,7 @@ module "aws_alb" {
     {
       port            = 443
       certificate_arn = var.certificate_arn
+      target_group_index = 1
     }
   ]
 
@@ -100,14 +101,6 @@ module "aws_alb" {
 
       conditions = [{
         path_patterns = ["/api/*"]
-      }]
-    },
-    {
-      https_listener_index = 0
-
-      actions = [{
-        type               = "forward"
-        target_group_index = 1
       }]
     }
   ]
