@@ -69,6 +69,16 @@ module "aws_alb" {
       #   port = 80
       #   path = "/"
       # }
+    },
+    {
+      name_prefix      = "gn-"
+      backend_protocol = "HTTP"
+      backend_port     = 80
+      target_type      = "ip"
+      # health_check = {
+      #   port = 80
+      #   path = "/"
+      # }
     }
   ]
 
@@ -90,6 +100,14 @@ module "aws_alb" {
 
       conditions = [{
         path_patterns = ["/api/*"]
+      }]
+    },
+    {
+      https_listener_index = 0
+
+      actions = [{
+        type               = "forward"
+        target_group_index = 1
       }]
     }
   ]

@@ -17,14 +17,14 @@ let $imageApi: () => ImageApi
 const initializeApi = () => {
   if (process.client) {
     const clientConf = new Configuration({
-      basePath: process.env.API_URL_BROWSER,
+      basePath: process.env.API_URL_BROWSER + '/api/v1',
     })
     $articleApi = () => new ArticleApi(clientConf)
     $userApi = () => new UserApi(clientConf)
     $imageApi = () => new ImageApi(clientConf)
   } else {
     const serverConf = new Configuration({
-      basePath: process.env.API_URL,
+      basePath: process.env.API_URL + '/api/v1',
     })
     $articleApi = () => new ArticleApi(serverConf)
     $userApi = () => new UserApi(serverConf)

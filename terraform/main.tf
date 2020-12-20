@@ -77,14 +77,16 @@ module "cw" {
 
 # ECS
 module "ecs" {
-  source           = "./ecs"
-  name             = var.name
-  subnets          = [module.vpc.private_subnets[0]] # 節約のために一つのサブネットのみ使う
-  target_group_arn = module.alb.target_group_arns[0]
-  vpc_id           = module.vpc.vpc_id
-  aws_account_id   = var.aws_account_id
-  aws_region       = var.aws_region
-  log_group_name   = module.cw.log_group_name_api
-  image_tag        = var.image_tag
+  source               = "./ecs"
+  name                 = var.name
+  subnets              = [module.vpc.private_subnets[0]] # 節約のために一つのサブネットのみ使う
+  target_group_arn_api = module.alb.target_group_arns[0]
+  target_group_arn_app = module.alb.target_group_arns[1]
+  vpc_id               = module.vpc.vpc_id
+  aws_account_id       = var.aws_account_id
+  aws_region           = var.aws_region
+  log_group_name_api   = module.cw.log_group_name_api
+  log_group_name_app   = module.cw.log_group_name_app
+  image_tag            = var.image_tag
 }
 
