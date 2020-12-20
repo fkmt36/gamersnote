@@ -58,8 +58,7 @@ jobs:
         if: github.event_name == 'pull_request'
         run: |
           touch a.auto.tfvars
-          echo ${{github.sha}} >> a.auto.tfvars
-          ls
+          echo "image_tag = ${{github.sha}}" >> a.auto.tfvars
           cat a.auto.tfvars
           terraform plan -no-color
         continue-on-error: true
@@ -94,5 +93,7 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -var 'image_tag=${{github.sha}}'
+        run: |
+          ls
+          terraform apply -auto-approve
         working-directory: ./terraform
