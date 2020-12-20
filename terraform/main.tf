@@ -68,6 +68,12 @@ module "s3" {
   domain = var.domain
 }
 
+# Cloud Watch
+module "cw" {
+  source = "./cw"
+  name   = var.name
+}
+
 # ECS
 module "ecs" {
   source           = "./ecs"
