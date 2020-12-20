@@ -38,27 +38,6 @@ services:
       - S3_BASEURL
     command: gin --build ./cmd/gamersnote-api-server --port=3000 --appPort=3001 -i main.go --port=3001
 
-  # api_service:
-  #   depends_on:
-  #     - db_service
-  #   container_name: api
-  #   image: test:latest
-  #   environment:
-  #     - POSTGRES_HOST
-  #     - POSTGRES_USER
-  #     - POSTGRES_PASSWORD
-  #     - POSTGRES_DBNAME
-  #     - POSTGRES_PORT
-  #     - EMAIL_FROM_ADDRESS
-  #     - AWS_ACCESS_KEY_ID
-  #     - AWS_SECRET_KEY
-  #     - AWS_REGION
-  #     - BASE_URL=http://localhost:3000
-  #     - S3_BUCKET
-  #     - S3_BASEURL
-  #   ports:
-  #     - 5555:3000
-
   r_proxy_service:
     depends_on:
       - app_service

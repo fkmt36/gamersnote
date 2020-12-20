@@ -22,6 +22,7 @@ import (
 	"gamersnote.com/v1/restapi/operations/article"
 	"gamersnote.com/v1/restapi/operations/comment"
 	"gamersnote.com/v1/restapi/operations/follow"
+	"gamersnote.com/v1/restapi/operations/healthcheck"
 	"gamersnote.com/v1/restapi/operations/image"
 	"gamersnote.com/v1/restapi/operations/like"
 	"gamersnote.com/v1/restapi/operations/notification"
@@ -99,6 +100,9 @@ func NewGamersnoteAPIAPI(spec *loads.Document) *GamersnoteAPIAPI {
 		}),
 		UserGetUserHandler: user.GetUserHandlerFunc(func(params user.GetUserParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetUser has not yet been implemented")
+		}),
+		HealthcheckHealthcheckHandler: healthcheck.HealthcheckHandlerFunc(func(params healthcheck.HealthcheckParams) middleware.Responder {
+			return middleware.NotImplemented("operation healthcheck.Healthcheck has not yet been implemented")
 		}),
 		UserPatchUserSigninedHandler: user.PatchUserSigninedHandlerFunc(func(params user.PatchUserSigninedParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.PatchUserSignined has not yet been implemented")
@@ -211,6 +215,8 @@ type GamersnoteAPIAPI struct {
 	ArticleGetTheUsersArticlesHandler article.GetTheUsersArticlesHandler
 	// UserGetUserHandler sets the operation handler for the get user operation
 	UserGetUserHandler user.GetUserHandler
+	// HealthcheckHealthcheckHandler sets the operation handler for the healthcheck operation
+	HealthcheckHealthcheckHandler healthcheck.HealthcheckHandler
 	// UserPatchUserSigninedHandler sets the operation handler for the patch user signined operation
 	UserPatchUserSigninedHandler user.PatchUserSigninedHandler
 	// UserPatchUserSignoutedHandler sets the operation handler for the patch user signouted operation
@@ -365,6 +371,9 @@ func (o *GamersnoteAPIAPI) Validate() error {
 	}
 	if o.UserGetUserHandler == nil {
 		unregistered = append(unregistered, "user.GetUserHandler")
+	}
+	if o.HealthcheckHealthcheckHandler == nil {
+		unregistered = append(unregistered, "healthcheck.HealthcheckHandler")
 	}
 	if o.UserPatchUserSigninedHandler == nil {
 		unregistered = append(unregistered, "user.PatchUserSigninedHandler")
@@ -562,6 +571,10 @@ func (o *GamersnoteAPIAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{username}"] = user.NewGetUser(o.context, o.UserGetUserHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/status"] = healthcheck.NewHealthcheck(o.context, o.HealthcheckHealthcheckHandler)
 	if o.handlers["PATCH"] == nil {
 		o.handlers["PATCH"] = make(map[string]http.Handler)
 	}

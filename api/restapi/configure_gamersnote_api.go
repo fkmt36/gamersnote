@@ -8,9 +8,11 @@ import (
 
 	"gamersnote.com/v1/middlewares"
 	"gamersnote.com/v1/restapi/operations"
+	"gamersnote.com/v1/restapi/operations/healthcheck"
 	"gamersnote.com/v1/utils/di"
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/runtime/middleware"
 )
 
 func configureFlags(api *operations.GamersnoteAPIAPI) {
@@ -23,6 +25,10 @@ func configureAPI(api *operations.GamersnoteAPIAPI) http.Handler {
 	api.JSONConsumer = runtime.JSONConsumer()
 
 	api.JSONProducer = runtime.JSONProducer()
+
+	api.HealthcheckHealthcheckHandler = healthcheck.HealthcheckHandlerFunc(func(params healthcheck.HealthcheckParams) middleware.Responder {
+		return healthcheck.NewHealthcheckOK()
+	})
 
 	// users
 	api.UserPostUserHandler = di.PostUserHandler
