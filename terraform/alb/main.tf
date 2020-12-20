@@ -66,7 +66,7 @@ module "aws_alb" {
       backend_port     = 80
       target_type      = "ip"
       health_check = {
-        path = "/api/v1/health"
+        path = "/api/v1/status"
       }
     },
     {
