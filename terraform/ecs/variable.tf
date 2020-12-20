@@ -4,7 +4,10 @@ variable "name" {
 variable "subnets" {
   type = list(string)
 }
-variable "target_group_arn" {
+variable "target_group_arn_api" {
+  type = string
+}
+variable "target_group_arn_app" {
   type = string
 }
 variable "vpc_id" {
@@ -16,7 +19,10 @@ variable "aws_account_id" {
 variable "aws_region" {
   type = string
 }
-variable "log_group_name" {
+variable "log_group_name_api" {
+  type = string
+}
+variable "log_group_name_app" {
   type = string
 }
 variable "image_tag" {

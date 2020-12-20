@@ -16,6 +16,6 @@ COPY . .
 
 RUN npm run build
 
-# ENV NUXT_HOST=0.0.0.0 NUXT_PORT=3000 API_URL=http://nginx API_URL_BROWSER=http://localhost:3000
+ENV HOST=0.0.0.0 PORT=3000
 
 CMD [ "npm", "run", "start" ]
