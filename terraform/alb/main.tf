@@ -61,7 +61,7 @@ module "aws_alb" {
 
   target_groups = [
     {
-      name_prefix      = "gn-api-"
+      name_prefix      = "gn-"
       backend_protocol = "HTTP"
       backend_port     = 80
       target_type      = "ip"
@@ -70,7 +70,7 @@ module "aws_alb" {
       }
     },
     {
-      name_prefix      = "gn-app-"
+      name_prefix      = "gn-"
       backend_protocol = "HTTP"
       backend_port     = 80
       target_type      = "ip"
