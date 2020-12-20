@@ -19,3 +19,6 @@ variable "aws_region" {
 variable "log_group_name" {
   type = string
 }
+variable "image_tag" {
+  type = string
+}
