@@ -59,7 +59,6 @@ jobs:
         run: |
           touch a.auto.tfvars
           echo 'image_tag = "${{github.sha}}"' >> a.auto.tfvars
-          cat a.auto.tfvars
           terraform plan -no-color
         continue-on-error: true
         working-directory: ./terraform
@@ -94,6 +93,7 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
-          ls
+          touch a.auto.tfvars
+          echo 'image_tag = "${{github.sha}}"' >> a.auto.tfvars
           terraform apply -auto-approve
         working-directory: ./terraform
