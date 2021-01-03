@@ -33,6 +33,9 @@ export default Vue.extend({
       return !!meStore.getMe
     },
     avatar(): string {
+      if (meStore.getMe && meStore.getMe.avatar_url) {
+        return meStore.getMe.avatar_url
+      }
       return '/default.png'
     },
   },

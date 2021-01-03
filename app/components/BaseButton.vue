@@ -1,5 +1,10 @@
 <template>
-  <button class="base-button" @click="onClick">
+  <button
+    class="base-button"
+    :disabled="disabled"
+    type="button"
+    @click="onClick"
+  >
     {{ text }}
   </button>
 </template>
@@ -20,6 +25,11 @@ export default Vue.extend({
       required: false,
       default: () => {},
     } as PropOptions<() => void>,
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    } as PropOptions<boolean>,
   },
 })
 </script>

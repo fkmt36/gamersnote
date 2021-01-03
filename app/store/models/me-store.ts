@@ -1,6 +1,5 @@
-import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
+import { Module, VuexModule, Mutation } from 'vuex-module-decorators'
 import { User } from '@/api-client-axios'
-import { $userApi } from '@/plugins/api'
 
 @Module({
   name: 'models/me-store',

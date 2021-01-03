@@ -38,7 +38,7 @@ export default Vue.extend({
     if (me && me.username === params.username) {
       return {
         username: me.username,
-        avatarURL: me.avatar_url || '',
+        avatarURL: me.avatar_url || '/default.png',
         message: me.message || '',
       }
     }
@@ -46,7 +46,7 @@ export default Vue.extend({
       const result = await $userApi().getUser(params.username)
       return {
         username: result.data.username,
-        avatarURL: result.data.avatar_url || '',
+        avatarURL: result.data.avatar_url || '/default.png',
         message: result.data.message || '',
       }
     } catch (err) {}

@@ -54,7 +54,9 @@ export default Vue.extend({
         thumbnailUrl: data.thumbnail_url,
         title: data.title,
         body: data.body,
-        avatarURL: data.author ? data.author.avatar_url || '' : '',
+        avatarURL: data.author
+          ? data.author.avatar_url || '/default.png'
+          : '/default.png',
         username: data.author ? data.author.username : '',
         createdAt: data.created_at ? data.created_at : '',
         likeCount: data.like_count ? data.like_count : 0,
@@ -142,7 +144,21 @@ article {
 }
 .article-body img {
   display: block;
-  width: 80%;
+  max-width: 80%;
+  max-height: 56.25%;
   margin: 0 auto;
+}
+.article-body .iframe-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+}
+.article-body iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 </style>

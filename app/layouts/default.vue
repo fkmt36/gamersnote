@@ -1,10 +1,11 @@
 <template>
   <div>
-    <TheHeader />
-    <Nuxt />
-    <FilterDarken />
-    <FilterLoading />
-    <TheMenu />
+    <TheHeader style="z-index: 1" />
+    <Nuxt style="z-index: 1" />
+    <FilterDarken style="z-index: 2" />
+    <FilterLoading style="z-index: 3" />
+    <TheMenu style="z-index: 4" />
+    <BaseModal style="z-index: 4" />
   </div>
 </template>
 
@@ -14,6 +15,7 @@ import TheHeader from '@/components/TheHeader.vue'
 import TheMenu from '@/components/TheMenu.vue'
 import FilterDarken from '@/components/FilterDarken.vue'
 import FilterLoading from '@/components/FilterLoading.vue'
+import BaseModal from '@/components/BaseModal.vue'
 
 export default Vue.extend({
   components: {
@@ -21,6 +23,7 @@ export default Vue.extend({
     TheMenu,
     FilterDarken,
     FilterLoading,
+    BaseModal,
   },
 })
 </script>
