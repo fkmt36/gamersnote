@@ -67,7 +67,7 @@ export default Vue.extend({
       return !!this.thumbnail
     },
   },
-  async created() {
+  async beforeMount() {
     const Quill = (await import('quill')).default
     const BlockEmbed = Quill.import('blots/block/embed')
 
@@ -84,7 +84,7 @@ export default Vue.extend({
     })
 
     class VideoBlot extends BlockEmbed {
-      static create(url) {
+      static create(url: string) {
         const node = super.create() as HTMLElement
         const child = node.appendChild(
           document.createElement('iframe')
@@ -92,26 +92,28 @@ export default Vue.extend({
         node.setAttribute('class', 'iframe-wrapper')
         child.setAttribute('src', url)
         child.setAttribute('frameborder', '0')
-        child.setAttribute('allowfullscreen', true)
+        child.setAttribute('allowfullscreen', 'true')
         return node
       }
 
-      static formats(node) {
+      static formats(node: HTMLElement) {
         const format = {}
         if (node.hasAttribute('height')) {
+          // @ts-ignore
           format.height = node.getAttribute('height')
         }
         if (node.hasAttribute('width')) {
+          // @ts-ignore
           format.width = node.getAttribute('width')
         }
         return format
       }
 
-      static value(node) {
+      static value(node: HTMLElement) {
         return node.getAttribute('src')
       }
 
-      format(name, value) {
+      format(name: string, value: string) {
         if (name === 'height' || name === 'width') {
           if (value) {
             this.domNode.setAttribute(name, value)
