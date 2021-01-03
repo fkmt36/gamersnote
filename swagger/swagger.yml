@@ -625,7 +625,7 @@ definitions:
     pattern: "[A-Za-z0-9\\-\\.\\_]+@[A-Za-z0-9\\-\\._]+\\.[A-Za-z]+"
   password:
     type: string
-    pattern: "[A-Za-z0-9\_]{6,20}"
+    pattern: "[A-Za-z0-9\\_]{6,20}"
   base_date:
     type: string
     format: date

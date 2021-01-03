@@ -4,7 +4,10 @@
       <div id="toolbar">
         <button class="ql-header" value="2"></button>
         <button class="ql-image" value="2"></button>
-        <button id="post-btn" @click="uploadArticle">投稿</button>
+        <button ref="youtubeBtn">
+          <font-awesome-icon :icon="['fab', 'youtube']" style="color: #444" />
+        </button>
+        <button id="post-btn" ref="postBtn" @click="uploadArticle">投稿</button>
         <input
           v-show="false"
           ref="inputImage"
@@ -39,6 +42,7 @@
 import Vue from 'vue'
 import { $articleApi, $imageApi } from '@/plugins/api'
 import 'quill/dist/quill.snow.css'
+import { baseModalState } from '~/store'
 
 interface data {
   thumbnail: string
@@ -64,34 +68,93 @@ export default Vue.extend({
     },
   },
   async created() {
-    try {
-      const Quill = (await import('quill')).default
-      this.bodyEditor = new Quill('#body-editor', {
-        modules: {
-          toolbar: '#toolbar',
-        },
-        formats: ['link', 'header', 'image'],
-        placeholder: '今日はゲームでどんなことがありましたか？',
-        theme: 'snow',
-      })
-      this.bodyEditor.getModule('toolbar').addHandler('image', this.selectImage)
+    const Quill = (await import('quill')).default
+    const BlockEmbed = Quill.import('blots/block/embed')
 
-      this.titleEditor = new Quill('#title-editor', {
-        formats: [],
-        placeholder: 'タイトル',
-      })
-      this.titleEditor.on('text-change', (delta: any, _: any, __: any) => {
-        if (delta.ops[delta.ops.length - 1].insert === '\n') {
-          this.titleEditor.deleteText(this.titleEditor.getLength() - 1, 1)
+    // タイトルエディター
+    this.titleEditor = new Quill('#title-editor', {
+      formats: [],
+      placeholder: 'タイトル',
+    })
+    // 改行が入力されたら削除
+    this.titleEditor.on('text-change', (delta: any, _: any, __: any) => {
+      if (delta.ops[delta.ops.length - 1].insert === '\n') {
+        this.titleEditor.deleteText(this.titleEditor.getLength() - 1, 1)
+      }
+    })
+
+    class VideoBlot extends BlockEmbed {
+      static create(url) {
+        const node = super.create() as HTMLElement
+        const child = node.appendChild(
+          document.createElement('iframe')
+        ) as HTMLIFrameElement
+        node.setAttribute('class', 'iframe-wrapper')
+        child.setAttribute('src', url)
+        child.setAttribute('frameborder', '0')
+        child.setAttribute('allowfullscreen', true)
+        return node
+      }
+
+      static formats(node) {
+        const format = {}
+        if (node.hasAttribute('height')) {
+          format.height = node.getAttribute('height')
         }
-      })
-    } catch (e) {
-      console.error(e)
+        if (node.hasAttribute('width')) {
+          format.width = node.getAttribute('width')
+        }
+        return format
+      }
+
+      static value(node) {
+        return node.getAttribute('src')
+      }
+
+      format(name, value) {
+        if (name === 'height' || name === 'width') {
+          if (value) {
+            this.domNode.setAttribute(name, value)
+          } else {
+            this.domNode.removeAttribute(name, value)
+          }
+        } else {
+          super.format(name, value)
+        }
+      }
+    }
+    VideoBlot.blotName = 'video'
+    VideoBlot.tagName = 'div'
+    Quill.register(VideoBlot)
+
+    // ボディエディター
+    this.bodyEditor = new Quill('#body-editor', {
+      modules: {
+        toolbar: '#toolbar',
+      },
+      formats: ['link', 'header', 'image', 'video'],
+      placeholder: '今日はゲームでどんなことがありましたか？',
+      theme: 'snow',
+    })
+    this.bodyEditor.getModule('toolbar').addHandler('image', this.selectImage)
+    const youtubeBtn = this.$refs.youtubeBtn as HTMLButtonElement
+    youtubeBtn.onclick = () => {
+      const range = this.bodyEditor.getSelection(true)
+      this.bodyEditor.insertText(range.index, '\n', 'user')
+      const url = 'https://www.youtube.com/embed/QHH3iSeDBLo?showinfo=0'
+      this.bodyEditor.insertEmbed(range.index + 1, 'video', url, 'user')
+      this.bodyEditor.setSelection(range.index + 2, 0, 'silent')
     }
   },
+
   methods: {
     async uploadArticle() {
       try {
+        // ボタンをdisabledにする
+        const btn = this.$refs.postBtn as HTMLButtonElement
+        btn.setAttribute('disabled', 'disabled')
+
+        // 記事投稿APIを叩く
         this.title = this.titleEditor.getText()
         this.body = this.bodyEditor.container.firstChild.innerHTML
         const { data } = await $articleApi().postArticle({
@@ -99,12 +162,26 @@ export default Vue.extend({
           title: this.title,
           body: this.body,
         })
+
+        // 投稿に成功したら、記事ページに遷移
         if (data && data.article_id) {
           this.$router.push(`/articles/${data.article_id}`)
         }
       } catch (err) {
+        baseModalState.setModal({
+          showModal: true,
+          message: '記事の投稿に失敗しました',
+        })
       } finally {
+        // ボタンのdisabledを解除
+        const btn = this.$refs.postBtn as HTMLButtonElement
+        btn.removeAttribute('disabled')
       }
+    },
+
+    embedYouTube() {
+      console.log(this.bodyEditor.container)
+      this.bodyEditor.insertEmbed(0, 'image', '/default.png')
     },
 
     selectImage() {
@@ -172,6 +249,10 @@ export default Vue.extend({
   border: none;
   border-bottom: 1px solid $base-grey;
   height: 45px;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1;
   button {
     height: 100%;
   }
@@ -184,8 +265,11 @@ export default Vue.extend({
     margin: 0 10px;
     width: 60px;
     background-color: $btn-red;
-    // margin-left: auto;
     float: right;
+  }
+  #post-btn:disabled {
+    background-color: $stroke-grey;
+    cursor: default;
   }
 }
 .thumbnail-empty {
@@ -269,6 +353,19 @@ export default Vue.extend({
     width: 80%;
     display: block;
     margin: 0 auto;
+  }
+  .ql-editor .iframe-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+  }
+  .ql-editor iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

@@ -39,7 +39,7 @@ export default Vue.extend({
 
   computed: {
     thumbnail(): string {
-      return this.article.thumbnail_url
+      return this.article.thumbnail_url || '/default.png'
     },
     title(): string {
       return this.article.title
@@ -52,11 +52,11 @@ export default Vue.extend({
       }
     },
     avatar(): string {
-      if (this.article.author) {
-        return this.article.author.avatar_url || ''
-      } else {
-        return ''
+      const author = this.article.author
+      if (author && author.avatar_url) {
+        return author.avatar_url
       }
+      return '/default.png'
     },
     date(): string {
       return this.article.created_at || ''

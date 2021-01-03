@@ -5,6 +5,8 @@ import MeStore from '@/store/models/me-store'
 import TheMenuState from '~/store/states/the-menu-state'
 import FilterLoadingState from '~/store/states/filter-loading-state'
 import FilterDarkenState from '~/store/states/filter-darken-state'
+import BaseModalState from '~/store/states/base-modal-state'
+import SignupState from '~/store/states/signup-state'
 
 // eslint-disable-next-line import/no-mutable-exports
 let theMenuState: TheMenuState = new TheMenuState({})
@@ -17,6 +19,9 @@ let articlesStore: ArticlesStore = new ArticlesStore({})
 // eslint-disable-next-line import/no-mutable-exports
 let meStore: MeStore = new MeStore({})
 // eslint-disable-next-line import/no-mutable-exports
+let baseModalState: BaseModalState = new BaseModalState({})
+// eslint-disable-next-line import/no-mutable-exports
+let signupState: SignupState = new SignupState({})
 
 function initialiseStores(store: Store<any>): void {
   theMenuState = getModule(TheMenuState, store)
@@ -24,6 +29,8 @@ function initialiseStores(store: Store<any>): void {
   filterDarkenState = getModule(FilterDarkenState, store)
   articlesStore = getModule(ArticlesStore, store)
   meStore = getModule(MeStore, store)
+  baseModalState = getModule(BaseModalState, store)
+  signupState = getModule(SignupState, store)
 }
 
 export {
@@ -33,4 +40,6 @@ export {
   filterDarkenState,
   articlesStore,
   meStore,
+  baseModalState,
+  signupState,
 }

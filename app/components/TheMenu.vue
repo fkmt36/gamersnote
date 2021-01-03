@@ -81,12 +81,10 @@ export default Vue.extend({
       return ''
     },
     avatar(): string {
-      const me = meStore.getMe
-      if (me) {
-        return me.avatar_url || ''
-      } else {
-        return ''
+      if (meStore.getMe && meStore.getMe.avatar_url) {
+        return meStore.getMe.avatar_url
       }
+      return '/default.png'
     },
   },
 
