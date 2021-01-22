@@ -52,6 +52,6 @@ export default {
     ],
   },
   env: {
-    API_URL_BROWSER: process.env.API_URL_BROWSER || 'localhost:3000',
+    API_URL_BROWSER: process.env.API_URL_BROWSER,
   },
 }
