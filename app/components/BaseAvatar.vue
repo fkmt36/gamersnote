@@ -53,38 +53,6 @@ export default Vue.extend({
       `
     },
   },
-
-  methods: {
-    // selectImage() {
-    //   if (document !== undefined && document !== null) {
-    //     const e = this.$refs.inputAvatar as HTMLButtonElement
-    //     if (e !== null) {
-    //       e.click()
-    //     }
-    //   }
-    // },
-    // async uploadImage(event: Event) {
-    //   try {
-    //     const files = (event.target as HTMLInputElement).files
-    //     if (files && files.length) {
-    //       const file = this.validateImage(files[0])
-    //       if (file) {
-    //         const { v4: uuidv4 } = require('uuid')
-    //         const fileName = (uuidv4() as string) + file.name
-    //         const ref = this.$fire.storage.ref('avatars')
-    //         await ref.child(fileName).put(file)
-    //         this.onChange(await ref.child(fileName).getDownloadURL())
-    //       }
-    //     }
-    //   } catch (err) {}
-    // },
-    // validateImage(image: File): File | null {
-    //   if (image.size > 100000000) {
-    //     return null
-    //   }
-    //   return image
-    // },
-  },
 })
 </script>
 

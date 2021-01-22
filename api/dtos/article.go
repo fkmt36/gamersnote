@@ -11,7 +11,7 @@ import (
 type Article struct {
 	ArticleID    string `gorm:"primaryKey"`
 	AuthorID     string
-	Author       User `gorm:"foreignKey:AuthorID; constraint:OnUpdate:CASCADE"`
+	Author       User `gorm:"foreignKey:AuthorID; constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	ThumbnailURL string
 	Title        string
 	Body         string

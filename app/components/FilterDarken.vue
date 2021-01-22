@@ -22,7 +22,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 div {
   background-color: rgba(0, 0, 0, 0.4);
-  position: absolute;
+  position: fixed;
   height: 100vh;
   width: 100vw;
   top: 0;

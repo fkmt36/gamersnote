@@ -1,6 +1,11 @@
 <template>
   <div class="base-input">
-    <input ref="input" :type="type" @input="onInput($event.target.value)" />
+    <input
+      ref="input"
+      :type="type"
+      :value="text"
+      @input="onInput($event.target.value)"
+    />
     <button
       v-if="type === 'password'"
       type="button"
@@ -25,12 +30,19 @@ export default Vue.extend({
   props: {
     type: {
       type: String,
-      required: true,
+      required: false,
+      default: 'text',
     } as PropOptions<string>,
     onInput: {
       type: Function,
-      required: true,
+      required: false,
+      default: () => {},
     } as PropOptions<(v: string) => void>,
+    text: {
+      type: String,
+      required: false,
+      default: '',
+    } as PropOptions<string>,
   },
 
   data() {

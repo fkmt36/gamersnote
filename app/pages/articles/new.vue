@@ -35,6 +35,12 @@
       <div id="title-editor"></div>
       <div id="body-editor"></div>
     </div>
+    <VideoUrlInput
+      v-show="showVideoUrlInput"
+      :on-click-cancel="closeVideoUrlInput"
+      :on-click-ok="embedVideo"
+      :on-input="updateVideoUrl"
+    />
   </div>
 </template>
 
@@ -42,6 +48,7 @@
 import Vue from 'vue'
 import { $articleApi, $imageApi } from '@/plugins/api'
 import 'quill/dist/quill.snow.css'
+import VideoUrlInput from '@/components/VideoUrlInput.vue'
 import { baseModalState } from '~/store'
 
 interface data {
@@ -50,9 +57,15 @@ interface data {
   body: string
   titleEditor: any
   bodyEditor: any
+  showVideoUrlInput: boolean
+  videoUrl: string
 }
 
 export default Vue.extend({
+  components: {
+    VideoUrlInput,
+  },
+
   data(): data {
     return {
       thumbnail: '',
@@ -60,6 +73,8 @@ export default Vue.extend({
       body: '',
       titleEditor: null,
       bodyEditor: null,
+      showVideoUrlInput: false,
+      videoUrl: '',
     }
   },
   computed: {
@@ -141,11 +156,7 @@ export default Vue.extend({
     this.bodyEditor.getModule('toolbar').addHandler('image', this.selectImage)
     const youtubeBtn = this.$refs.youtubeBtn as HTMLButtonElement
     youtubeBtn.onclick = () => {
-      const range = this.bodyEditor.getSelection(true)
-      this.bodyEditor.insertText(range.index, '\n', 'user')
-      const url = 'https://www.youtube.com/embed/QHH3iSeDBLo?showinfo=0'
-      this.bodyEditor.insertEmbed(range.index + 1, 'video', url, 'user')
-      this.bodyEditor.setSelection(range.index + 2, 0, 'silent')
+      this.showVideoUrlInput = true
     }
   },
 
@@ -179,11 +190,6 @@ export default Vue.extend({
         const btn = this.$refs.postBtn as HTMLButtonElement
         btn.removeAttribute('disabled')
       }
-    },
-
-    embedYouTube() {
-      console.log(this.bodyEditor.container)
-      this.bodyEditor.insertEmbed(0, 'image', '/default.png')
     },
 
     selectImage() {
@@ -228,6 +234,27 @@ export default Vue.extend({
           this.thumbnail = result.data.url
         }
       } catch (err) {}
+    },
+
+    closeVideoUrlInput() {
+      this.showVideoUrlInput = false
+    },
+    embedVideo() {
+      const range = this.bodyEditor.getSelection(true)
+      this.bodyEditor.insertText(range.index, '\n', 'user')
+      let url = ''
+      const urlObj = new URL(this.videoUrl)
+      if (urlObj.host === 'www.youtube.com') {
+        const params = urlObj.searchParams
+        const videoId = params.get('v')
+        url = `https://www.youtube.com/embed/${videoId}?showinfo=0`
+      }
+      this.bodyEditor.insertEmbed(range.index + 1, 'video', url, 'user')
+      this.bodyEditor.setSelection(range.index + 2, 0, 'silent')
+      this.closeVideoUrlInput()
+    },
+    updateVideoUrl(url: string) {
+      this.videoUrl = url
     },
   },
 })

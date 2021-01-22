@@ -440,6 +440,47 @@ func init() {
         }
       }
     },
+    "/users/me/email/verified": {
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "patchUserEmailVerified",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "code",
+                "uid"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "uid": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/users/me/follows": {
       "get": {
         "tags": [
@@ -678,6 +719,86 @@ func init() {
           "required": true
         }
       ]
+    },
+    "/users/me/password": {
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "putPassword",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "password"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "password": {
+                  "$ref": "#/definitions/password"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/me/password/reset": {
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "patchUserPasswordReset",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "email"
+              ],
+              "properties": {
+                "email": {
+                  "$ref": "#/definitions/email"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
     },
     "/users/me/signined": {
       "patch": {
@@ -1095,7 +1216,7 @@ func init() {
     },
     "password": {
       "type": "string",
-      "pattern": "[A-Za-z0-9 ]{6,20}"
+      "pattern": "[A-Za-z0-9\\_]{6,20}"
     },
     "profile_message": {
       "type": "string",
@@ -1563,6 +1684,47 @@ func init() {
         }
       }
     },
+    "/users/me/email/verified": {
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "patchUserEmailVerified",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "code",
+                "uid"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "uid": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/users/me/follows": {
       "get": {
         "tags": [
@@ -1801,6 +1963,86 @@ func init() {
           "required": true
         }
       ]
+    },
+    "/users/me/password": {
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "putPassword",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "password"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "password": {
+                  "$ref": "#/definitions/password"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/me/password/reset": {
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "operationId": "patchUserPasswordReset",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "email"
+              ],
+              "properties": {
+                "email": {
+                  "$ref": "#/definitions/email"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
     },
     "/users/me/signined": {
       "patch": {
@@ -2218,7 +2460,7 @@ func init() {
     },
     "password": {
       "type": "string",
-      "pattern": "[A-Za-z0-9 ]{6,20}"
+      "pattern": "[A-Za-z0-9\\_]{6,20}"
     },
     "profile_message": {
       "type": "string",

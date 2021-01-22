@@ -80,12 +80,6 @@ func (h PostUserHandler) Handle(params o.PostUserParams) middleware.Responder {
 			HashedCode: hashedCode,
 			Email:      string(params.Body.Email),
 			HashedPass: hashedPass})
-	// h.TempUserCache.AddOne(
-	// 	string(params.Body.Username),
-	// 	cache.TempUserData{
-	// 		HashedCode: hashedCode,
-	// 		Email:      string(params.Body.Email),
-	// 		HashedPass: hashedPass})
 
 	// - メール送信
 	err = h.emailSvc.SendVerificationEmail(

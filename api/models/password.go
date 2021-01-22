@@ -20,7 +20,7 @@ type Password string
 func (m Password) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := validate.Pattern("", "body", string(m), `[A-Za-z0-9 ]{6,20}`); err != nil {
+	if err := validate.Pattern("", "body", string(m), `[A-Za-z0-9\_]{6,20}`); err != nil {
 		return err
 	}
 

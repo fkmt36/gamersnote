@@ -5,8 +5,6 @@ import {
   ImageApi,
 } from '@/api-client-axios'
 
-console.log('api', process.client)
-
 // eslint-disable-next-line import/no-mutable-exports
 let $articleApi: () => ArticleApi
 // eslint-disable-next-line import/no-mutable-exports

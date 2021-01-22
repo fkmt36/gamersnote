@@ -12,7 +12,7 @@ type Comment struct {
 	CommentID       string `gorm:"primaryKey"`
 	ArticleID       string
 	AuthorID        string
-	Author          User `gorm:"foreignKey:AuthorID"`
+	Author          User `gorm:"foreignKey:AuthorID; constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	Body            string
 	ParentCommentID string
 	Replies         Comments `gorm:"foreignKey:ParentCommentID"`

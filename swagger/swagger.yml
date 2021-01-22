@@ -124,6 +124,33 @@ paths:
           description: error
           schema:
             $ref: "#/definitions/error"
+  /users/me/password:
+    put:
+      tags:
+        - user
+      operationId: putPassword
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            required:
+              - password
+            type: object
+            properties:
+              password:
+                $ref: "#/definitions/password"
+              code:
+                type: string
+      responses:
+        200:
+          description: Updated
+          schema:
+            $ref: "#/definitions/user"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
   /users/me/verified:
     patch:
       tags:
@@ -148,6 +175,32 @@ paths:
           description: Success
           schema:
             $ref: "#/definitions/user"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /users/me/email/verified:
+    patch:
+      tags:
+        - user
+      operationId: patchUserEmailVerified
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            required:
+              - code
+              - uid
+            type: object
+            properties:
+              code:
+                type: string
+              uid:
+                type: string
+      responses:
+        200:
+          description: Success
         default:
           description: error
           schema:
@@ -185,6 +238,29 @@ paths:
       tags:
         - user
       operationId: patchUserSignouted
+      responses:
+        200:
+          description: Success
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
+  /users/me/password/reset:
+    patch:
+      tags:
+        - user
+      operationId: patchUserPasswordReset
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            required:
+              - email
+            properties:
+              email:
+                $ref: "#/definitions/email"
       responses:
         200:
           description: Success

@@ -7,18 +7,6 @@ export async function nuxtServerInit(
   _: ActionContext<any, any>,
   { res, redirect, route, req }: Context
 ) {
-  // await $userApi
-  //   .getMe({
-  //     headers: {
-  //       Cookie: 'session="Hello World!"',
-  //     },
-  //   })
-  //   .catch((err) => {
-  //     console.error(err)
-  //   })
-  // console.log(req.headers)
-  // console.log(route.path)
-  // res.setHeader('Set-Cookie', [`bbb=bbbbb; HttpOnly`])
   if (route.path === '/verify-code') {
     try {
       if (
@@ -29,11 +17,24 @@ export async function nuxtServerInit(
           code: route.query.code,
           username: route.query.username,
         })
-        console.log(result.headers)
         res.setHeader('Set-Cookie', result.headers['set-cookie'])
       }
     } catch (err) {
-      console.error(err)
+    } finally {
+      redirect('/')
+    }
+  } else if (route.path === '/verify-email') {
+    try {
+      if (
+        typeof route.query.code === 'string' &&
+        typeof route.query.uid === 'string'
+      ) {
+        await $userApi().patchUserEmailVerified({
+          code: route.query.code,
+          uid: route.query.uid,
+        })
+      }
+    } catch (err) {
     } finally {
       redirect('/')
     }
@@ -47,8 +48,4 @@ export async function nuxtServerInit(
       meStore.setMe(result.data)
     } catch (err) {}
   }
-  // if (res && res.locals && res.locals.user) {
-  //   authState.setToken(res.locals.user.idToken)
-  //   await meStore.fetchMe()
-  // }
 }

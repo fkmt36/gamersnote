@@ -153,13 +153,13 @@ export interface InlineObject1 {
      * @type {string}
      * @memberof InlineObject1
      */
-    code: string;
+    password: string;
     /**
      * 
      * @type {string}
      * @memberof InlineObject1
      */
-    username: string;
+    code?: string;
 }
 /**
  * 
@@ -172,13 +172,64 @@ export interface InlineObject2 {
      * @type {string}
      * @memberof InlineObject2
      */
-    email: string;
+    code: string;
     /**
      * 
      * @type {string}
      * @memberof InlineObject2
      */
+    username: string;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject3
+ */
+export interface InlineObject3 {
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject3
+     */
+    code: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject3
+     */
+    uid: string;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject4
+ */
+export interface InlineObject4 {
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject4
+     */
+    email: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject4
+     */
     password: string;
+}
+/**
+ * 
+ * @export
+ * @interface InlineObject5
+ */
+export interface InlineObject5 {
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineObject5
+     */
+    email: string;
 }
 /**
  * 
@@ -2429,11 +2480,99 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {InlineObject2} body 
+         * @param {InlineObject3} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        patchUserSignined: async (body: InlineObject2, options: any = {}): Promise<RequestArgs> => {
+        patchUserEmailVerified: async (body: InlineObject3, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling patchUserEmailVerified.');
+            }
+            const localVarPath = `/users/me/email/verified`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                query.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof body !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(body !== undefined ? body : {}) : (body || "");
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {InlineObject5} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        patchUserPasswordReset: async (body: InlineObject5, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling patchUserPasswordReset.');
+            }
+            const localVarPath = `/users/me/password/reset`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                query.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof body !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(body !== undefined ? body : {}) : (body || "");
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {InlineObject4} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        patchUserSignined: async (body: InlineObject4, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
                 throw new RequiredError('body','Required parameter body was null or undefined when calling patchUserSignined.');
@@ -2508,11 +2647,11 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {InlineObject1} body 
+         * @param {InlineObject2} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        patchUserVerified: async (body: InlineObject1, options: any = {}): Promise<RequestArgs> => {
+        patchUserVerified: async (body: InlineObject2, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
                 throw new RequiredError('body','Required parameter body was null or undefined when calling patchUserVerified.');
@@ -2569,6 +2708,50 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
                 baseOptions = configuration.baseOptions;
             }
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                query.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof body !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(body !== undefined ? body : {}) : (body || "");
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {InlineObject1} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putPassword: async (body: InlineObject1, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            if (body === null || body === undefined) {
+                throw new RequiredError('body','Required parameter body was null or undefined when calling putPassword.');
+            }
+            const localVarPath = `/users/me/password`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -2686,11 +2869,37 @@ export const UserApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {InlineObject2} body 
+         * @param {InlineObject3} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async patchUserSignined(body: InlineObject2, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async patchUserEmailVerified(body: InlineObject3, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await UserApiAxiosParamCreator(configuration).patchUserEmailVerified(body, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @param {InlineObject5} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async patchUserPasswordReset(body: InlineObject5, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await UserApiAxiosParamCreator(configuration).patchUserPasswordReset(body, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @param {InlineObject4} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async patchUserSignined(body: InlineObject4, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await UserApiAxiosParamCreator(configuration).patchUserSignined(body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -2711,11 +2920,11 @@ export const UserApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {InlineObject1} body 
+         * @param {InlineObject2} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async patchUserVerified(body: InlineObject1, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async patchUserVerified(body: InlineObject2, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await UserApiAxiosParamCreator(configuration).patchUserVerified(body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -2730,6 +2939,19 @@ export const UserApiFp = function(configuration?: Configuration) {
          */
         async postUser(body: InlineObject, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
             const localVarAxiosArgs = await UserApiAxiosParamCreator(configuration).postUser(body, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @param {InlineObject1} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putPassword(body: InlineObject1, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await UserApiAxiosParamCreator(configuration).putPassword(body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -2784,11 +3006,29 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @param {InlineObject2} body 
+         * @param {InlineObject3} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        patchUserSignined(body: InlineObject2, options?: any): AxiosPromise<User> {
+        patchUserEmailVerified(body: InlineObject3, options?: any): AxiosPromise<void> {
+            return UserApiFp(configuration).patchUserEmailVerified(body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {InlineObject5} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        patchUserPasswordReset(body: InlineObject5, options?: any): AxiosPromise<void> {
+            return UserApiFp(configuration).patchUserPasswordReset(body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {InlineObject4} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        patchUserSignined(body: InlineObject4, options?: any): AxiosPromise<User> {
             return UserApiFp(configuration).patchUserSignined(body, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2801,11 +3041,11 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @param {InlineObject1} body 
+         * @param {InlineObject2} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        patchUserVerified(body: InlineObject1, options?: any): AxiosPromise<User> {
+        patchUserVerified(body: InlineObject2, options?: any): AxiosPromise<User> {
             return UserApiFp(configuration).patchUserVerified(body, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2816,6 +3056,15 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          */
         postUser(body: InlineObject, options?: any): AxiosPromise<User> {
             return UserApiFp(configuration).postUser(body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {InlineObject1} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putPassword(body: InlineObject1, options?: any): AxiosPromise<User> {
+            return UserApiFp(configuration).putPassword(body, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2869,12 +3118,34 @@ export class UserApi extends BaseAPI {
 
     /**
      * 
-     * @param {InlineObject2} body 
+     * @param {InlineObject3} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public patchUserSignined(body: InlineObject2, options?: any) {
+    public patchUserEmailVerified(body: InlineObject3, options?: any) {
+        return UserApiFp(this.configuration).patchUserEmailVerified(body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {InlineObject5} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public patchUserPasswordReset(body: InlineObject5, options?: any) {
+        return UserApiFp(this.configuration).patchUserPasswordReset(body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {InlineObject4} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public patchUserSignined(body: InlineObject4, options?: any) {
         return UserApiFp(this.configuration).patchUserSignined(body, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2890,12 +3161,12 @@ export class UserApi extends BaseAPI {
 
     /**
      * 
-     * @param {InlineObject1} body 
+     * @param {InlineObject2} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public patchUserVerified(body: InlineObject1, options?: any) {
+    public patchUserVerified(body: InlineObject2, options?: any) {
         return UserApiFp(this.configuration).patchUserVerified(body, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2908,6 +3179,17 @@ export class UserApi extends BaseAPI {
      */
     public postUser(body: InlineObject, options?: any) {
         return UserApiFp(this.configuration).postUser(body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {InlineObject1} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApi
+     */
+    public putPassword(body: InlineObject1, options?: any) {
+        return UserApiFp(this.configuration).putPassword(body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

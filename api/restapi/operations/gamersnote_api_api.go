@@ -104,6 +104,12 @@ func NewGamersnoteAPIAPI(spec *loads.Document) *GamersnoteAPIAPI {
 		HealthcheckHealthcheckHandler: healthcheck.HealthcheckHandlerFunc(func(params healthcheck.HealthcheckParams) middleware.Responder {
 			return middleware.NotImplemented("operation healthcheck.Healthcheck has not yet been implemented")
 		}),
+		UserPatchUserEmailVerifiedHandler: user.PatchUserEmailVerifiedHandlerFunc(func(params user.PatchUserEmailVerifiedParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.PatchUserEmailVerified has not yet been implemented")
+		}),
+		UserPatchUserPasswordResetHandler: user.PatchUserPasswordResetHandlerFunc(func(params user.PatchUserPasswordResetParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.PatchUserPasswordReset has not yet been implemented")
+		}),
 		UserPatchUserSigninedHandler: user.PatchUserSigninedHandlerFunc(func(params user.PatchUserSigninedParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.PatchUserSignined has not yet been implemented")
 		}),
@@ -136,6 +142,9 @@ func NewGamersnoteAPIAPI(spec *loads.Document) *GamersnoteAPIAPI {
 		}),
 		NotificationPutNotificationReadHandler: notification.PutNotificationReadHandlerFunc(func(params notification.PutNotificationReadParams) middleware.Responder {
 			return middleware.NotImplemented("operation notification.PutNotificationRead has not yet been implemented")
+		}),
+		UserPutPasswordHandler: user.PutPasswordHandlerFunc(func(params user.PutPasswordParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.PutPassword has not yet been implemented")
 		}),
 		StockPutStockHandler: stock.PutStockHandlerFunc(func(params stock.PutStockParams) middleware.Responder {
 			return middleware.NotImplemented("operation stock.PutStock has not yet been implemented")
@@ -217,6 +226,10 @@ type GamersnoteAPIAPI struct {
 	UserGetUserHandler user.GetUserHandler
 	// HealthcheckHealthcheckHandler sets the operation handler for the healthcheck operation
 	HealthcheckHealthcheckHandler healthcheck.HealthcheckHandler
+	// UserPatchUserEmailVerifiedHandler sets the operation handler for the patch user email verified operation
+	UserPatchUserEmailVerifiedHandler user.PatchUserEmailVerifiedHandler
+	// UserPatchUserPasswordResetHandler sets the operation handler for the patch user password reset operation
+	UserPatchUserPasswordResetHandler user.PatchUserPasswordResetHandler
 	// UserPatchUserSigninedHandler sets the operation handler for the patch user signined operation
 	UserPatchUserSigninedHandler user.PatchUserSigninedHandler
 	// UserPatchUserSignoutedHandler sets the operation handler for the patch user signouted operation
@@ -239,6 +252,8 @@ type GamersnoteAPIAPI struct {
 	LikePutLikeHandler like.PutLikeHandler
 	// NotificationPutNotificationReadHandler sets the operation handler for the put notification read operation
 	NotificationPutNotificationReadHandler notification.PutNotificationReadHandler
+	// UserPutPasswordHandler sets the operation handler for the put password operation
+	UserPutPasswordHandler user.PutPasswordHandler
 	// StockPutStockHandler sets the operation handler for the put stock operation
 	StockPutStockHandler stock.PutStockHandler
 	// UserPutUserHandler sets the operation handler for the put user operation
@@ -375,6 +390,12 @@ func (o *GamersnoteAPIAPI) Validate() error {
 	if o.HealthcheckHealthcheckHandler == nil {
 		unregistered = append(unregistered, "healthcheck.HealthcheckHandler")
 	}
+	if o.UserPatchUserEmailVerifiedHandler == nil {
+		unregistered = append(unregistered, "user.PatchUserEmailVerifiedHandler")
+	}
+	if o.UserPatchUserPasswordResetHandler == nil {
+		unregistered = append(unregistered, "user.PatchUserPasswordResetHandler")
+	}
 	if o.UserPatchUserSigninedHandler == nil {
 		unregistered = append(unregistered, "user.PatchUserSigninedHandler")
 	}
@@ -407,6 +428,9 @@ func (o *GamersnoteAPIAPI) Validate() error {
 	}
 	if o.NotificationPutNotificationReadHandler == nil {
 		unregistered = append(unregistered, "notification.PutNotificationReadHandler")
+	}
+	if o.UserPutPasswordHandler == nil {
+		unregistered = append(unregistered, "user.PutPasswordHandler")
 	}
 	if o.StockPutStockHandler == nil {
 		unregistered = append(unregistered, "stock.PutStockHandler")
@@ -578,6 +602,14 @@ func (o *GamersnoteAPIAPI) initHandlerCache() {
 	if o.handlers["PATCH"] == nil {
 		o.handlers["PATCH"] = make(map[string]http.Handler)
 	}
+	o.handlers["PATCH"]["/users/me/email/verified"] = user.NewPatchUserEmailVerified(o.context, o.UserPatchUserEmailVerifiedHandler)
+	if o.handlers["PATCH"] == nil {
+		o.handlers["PATCH"] = make(map[string]http.Handler)
+	}
+	o.handlers["PATCH"]["/users/me/password/reset"] = user.NewPatchUserPasswordReset(o.context, o.UserPatchUserPasswordResetHandler)
+	if o.handlers["PATCH"] == nil {
+		o.handlers["PATCH"] = make(map[string]http.Handler)
+	}
 	o.handlers["PATCH"]["/users/me/signined"] = user.NewPatchUserSignined(o.context, o.UserPatchUserSigninedHandler)
 	if o.handlers["PATCH"] == nil {
 		o.handlers["PATCH"] = make(map[string]http.Handler)
@@ -619,6 +651,10 @@ func (o *GamersnoteAPIAPI) initHandlerCache() {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
 	o.handlers["PUT"]["/users/me/notifications/{notification_id}/read"] = notification.NewPutNotificationRead(o.context, o.NotificationPutNotificationReadHandler)
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/users/me/password"] = user.NewPutPassword(o.context, o.UserPutPasswordHandler)
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}

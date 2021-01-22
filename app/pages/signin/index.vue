@@ -16,7 +16,11 @@
           <BaseInput type="password" :on-input="onInputPassword" />
         </div>
       </form>
-      <BaseButton text="ログイン" :disabled="processing" :on-click="signin" />
+      <BaseButton
+        text="ログイン"
+        :disabled="!submitable || processing"
+        :on-click="signin"
+      />
     </div>
     <div class="footer">
       <NuxtLink to="/reset-password/request">パスワードを忘れた方</NuxtLink>
@@ -34,7 +38,6 @@ import BaseButton from '@/components/BaseButton.vue'
 import { $userApi } from '@/plugins/api'
 import { meStore } from '@/store'
 import { baseModalState } from '~/store'
-import { isAxiosError } from '~/utils/is-axios-error'
 
 export default Vue.extend({
   components: {
@@ -49,6 +52,12 @@ export default Vue.extend({
       password: '',
       processing: false,
     }
+  },
+
+  computed: {
+    submitable(): boolean {
+      return !!this.email && !!this.password
+    },
   },
 
   methods: {
@@ -68,10 +77,8 @@ export default Vue.extend({
         meStore.setMe(result.data)
         await this.$router.push('/')
       } catch (err) {
-        if (isAxiosError(err) && err.response) {
-          const message = 'ログインに失敗しました'
-          baseModalState.setModal({ showModal: true, message })
-        }
+        const message = 'ログインに失敗しました'
+        baseModalState.setModal({ showModal: true, message })
       } finally {
         this.processing = false
       }

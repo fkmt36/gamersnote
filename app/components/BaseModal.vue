@@ -21,11 +21,17 @@ export default Vue.extend({
     message(): string {
       return baseModalState.getMessage
     },
+    to(): string {
+      return baseModalState.getTo
+    },
   },
 
   methods: {
     close(): void {
-      baseModalState.setModal({ showModal: false, message: '' })
+      if (this.to) {
+        this.$router.push(this.to)
+      }
+      baseModalState.setModal({ showModal: false, message: '', to: '' })
     },
   },
 })
@@ -36,7 +42,7 @@ export default Vue.extend({
 
 .base-modal-wrapper {
   background-color: rgba(0, 0, 0, 0.8);
-  position: absolute;
+  position: fixed;
   height: 100vh;
   width: 100vw;
   top: 0;
@@ -53,7 +59,7 @@ export default Vue.extend({
   padding: 5px;
   max-width: 450px;
   background-color: white;
-  margin: 30vh auto 0 auto;
+  margin: 40vh auto 0 auto;
   text-align: center;
   border-radius: 5px;
 }

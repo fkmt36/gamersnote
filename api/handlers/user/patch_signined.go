@@ -1,6 +1,7 @@
 package user
 
 import (
+	"gamersnote.com/v1/models"
 	"gamersnote.com/v1/repositories/user"
 	o "gamersnote.com/v1/restapi/operations/user"
 	"gamersnote.com/v1/utils/session"
@@ -27,6 +28,10 @@ func (h PatchSigninedHandler) Handle(params o.PatchUserSigninedParams) middlewar
 	u, err := h.userRepo.GetOneByEmail(string(params.Body.Email))
 	if err != nil {
 		return o.NewPatchUserSigninedDefault(500)
+	}
+	if u == nil {
+		res := &models.Error{Message: "そのメールアドレスは登録されていません"}
+		return o.NewPatchUserSigninedDefault(400).WithPayload(res)
 	}
 
 	// パスワードを検証

@@ -3,65 +3,70 @@
     <BaseHeadline text="プロフィールを編集" />
     <div class="body">
       <div class="input">
+        <h2>メールアドレス</h2>
+        <BaseInput type="email" :on-input="onInputEmail" :text="email" />
+        <p class="caption">
+          メールアドレスを変更した場合、本人確認のためメールを送信します。
+          30分以内に受け取ったメールアドレスにあるURLから変更を完了してください。
+        </p>
+      </div>
+      <div class="input">
         <h2>ユーザー名 <span class="caption">※4~12字の半角英数字</span></h2>
-        <BaseInput type="text" :on-input="onInputUsername" />
+        <BaseInput type="text" :on-input="onInputUsername" :text="username" />
+        <p class="caption">
+          ユーザー名を変更すると、マイページのURLが変わるので注意してください。
+        </p>
       </div>
-      <div class="textarea">
-        <textarea></textarea>
-      </div>
-    </div>
-    <!-- <form class="form">
-      <div class="section">
-        <div class="input-title">プロフィール画像</div>
-        <div class="input-subtitle">pngまたはjpegで10MB以下</div>
-        <div class="select-avatar">
-          <BaseAvatar
-            :size="65"
-            :src="avatarUrl"
-            :editable="true"
-            :on-change="updateAvatarUrl"
+      <div class="input">
+        <h2>アバター <span class="caption">※jpg、png形式（1MB以内）</span></h2>
+        <div style="display: flex; align-items: center; margin-top: 5px">
+          <BaseAvatar :editable="false" :src="avatarUrl" :size="60" />
+          <input
+            type="file"
+            accept="image/png, image/jpeg"
+            style="
+              font-size: 0.8rem;
+              margin-left: 10px;
+              text-overflow: ellipsis;
+              overflow: hidden;
+            "
+            @input="onInputImage($event)"
           />
         </div>
       </div>
-
-      <div class="section">
-        <div class="input-title">ユーザー名</div>
-        <div class="input-subtitle">4~20文字</div>
-        <div class="input-username">
-          <BaseInput v-model="username" type="text" />
+      <div class="input">
+        <h2>メッセージ <span class="caption">※300文字以内</span></h2>
+        <div style="display: flex; align-items: center">
+          <BaseTextarea :text="message" :on-input="onInputMessage" />
         </div>
       </div>
-
-      <div class="section">
-        <div class="input-title">GamersNoteID</div>
-        <div class="input-subtitle">4~12文字の半角英数字</div>
-        <div class="input-gamersnoteid">
-          <BaseInput v-model="gamersNoteId" type="text" />
-        </div>
+      <BaseButton text="保存" :on-click="save" :disabled="processing" />
+      <div class="other-settings">
+        <h2>その他の設定</h2>
+        <ButtonLink to="/settings/password" text="パスワード再設定" />
+        <ButtonLink to="/settings/leave" text="退会" />
       </div>
-
-      <div class="btn-section">
-        <button type="button" class="cancel-btn" @click="cancel">
-          キャンセル
-        </button>
-        <button type="button" class="save-btn" @click="save">保存</button>
-      </div>
-    </form> -->
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { meStore, filterLoadingState } from '@/store'
-import { $userApi } from '@/plugins/api'
+import { meStore, baseModalState } from '@/store'
+import { $userApi, $imageApi } from '@/plugins/api'
 import BaseHeadline from '@/components/BaseHeadline.vue'
 import BaseInput from '@/components/BaseInput.vue'
 import BaseAvatar from '@/components/BaseAvatar.vue'
+import BaseTextarea from '@/components/BaseTextarea.vue'
+import BaseButton from '@/components/BaseButton.vue'
+import ButtonLink from '@/components/ButtonLink.vue'
 
 interface Data {
   avatarUrl: string
   username: string
   message: string
+  email: string
+  processing: boolean
 }
 
 export default Vue.extend({
@@ -69,6 +74,9 @@ export default Vue.extend({
     BaseHeadline,
     BaseInput,
     BaseAvatar,
+    BaseTextarea,
+    BaseButton,
+    ButtonLink,
   },
 
   asyncData({ redirect }): Data | void {
@@ -77,9 +85,11 @@ export default Vue.extend({
       return redirect('/')
     }
     return {
-      avatarUrl: me.avatar_url || '',
+      avatarUrl: me.avatar_url || '/default.png',
       username: me.username,
       message: me.message || '',
+      email: me.email,
+      processing: false,
     }
   },
 
@@ -88,26 +98,55 @@ export default Vue.extend({
   },
 
   methods: {
+    onInputEmail(email: string): void {
+      this.email = email
+    },
+    onInputUsername(username: string): void {
+      this.username = username
+    },
+    onInputMessage(message: string): void {
+      this.message = message
+    },
+    async onInputImage(event: Event) {
+      try {
+        const files = (event.target as HTMLInputElement).files
+        if (files && files.length) {
+          const file = files[0]
+          if (file.size > 1000000) {
+            throw new Error('サイズオーバー')
+          }
+          const result = await $imageApi().uploadImage(file)
+          this.avatarUrl = result.data.url
+        }
+      } catch (err) {
+        event.preventDefault()
+        baseModalState.setModal({
+          showModal: true,
+          message: 'エラーが発生しました',
+        })
+      }
+    },
     updateAvatarUrl(url: string) {
       this.avatarUrl = url
     },
 
-    cancel() {
-      this.$router.push('/')
-    },
-
     async save() {
       try {
-        filterLoadingState.setLoading({ isLoading: true, message: '処理中...' })
-        await $userApi().putUser({
-          email: meStore.getMe ? meStore.getMe.email : '',
+        this.processing = true
+        const { data } = await $userApi().putUser({
+          email: this.email,
           avatar_url: this.avatarUrl,
           username: this.username,
           message: this.message,
         })
+        meStore.setMe(data)
+        const message = 'プロフィールを更新しました'
+        baseModalState.setModal({ showModal: true, message })
       } catch (err) {
+        const message = 'プロフィールの更新に失敗しました'
+        baseModalState.setModal({ showModal: true, message })
       } finally {
-        filterLoadingState.clearLoading()
+        this.processing = false
       }
     },
   },
@@ -120,6 +159,7 @@ export default Vue.extend({
 .body {
   max-width: 450px;
   margin: 0 auto;
+  padding: 15px 10px;
 }
 
 .input {
@@ -128,6 +168,19 @@ export default Vue.extend({
 
   .caption {
     font-size: $fs-tiny;
+  }
+}
+
+.other-settings {
+  margin: 40px 0;
+
+  h2 {
+    color: $dark-grey;
+    font-weight: bold;
+  }
+
+  a {
+    margin: 10px 0;
   }
 }
 </style>

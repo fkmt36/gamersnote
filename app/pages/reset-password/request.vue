@@ -12,7 +12,7 @@
         <h3>メールアドレス</h3>
         <BaseInput type="email" :on-input="onInputEmail" />
       </div>
-      <BaseButton text="送信" :on-click="() => {}" />
+      <BaseButton text="送信" :on-click="requestRestPassword" />
     </div>
   </div>
 </template>
@@ -22,6 +22,8 @@ import Vue from 'vue'
 import BaseHeadline from '@/components/BaseHeadline.vue'
 import BaseInput from '@/components/BaseInput.vue'
 import BaseButton from '@/components/BaseButton.vue'
+import { $userApi } from '@/plugins/api'
+import { baseModalState } from '@/store'
 
 export default Vue.extend({
   components: {
@@ -33,12 +35,29 @@ export default Vue.extend({
   data() {
     return {
       email: '',
+      processing: false,
     }
   },
 
   methods: {
     onInputEmail(email: string) {
       this.email = email
+    },
+
+    async requestRestPassword() {
+      try {
+        this.processing = true
+        await $userApi().patchUserPasswordReset({
+          email: this.email,
+        })
+        const message = 'メールを送信しました'
+        baseModalState.setModal({ showModal: true, message })
+      } catch (e) {
+        const message = 'メールの送信に失敗しました'
+        baseModalState.setModal({ showModal: true, message })
+      } finally {
+        this.processing = false
+      }
     },
   },
 })

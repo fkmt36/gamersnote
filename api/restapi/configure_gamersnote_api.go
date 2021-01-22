@@ -33,12 +33,15 @@ func configureAPI(api *operations.GamersnoteAPIAPI) http.Handler {
 	// users
 	api.UserPostUserHandler = di.PostUserHandler
 	api.UserPatchUserVerifiedHandler = di.PatchVerifiedHandler
-	// api.UserPutUserHandler = user.PutUserHandlerFunc(handlers.GetUsersHandler().PutMe)
+	api.UserPutUserHandler = di.PutMeHandler
+	api.UserPatchUserEmailVerifiedHandler = di.PatchEmailVefifiedHandler
 	// api.UserGetUserHandler = user.GetUserHandlerFunc(handlers.GetUsersHandler().GetUser)
 	api.UserGetMeHandler = di.GetMeHandler
 	api.UserPatchUserSigninedHandler = di.PatchSigninedHandler
 	api.UserPatchUserSignoutedHandler = di.PatchSignoutedHandler
-	// api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(handlers.GetUsersHandler().DeleteMe)
+	api.UserPatchUserPasswordResetHandler = di.PatchPasswordResetHandler
+	api.UserPutPasswordHandler = di.PutPasswordHandler
+	api.UserDeleteUserHandler = di.DeleteMeHandler
 
 	// image
 	api.ImageUploadImageHandler = di.UploadImageHandler
