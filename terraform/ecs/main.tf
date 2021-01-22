@@ -269,6 +269,10 @@ resource "aws_ecs_service" "api" {
     container_name   = "api"
     container_port   = "3000"
   }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.main.arn
+  }
 }
 
 # ECS Service
