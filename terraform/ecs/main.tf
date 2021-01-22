@@ -242,7 +242,7 @@ resource "aws_ecs_task_definition" "app" {
     "environment": [
       {
         "name": "API_URL",
-        "value": "http://${var.name}-api.local:3000"
+        "value": "http://${var.name}-api.local"
       }
     ]
   }
@@ -272,6 +272,7 @@ resource "aws_ecs_service" "api" {
 
   service_registries {
     registry_arn = aws_service_discovery_service.main.arn
+    container_port = "3000"
   }
 }
 
