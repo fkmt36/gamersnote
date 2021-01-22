@@ -242,7 +242,7 @@ resource "aws_ecs_task_definition" "app" {
     "environment": [
       {
         "name": "API_URL",
-        "value": "http://${var.name}-api.${var.name}-api.local"
+        "value": "http://${var.name}-api.${var.name}-api.local:3000"
       }
     ]
   }
