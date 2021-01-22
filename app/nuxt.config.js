@@ -51,10 +51,7 @@ export default {
       },
     ],
   },
-  // router: {
-  //   middleware: [],
-  // },
   env: {
-    API_URL_BROWSER: process.env.API_URL_BROWSER,
+    API_URL_BROWSER: process.env.API_URL_BROWSER || 'localhost:3000',
   },
 }
