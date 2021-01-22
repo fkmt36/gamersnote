@@ -244,7 +244,7 @@ resource "aws_ecs_task_definition" "app" {
         "name": "API_URL",
         "value": "${var.name}-api.local"
       }
-    ],
+    ]
   }
 ]
 TASK_DEFINITION
