@@ -245,12 +245,6 @@ resource "aws_ecs_task_definition" "app" {
         "value": "${var.name}-api.local"
       }
     ],
-    "secrets": [
-      {
-        "valueFrom": "gamersnote-base-url",
-        "name": "API_URL_BROWSER"
-      }
-    ]
   }
 ]
 TASK_DEFINITION

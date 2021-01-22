@@ -51,7 +51,4 @@ export default {
       },
     ],
   },
-  env: {
-    API_URL_BROWSER: process.env.API_URL_BROWSER,
-  },
 }

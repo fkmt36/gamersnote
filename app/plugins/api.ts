@@ -15,8 +15,9 @@ let $imageApi: () => ImageApi
 const initializeApi = () => {
   if (process.client) {
     const clientConf = new Configuration({
-      basePath: process.env.API_URL_BROWSER + '/api/v1',
+      basePath: '/api/v1',
     })
+    console.log('BaseURL', clientConf.basePath)
     $articleApi = () => new ArticleApi(clientConf)
     $userApi = () => new UserApi(clientConf)
     $imageApi = () => new ImageApi(clientConf)
@@ -24,6 +25,7 @@ const initializeApi = () => {
     const serverConf = new Configuration({
       basePath: process.env.API_URL + '/api/v1',
     })
+    console.log('BaseURL', serverConf.basePath)
     $articleApi = () => new ArticleApi(serverConf)
     $userApi = () => new UserApi(serverConf)
     $imageApi = () => new ImageApi(serverConf)
