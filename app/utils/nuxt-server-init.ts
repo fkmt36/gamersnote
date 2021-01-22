@@ -20,6 +20,7 @@ export async function nuxtServerInit(
         res.setHeader('Set-Cookie', result.headers['set-cookie'])
       }
     } catch (err) {
+      console.error(err)
     } finally {
       redirect('/')
     }
