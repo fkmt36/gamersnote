@@ -29,7 +29,7 @@ func NewGetTheUsersArticles(ctx *middleware.Context, handler GetTheUsersArticles
 	return &GetTheUsersArticles{Context: ctx, Handler: handler}
 }
 
-/*GetTheUsersArticles swagger:route GET /users/{gamersnote_id}/articles article getTheUsersArticles
+/*GetTheUsersArticles swagger:route GET /users/{username}/articles article getTheUsersArticles
 
 GetTheUsersArticles get the users articles API
 

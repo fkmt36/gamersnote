@@ -525,17 +525,17 @@ export const ArticleApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {string} gamersnoteId 
+         * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTheUsersArticles: async (gamersnoteId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'gamersnoteId' is not null or undefined
-            if (gamersnoteId === null || gamersnoteId === undefined) {
-                throw new RequiredError('gamersnoteId','Required parameter gamersnoteId was null or undefined when calling getTheUsersArticles.');
+        getTheUsersArticles: async (username: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'username' is not null or undefined
+            if (username === null || username === undefined) {
+                throw new RequiredError('username','Required parameter username was null or undefined when calling getTheUsersArticles.');
             }
-            const localVarPath = `/users/{gamersnote_id}/articles`
-                .replace(`{${"gamersnote_id"}}`, encodeURIComponent(String(gamersnoteId)));
+            const localVarPath = `/users/{username}/articles`
+                .replace(`{${"username"}}`, encodeURIComponent(String(username)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -722,12 +722,12 @@ export const ArticleApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} gamersnoteId 
+         * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTheUsersArticles(gamersnoteId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Article>>> {
-            const localVarAxiosArgs = await ArticleApiAxiosParamCreator(configuration).getTheUsersArticles(gamersnoteId, options);
+        async getTheUsersArticles(username: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Article>>> {
+            const localVarAxiosArgs = await ArticleApiAxiosParamCreator(configuration).getTheUsersArticles(username, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -808,12 +808,12 @@ export const ArticleApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {string} gamersnoteId 
+         * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTheUsersArticles(gamersnoteId: string, options?: any): AxiosPromise<Array<Article>> {
-            return ArticleApiFp(configuration).getTheUsersArticles(gamersnoteId, options).then((request) => request(axios, basePath));
+        getTheUsersArticles(username: string, options?: any): AxiosPromise<Array<Article>> {
+            return ArticleApiFp(configuration).getTheUsersArticles(username, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -891,13 +891,13 @@ export class ArticleApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} gamersnoteId 
+     * @param {string} username 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleApi
      */
-    public getTheUsersArticles(gamersnoteId: string, options?: any) {
-        return ArticleApiFp(this.configuration).getTheUsersArticles(gamersnoteId, options).then((request) => request(this.axios, this.basePath));
+    public getTheUsersArticles(username: string, options?: any) {
+        return ArticleApiFp(this.configuration).getTheUsersArticles(username, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

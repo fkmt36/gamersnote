@@ -268,7 +268,7 @@ paths:
           description: error
           schema:
             $ref: "#/definitions/error"
-  
+
   ############################################################
   ### article ################################################
   ############################################################
@@ -363,13 +363,13 @@ paths:
           description: error
           schema:
             $ref: "#/definitions/error"
-  /users/{gamersnote_id}/articles:
+  /users/{username}/articles:
     get:
       tags:
         - article
       parameters:
         - type: string
-          name: gamersnote_id
+          name: username
           in: path
           required: true
       operationId: getTheUsersArticles
@@ -433,9 +433,7 @@ paths:
           description: error
           schema:
             $ref: "#/definitions/error"
-  
-  
-  
+
   ############################################################
   ### comment ################################################
   ############################################################
@@ -686,9 +684,6 @@ paths:
           schema:
             $ref: "#/definitions/error"
 
-
-
-  
 definitions:
   base_id:
     type: string
@@ -721,7 +716,7 @@ definitions:
   base_count:
     type: integer
     readOnly: true
-    
+
   comments:
     readOnly: true
     type: array
@@ -758,7 +753,7 @@ definitions:
       author:
         readOnly: true
         allOf:
-          - $ref: '#/definitions/user'
+          - $ref: "#/definitions/user"
       thumbnail_url:
         $ref: "#/definitions/img_url"
       title:

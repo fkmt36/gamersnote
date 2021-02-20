@@ -10,6 +10,7 @@ import (
 var GetAllArticlesHandler *article.GetAllArticlesHandler
 var GetArticleByArticleIDHandler *article.GetArticleByArticleIDHandler
 var PostArticleHandler *article.PostArticleHandler
+var GetArticleByUsernameHandler *article.GetArticleByUsernameHandler
 
 // image
 var UploadImageHandler *image.UploadImageHandler
@@ -26,11 +27,15 @@ var PatchSignoutedHandler *user.PatchSignoutedHandler
 var PatchEmailVefifiedHandler *user.PatchEmailVefifiedHandler
 var PatchPasswordResetHandler *user.PatchPasswordResetHandler
 var PutPasswordHandler *user.PutPasswordHandler
+var DeleteArticleHandler *article.DeleteArticleHandler
+var PutArticleHandler *article.PutArticleHandler
 
 func initHdlr() {
 	GetAllArticlesHandler = article.NewGetAllArticlesHandler(ArticleRepository)
 	GetArticleByArticleIDHandler = article.NewGetArticleByArticleIDHandler(ArticleRepository)
 	PostArticleHandler = article.NewPostArticleHandler(ArticleRepository, CtxuidService)
+	GetArticleByUsernameHandler = article.NewGetArticleByUsernameHandler(ArticleRepository, UserRepository)
+	DeleteArticleHandler = article.NewDeleteArticleHandler(ArticleRepository, CtxuidService)
 	UploadImageHandler = image.NewUploadImageHandler(ImageService)
 	DeleteMeHandler = user.NewDeleteMeHandler(UserRepository, CtxuidService)
 	GetMeHandler = user.NewGetMeHandler(UserRepository, CtxuidService)
@@ -43,4 +48,5 @@ func initHdlr() {
 	PatchEmailVefifiedHandler = user.NewPatchEmailVefifiedHandler(UserRepository, TmpemailService)
 	PatchPasswordResetHandler = user.NewPatchPasswordResetHandler(UserRepository, TmpsessionService, EmailSender)
 	PutPasswordHandler = user.NewPutPasswordHandler(UserRepository, CtxuidService, TmpsessionService)
+	PutArticleHandler = article.NewPutArticleHandler(ArticleRepository, CtxuidService)
 }

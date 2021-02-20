@@ -1,6 +1,8 @@
 package article
 
 import (
+	"sort"
+
 	"gamersnote.com/v1/repositories/article"
 	o "gamersnote.com/v1/restapi/operations/article"
 	"github.com/go-openapi/runtime/middleware"
@@ -24,5 +26,8 @@ func (h GetAllArticlesHandler) Handle(params o.GetArticlesParams) middleware.Res
 	if err != nil {
 		return o.NewGetArticlesDefault(500)
 	}
+	sort.Slice(articles, func(i, j int) bool {
+		return articles[i].CreatedAt.After(articles[j].CreatedAt)
+	})
 	return o.NewGetArticlesOK().WithPayload(*articles.ToModels())
 }

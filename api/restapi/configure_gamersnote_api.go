@@ -35,7 +35,7 @@ func configureAPI(api *operations.GamersnoteAPIAPI) http.Handler {
 	api.UserPatchUserVerifiedHandler = di.PatchVerifiedHandler
 	api.UserPutUserHandler = di.PutMeHandler
 	api.UserPatchUserEmailVerifiedHandler = di.PatchEmailVefifiedHandler
-	// api.UserGetUserHandler = user.GetUserHandlerFunc(handlers.GetUsersHandler().GetUser)
+	api.UserGetUserHandler = di.GetUserHandler
 	api.UserGetMeHandler = di.GetMeHandler
 	api.UserPatchUserSigninedHandler = di.PatchSigninedHandler
 	api.UserPatchUserSignoutedHandler = di.PatchSignoutedHandler
@@ -50,6 +50,9 @@ func configureAPI(api *operations.GamersnoteAPIAPI) http.Handler {
 	api.ArticlePostArticleHandler = di.PostArticleHandler
 	api.ArticleGetArticlesHandler = di.GetAllArticlesHandler
 	api.ArticleGetArticleHandler = di.GetArticleByArticleIDHandler
+	api.ArticleGetTheUsersArticlesHandler = di.GetArticleByUsernameHandler
+	api.ArticleDeleteArticleHandler = di.DeleteArticleHandler
+	api.ArticlePutArticleHandler = di.PutArticleHandler
 
 	api.PreServerShutdown = func() {}
 

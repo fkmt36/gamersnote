@@ -590,7 +590,7 @@ func (o *GamersnoteAPIAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/users/{gamersnote_id}/articles"] = article.NewGetTheUsersArticles(o.context, o.ArticleGetTheUsersArticlesHandler)
+	o.handlers["GET"]["/users/{username}/articles"] = article.NewGetTheUsersArticles(o.context, o.ArticleGetTheUsersArticlesHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

@@ -1,13 +1,16 @@
 <template>
-  <div id="new-article">
-    <div class="new-article-container">
+  <div id="edit-article">
+    <div class="edit-article-container">
       <div id="toolbar">
         <button class="ql-header" value="2"></button>
         <button class="ql-image" value="2"></button>
         <button ref="youtubeBtn">
           <font-awesome-icon :icon="['fab', 'youtube']" style="color: #444" />
         </button>
-        <button id="post-btn" ref="postBtn" @click="uploadArticle">投稿</button>
+        <button id="save-btn" ref="postBtn" @click="saveArticle">保存</button>
+        <button id="delete-btn" ref="postBtn" @click="deleteArticle">
+          削除
+        </button>
         <input
           v-show="false"
           ref="inputImage"
@@ -29,7 +32,7 @@
           @change="uploadThumbnail"
         />
       </div>
-      <div v-show="showThumbnail" class="thumbnail" @click="selectThumbnail">
+      <div v-show="showThumbnail" class="thumbnail">
         <img :src="thumbnail" />
       </div>
       <div id="title-editor"></div>
@@ -51,7 +54,7 @@ import 'quill/dist/quill.snow.css'
 import VideoUrlInput from '@/components/VideoUrlInput.vue'
 import { baseModalState } from '~/store'
 
-interface data {
+interface Data {
   thumbnail: string
   title: string
   body: string
@@ -66,17 +69,28 @@ export default Vue.extend({
     VideoUrlInput,
   },
 
-  data(): data {
-    return {
-      thumbnail: '',
-      title: '',
-      body: '',
-      titleEditor: null,
-      bodyEditor: null,
-      showVideoUrlInput: false,
-      videoUrl: '',
+  async asyncData({ route, redirect }): Promise<Data | void> {
+    try {
+      const result = await $articleApi().getArticle(route.params.id as string)
+      return {
+        thumbnail: result.data.thumbnail_url,
+        title: result.data.title,
+        body: result.data.body,
+        titleEditor: null,
+        bodyEditor: null,
+        showVideoUrlInput: false,
+        videoUrl: '',
+      }
+    } catch (err) {
+      console.error(err)
+      redirect('/signin')
     }
   },
+
+  data(): Data {
+    return {} as Data
+  },
+
   computed: {
     showThumbnail(): boolean {
       return !!this.thumbnail
@@ -91,6 +105,9 @@ export default Vue.extend({
       formats: [],
       placeholder: 'タイトル',
     })
+    // タイトル挿入
+    // this.titleEditor.container.innerHTML = '<p>' + this.title + '</p>'
+    this.titleEditor.clipboard.dangerouslyPasteHTML(0, this.title)
     // 改行が入力されたら削除
     this.titleEditor.on('text-change', (delta: any, _: any, __: any) => {
       if (delta.ops[delta.ops.length - 1].insert === '\n') {
@@ -154,6 +171,7 @@ export default Vue.extend({
       theme: 'snow',
     })
     this.bodyEditor.getModule('toolbar').addHandler('image', this.selectImage)
+    this.bodyEditor.clipboard.dangerouslyPasteHTML(0, this.body)
     const youtubeBtn = this.$refs.youtubeBtn as HTMLButtonElement
     youtubeBtn.onclick = () => {
       this.showVideoUrlInput = true
@@ -161,29 +179,56 @@ export default Vue.extend({
   },
 
   methods: {
-    async uploadArticle() {
+    async saveArticle() {
       try {
         // ボタンをdisabledにする
         const btn = this.$refs.postBtn as HTMLButtonElement
         btn.setAttribute('disabled', 'disabled')
 
-        // 記事投稿APIを叩く
+        // 記事更新APIを叩く
+        const articleId = this.$route.params.id as string
         this.title = this.titleEditor.getText()
         this.body = this.bodyEditor.container.firstChild.innerHTML
-        const { data } = await $articleApi().postArticle({
+        await $articleApi().putArticle(articleId, {
           thumbnail_url: this.thumbnail,
           title: this.title,
           body: this.body,
         })
 
-        // 投稿に成功したら、記事ページに遷移
-        if (data && data.article_id) {
-          this.$router.push(`/articles/${data.article_id}`)
-        }
-      } catch (err) {
         baseModalState.setModal({
           showModal: true,
-          message: '記事の投稿に失敗しました',
+          message: '記事を更新しました',
+        })
+      } catch (err) {
+        console.error(err)
+        baseModalState.setModal({
+          showModal: true,
+          message: '記事の更新に失敗しました',
+        })
+      } finally {
+        // ボタンのdisabledを解除
+        const btn = this.$refs.postBtn as HTMLButtonElement
+        btn.removeAttribute('disabled')
+      }
+    },
+
+    async deleteArticle() {
+      try {
+        // ボタンをdisabledにする
+        const btn = this.$refs.postBtn as HTMLButtonElement
+        btn.setAttribute('disabled', 'disabled')
+
+        // 記事削除APIを叩く
+        const articleId = this.$route.params.id as string
+        console.log(articleId)
+        await $articleApi().deleteArticle(articleId)
+
+        this.$router.push(`/`)
+      } catch (err) {
+        console.error(err)
+        baseModalState.setModal({
+          showModal: true,
+          message: '記事の削除に失敗しました',
         })
       } finally {
         // ボタンのdisabledを解除
@@ -262,14 +307,14 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 @import 'assets/global';
-#new-article {
+#edit-article {
   background-color: white;
   max-width: 640px;
   margin: 0 auto;
   border-radius: 10px 10px 0 0;
 }
 
-.new-article-container {
+.edit-article-container {
   max-width: 640px;
   margin: 0 auto;
 }
@@ -285,18 +330,28 @@ export default Vue.extend({
   button {
     height: 100%;
   }
-  #post-btn {
-    color: white;
+
+  #save-btn,
+  #delete-btn {
     font-weight: bold;
     text-align: center;
     padding: 5px 0;
     border-radius: 15px;
     margin: 0 10px;
     width: 60px;
-    background-color: $btn-red;
     float: right;
   }
-  #post-btn:disabled {
+  #save-btn {
+    color: white;
+    background-color: $btn-red;
+  }
+  #delete-btn {
+    border: 1px solid $stroke-grey;
+    color: $stroke-grey;
+    background-color: white;
+  }
+  #save-btn:disabled,
+  #delete-btn:disabled {
     background-color: $stroke-grey;
     cursor: default;
   }
@@ -325,7 +380,6 @@ export default Vue.extend({
   padding-top: 56.25%;
   overflow: hidden;
   position: relative;
-  cursor: pointer;
 
   img {
     position: absolute;

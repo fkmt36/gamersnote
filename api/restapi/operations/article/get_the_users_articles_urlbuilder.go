@@ -14,7 +14,7 @@ import (
 
 // GetTheUsersArticlesURL generates an URL for the get the users articles operation
 type GetTheUsersArticlesURL struct {
-	GamersnoteID string
+	Username string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -40,13 +40,13 @@ func (o *GetTheUsersArticlesURL) SetBasePath(bp string) {
 func (o *GetTheUsersArticlesURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/users/{gamersnote_id}/articles"
+	var _path = "/users/{username}/articles"
 
-	gamersnoteID := o.GamersnoteID
-	if gamersnoteID != "" {
-		_path = strings.Replace(_path, "{gamersnote_id}", gamersnoteID, -1)
+	username := o.Username
+	if username != "" {
+		_path = strings.Replace(_path, "{username}", username, -1)
 	} else {
-		return nil, errors.New("gamersnoteId is required on GetTheUsersArticlesURL")
+		return nil, errors.New("username is required on GetTheUsersArticlesURL")
 	}
 
 	_basePath := o._basePath

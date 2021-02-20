@@ -16,6 +16,9 @@ type Repository interface {
 	AddOne(article dtos.Article) (*dtos.Article, error)
 	GetAll() (dtos.Articles, error)
 	GetOneByID(articleID string) (*dtos.Article, error)
+	GetByUserID(username string) (dtos.Articles, error)
+	UpdateOne(article *dtos.Article) (*dtos.Article, error)
+	DeleteOne(uid string, articleID string) error
 }
 
 // ArticleRepository 記事のリポジトリ実装

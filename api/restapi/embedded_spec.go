@@ -976,39 +976,6 @@ func init() {
         }
       }
     },
-    "/users/{gamersnote_id}/articles": {
-      "get": {
-        "tags": [
-          "article"
-        ],
-        "operationId": "getTheUsersArticles",
-        "parameters": [
-          {
-            "type": "string",
-            "name": "gamersnote_id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "get articles by user",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/article"
-              }
-            }
-          },
-          "default": {
-            "description": "error",
-            "schema": {
-              "$ref": "#/definitions/error"
-            }
-          }
-        }
-      }
-    },
     "/users/{username}": {
       "get": {
         "tags": [
@@ -1038,6 +1005,39 @@ func init() {
           "required": true
         }
       ]
+    },
+    "/users/{username}/articles": {
+      "get": {
+        "tags": [
+          "article"
+        ],
+        "operationId": "getTheUsersArticles",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get articles by user",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/article"
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -2220,39 +2220,6 @@ func init() {
         }
       }
     },
-    "/users/{gamersnote_id}/articles": {
-      "get": {
-        "tags": [
-          "article"
-        ],
-        "operationId": "getTheUsersArticles",
-        "parameters": [
-          {
-            "type": "string",
-            "name": "gamersnote_id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "get articles by user",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/article"
-              }
-            }
-          },
-          "default": {
-            "description": "error",
-            "schema": {
-              "$ref": "#/definitions/error"
-            }
-          }
-        }
-      }
-    },
     "/users/{username}": {
       "get": {
         "tags": [
@@ -2282,6 +2249,39 @@ func init() {
           "required": true
         }
       ]
+    },
+    "/users/{username}/articles": {
+      "get": {
+        "tags": [
+          "article"
+        ],
+        "operationId": "getTheUsersArticles",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get articles by user",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/article"
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
