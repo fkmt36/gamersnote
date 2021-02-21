@@ -2,10 +2,22 @@ export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: 'GamersNote',
+    prefix:
+      'og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/website#',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
+      { property: 'og:url', content: process.env.API_URL },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:title', content: 'GamersNote' },
+      {
+        property: 'og:description',
+        content:
+          'GamersNoteはゲームに関する記事を投稿して交流できるメディアプラットフォームです。',
+      },
+      { property: 'og:site_name', content: 'GamersNote' },
+      { property: 'og:image', content: process.env.API_URL + '/ogp.png' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
