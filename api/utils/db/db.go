@@ -30,6 +30,7 @@ func NewDBClient() *gorm.DB {
 		&dtos.User{},
 		&dtos.Article{},
 		&dtos.Comment{},
+		&dtos.Like{},
 	)
 	if err != nil {
 		panic("failed to migration")

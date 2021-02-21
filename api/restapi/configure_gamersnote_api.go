@@ -53,6 +53,12 @@ func configureAPI(api *operations.GamersnoteAPIAPI) http.Handler {
 	api.ArticleGetTheUsersArticlesHandler = di.GetArticleByUsernameHandler
 	api.ArticleDeleteArticleHandler = di.DeleteArticleHandler
 	api.ArticlePutArticleHandler = di.PutArticleHandler
+	api.ArticleGetLikedArticlesHandler = di.GetLikedArticleHandler
+
+	// like
+	api.LikeGetLikeHandler = di.GetLikeHandler
+	api.LikePutLikeHandler = di.PutLikeHandler
+	api.LikeDeleteLikeHandler = di.DeleteLikeHandler
 
 	api.PreServerShutdown = func() {}
 

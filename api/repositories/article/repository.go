@@ -19,6 +19,7 @@ type Repository interface {
 	GetByUserID(username string) (dtos.Articles, error)
 	UpdateOne(article *dtos.Article) (*dtos.Article, error)
 	DeleteOne(uid string, articleID string) error
+	GetByUserLiked(uid string) (dtos.Articles, error)
 }
 
 // ArticleRepository 記事のリポジトリ実装

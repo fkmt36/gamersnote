@@ -599,10 +599,10 @@ func init() {
         }
       }
     },
-    "/users/me/likes": {
+    "/users/me/liked/articles": {
       "get": {
         "tags": [
-          "like"
+          "article"
         ],
         "operationId": "getLikedArticles",
         "responses": {
@@ -625,6 +625,29 @@ func init() {
       }
     },
     "/users/me/likes/{article_id}": {
+      "get": {
+        "tags": [
+          "like"
+        ],
+        "operationId": "getLike",
+        "responses": {
+          "200": {
+            "description": "Found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "NotFound"
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
           "like"
@@ -1843,10 +1866,10 @@ func init() {
         }
       }
     },
-    "/users/me/likes": {
+    "/users/me/liked/articles": {
       "get": {
         "tags": [
-          "like"
+          "article"
         ],
         "operationId": "getLikedArticles",
         "responses": {
@@ -1869,6 +1892,29 @@ func init() {
       }
     },
     "/users/me/likes/{article_id}": {
+      "get": {
+        "tags": [
+          "like"
+        ],
+        "operationId": "getLike",
+        "responses": {
+          "200": {
+            "description": "Found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "NotFound"
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
           "like"

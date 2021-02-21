@@ -3,6 +3,7 @@ package di
 import (
 	"gamersnote.com/v1/handlers/article"
 	"gamersnote.com/v1/handlers/image"
+	"gamersnote.com/v1/handlers/like"
 	"gamersnote.com/v1/handlers/user"
 )
 
@@ -11,6 +12,7 @@ var GetAllArticlesHandler *article.GetAllArticlesHandler
 var GetArticleByArticleIDHandler *article.GetArticleByArticleIDHandler
 var PostArticleHandler *article.PostArticleHandler
 var GetArticleByUsernameHandler *article.GetArticleByUsernameHandler
+var GetLikedArticleHandler *article.GetArticleByUserLikedHandler
 
 // image
 var UploadImageHandler *image.UploadImageHandler
@@ -29,6 +31,11 @@ var PatchPasswordResetHandler *user.PatchPasswordResetHandler
 var PutPasswordHandler *user.PutPasswordHandler
 var DeleteArticleHandler *article.DeleteArticleHandler
 var PutArticleHandler *article.PutArticleHandler
+
+// like
+var PutLikeHandler *like.PutLikeHandler
+var DeleteLikeHandler *like.DeleteLikeHandler
+var GetLikeHandler *like.GetLikeHandler
 
 func initHdlr() {
 	GetAllArticlesHandler = article.NewGetAllArticlesHandler(ArticleRepository)
@@ -49,4 +56,8 @@ func initHdlr() {
 	PatchPasswordResetHandler = user.NewPatchPasswordResetHandler(UserRepository, TmpsessionService, EmailSender)
 	PutPasswordHandler = user.NewPutPasswordHandler(UserRepository, CtxuidService, TmpsessionService)
 	PutArticleHandler = article.NewPutArticleHandler(ArticleRepository, CtxuidService)
+	PutLikeHandler = like.NewPutLikeHandler(LikeRepository, CtxuidService)
+	DeleteLikeHandler = like.NewDeleteLikeHandler(LikeRepository, CtxuidService)
+	GetLikedArticleHandler = article.NewGetArticleByUserLikedHandler(ArticleRepository, CtxuidService)
+	GetLikeHandler = like.NewGetLikeHandler(LikeRepository, CtxuidService)
 }

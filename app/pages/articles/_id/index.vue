@@ -21,16 +21,22 @@
         </div>
         <div class="article-body" v-html="body"></div>
       </div>
+      <div v-if="showLikeBtn">
+        <button v-show="!liked" class="like-btn" @click="like"></button>
+        <button v-show="liked" class="liked-btn" @click="like"></button>
+      </div>
     </article>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { $articleApi } from '@/plugins/api'
+import { $articleApi, $likeApi } from '@/plugins/api'
+import { meStore } from '@/store'
 import BaseAvatar from '@/components/BaseAvatar.vue'
 
 interface Data {
+  articleId: string
   thumbnailUrl: string
   title: string
   body: string
@@ -38,19 +44,38 @@ interface Data {
   username: string
   createdAt: string
   likeCount: number
+  liked: boolean
 }
 
 export default Vue.extend({
   components: {
     BaseAvatar,
   },
-  async asyncData({ params, redirect }): Promise<Data | void> {
+  async asyncData({ params, redirect, req }): Promise<Data | void> {
     try {
+      // TODO: 並列実行
       const { data } = await $articleApi().getArticle(params.id)
       if (!data) {
         redirect('/')
       }
+      const liked = await (async (): Promise<boolean> => {
+        try {
+          if (process.server) {
+            await $likeApi().getLike(params.id, {
+              headers: {
+                Cookie: req.headers.cookie,
+              },
+            })
+          } else {
+            await $likeApi().getLike(params.id)
+          }
+          return true
+        } catch {
+          return false
+        }
+      })()
       return {
+        articleId: params.id,
         thumbnailUrl: data.thumbnail_url,
         title: data.title,
         body: data.body,
@@ -60,6 +85,7 @@ export default Vue.extend({
         username: data.author ? data.author.username : '',
         createdAt: data.created_at ? data.created_at : '',
         likeCount: data.like_count ? data.like_count : 0,
+        liked,
       }
     } catch {
     } finally {
@@ -67,6 +93,25 @@ export default Vue.extend({
   },
   data(): Data {
     return {} as Data
+  },
+  computed: {
+    showLikeBtn(): boolean {
+      return meStore.getMe !== null
+    },
+  },
+  methods: {
+    async like() {
+      try {
+        if (!this.liked) {
+          await $likeApi().putLike(this.articleId)
+          this.likeCount += 1
+        } else {
+          await $likeApi().deleteLike(this.articleId)
+          this.likeCount -= 1
+        }
+        this.liked = !this.liked
+      } catch {}
+    },
   },
 })
 </script>
@@ -129,6 +174,23 @@ article {
       margin: auto 0 auto auto;
       color: $good-color;
     }
+  }
+  .like-btn,
+  .liked-btn {
+    width: 60px;
+    height: 60px;
+    background-size: contain;
+    border-radius: 50%;
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    box-shadow: 0 15px 30px -5px rgb(0 0 0 / 15%), 0 0 5px rgb(0 0 0 / 10%);
+  }
+  .like-btn {
+    background-image: url('/like.png');
+  }
+  .liked-btn {
+    background-image: url('/liked.png');
   }
 }
 </style>

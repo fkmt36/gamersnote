@@ -525,6 +525,41 @@ export const ArticleApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getLikedArticles: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/users/me/liked/articles`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                query.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -722,6 +757,18 @@ export const ArticleApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getLikedArticles(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Article>>> {
+            const localVarAxiosArgs = await ArticleApiAxiosParamCreator(configuration).getLikedArticles(options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -808,6 +855,14 @@ export const ArticleApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getLikedArticles(options?: any): AxiosPromise<Array<Article>> {
+            return ArticleApiFp(configuration).getLikedArticles(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} username 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -887,6 +942,16 @@ export class ArticleApi extends BaseAPI {
      */
     public getFollowsArticles(since?: string, options?: any) {
         return ArticleApiFp(this.configuration).getFollowsArticles(since, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleApi
+     */
+    public getLikedArticles(options?: any) {
+        return ArticleApiFp(this.configuration).getLikedArticles(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1737,11 +1802,17 @@ export const LikeApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} articleId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getLikedArticles: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/users/me/likes`;
+        getLike: async (articleId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'articleId' is not null or undefined
+            if (articleId === null || articleId === undefined) {
+                throw new RequiredError('articleId','Required parameter articleId was null or undefined when calling getLike.');
+            }
+            const localVarPath = `/users/me/likes/{article_id}`
+                .replace(`{${"article_id"}}`, encodeURIComponent(String(articleId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -1835,11 +1906,12 @@ export const LikeApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} articleId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getLikedArticles(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Article>>> {
-            const localVarAxiosArgs = await LikeApiAxiosParamCreator(configuration).getLikedArticles(options);
+        async getLike(articleId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await LikeApiAxiosParamCreator(configuration).getLike(articleId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -1878,11 +1950,12 @@ export const LikeApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {string} articleId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getLikedArticles(options?: any): AxiosPromise<Array<Article>> {
-            return LikeApiFp(configuration).getLikedArticles(options).then((request) => request(axios, basePath));
+        getLike(articleId: string, options?: any): AxiosPromise<void> {
+            return LikeApiFp(configuration).getLike(articleId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1916,12 +1989,13 @@ export class LikeApi extends BaseAPI {
 
     /**
      * 
+     * @param {string} articleId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof LikeApi
      */
-    public getLikedArticles(options?: any) {
-        return LikeApiFp(this.configuration).getLikedArticles(options).then((request) => request(this.axios, this.basePath));
+    public getLike(articleId: string, options?: any) {
+        return LikeApiFp(this.configuration).getLike(articleId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

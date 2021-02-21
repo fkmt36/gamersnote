@@ -404,6 +404,22 @@ paths:
           description: error
           schema:
             $ref: "#/definitions/error"
+  /users/me/liked/articles:
+    get:
+      tags:
+        - article
+      operationId: getLikedArticles
+      responses:
+        200:
+          description: get liked articles
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/article"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
 
   ############################################################
   ### image ##################################################
@@ -639,28 +655,27 @@ paths:
   ############################################################
   ### like ###################################################
   ############################################################
-  /users/me/likes:
-    get:
-      tags:
-        - like
-      operationId: getLikedArticles
-      responses:
-        200:
-          description: get liked articles
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/article"
-        default:
-          description: error
-          schema:
-            $ref: "#/definitions/error"
   /users/me/likes/{article_id}:
     parameters:
       - type: string
         name: article_id
         in: path
         required: true
+    get:
+      tags:
+        - like
+      operationId: getLike
+      responses:
+        200:
+          description: Found
+        401:
+          description: Unauthorized
+        404:
+          description: NotFound
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
     put:
       tags:
         - like

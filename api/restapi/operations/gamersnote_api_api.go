@@ -83,8 +83,11 @@ func NewGamersnoteAPIAPI(spec *loads.Document) *GamersnoteAPIAPI {
 		ArticleGetFollowsArticlesHandler: article.GetFollowsArticlesHandlerFunc(func(params article.GetFollowsArticlesParams) middleware.Responder {
 			return middleware.NotImplemented("operation article.GetFollowsArticles has not yet been implemented")
 		}),
-		LikeGetLikedArticlesHandler: like.GetLikedArticlesHandlerFunc(func(params like.GetLikedArticlesParams) middleware.Responder {
-			return middleware.NotImplemented("operation like.GetLikedArticles has not yet been implemented")
+		LikeGetLikeHandler: like.GetLikeHandlerFunc(func(params like.GetLikeParams) middleware.Responder {
+			return middleware.NotImplemented("operation like.GetLike has not yet been implemented")
+		}),
+		ArticleGetLikedArticlesHandler: article.GetLikedArticlesHandlerFunc(func(params article.GetLikedArticlesParams) middleware.Responder {
+			return middleware.NotImplemented("operation article.GetLikedArticles has not yet been implemented")
 		}),
 		UserGetMeHandler: user.GetMeHandlerFunc(func(params user.GetMeParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetMe has not yet been implemented")
@@ -212,8 +215,10 @@ type GamersnoteAPIAPI struct {
 	FollowGetFollowsHandler follow.GetFollowsHandler
 	// ArticleGetFollowsArticlesHandler sets the operation handler for the get follows articles operation
 	ArticleGetFollowsArticlesHandler article.GetFollowsArticlesHandler
-	// LikeGetLikedArticlesHandler sets the operation handler for the get liked articles operation
-	LikeGetLikedArticlesHandler like.GetLikedArticlesHandler
+	// LikeGetLikeHandler sets the operation handler for the get like operation
+	LikeGetLikeHandler like.GetLikeHandler
+	// ArticleGetLikedArticlesHandler sets the operation handler for the get liked articles operation
+	ArticleGetLikedArticlesHandler article.GetLikedArticlesHandler
 	// UserGetMeHandler sets the operation handler for the get me operation
 	UserGetMeHandler user.GetMeHandler
 	// NotificationGetNotificationsHandler sets the operation handler for the get notifications operation
@@ -369,8 +374,11 @@ func (o *GamersnoteAPIAPI) Validate() error {
 	if o.ArticleGetFollowsArticlesHandler == nil {
 		unregistered = append(unregistered, "article.GetFollowsArticlesHandler")
 	}
-	if o.LikeGetLikedArticlesHandler == nil {
-		unregistered = append(unregistered, "like.GetLikedArticlesHandler")
+	if o.LikeGetLikeHandler == nil {
+		unregistered = append(unregistered, "like.GetLikeHandler")
+	}
+	if o.ArticleGetLikedArticlesHandler == nil {
+		unregistered = append(unregistered, "article.GetLikedArticlesHandler")
 	}
 	if o.UserGetMeHandler == nil {
 		unregistered = append(unregistered, "user.GetMeHandler")
@@ -574,7 +582,11 @@ func (o *GamersnoteAPIAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/users/me/likes"] = like.NewGetLikedArticles(o.context, o.LikeGetLikedArticlesHandler)
+	o.handlers["GET"]["/users/me/likes/{article_id}"] = like.NewGetLike(o.context, o.LikeGetLikeHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/me/liked/articles"] = article.NewGetLikedArticles(o.context, o.ArticleGetLikedArticlesHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}

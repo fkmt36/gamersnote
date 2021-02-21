@@ -9,17 +9,22 @@ import (
 	"errors"
 	"net/url"
 	golangswaggerpaths "path"
+	"strings"
 )
 
-// GetLikedArticlesURL generates an URL for the get liked articles operation
-type GetLikedArticlesURL struct {
+// GetLikeURL generates an URL for the get like operation
+type GetLikeURL struct {
+	ArticleID string
+
 	_basePath string
+	// avoid unkeyed usage
+	_ struct{}
 }
 
 // WithBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *GetLikedArticlesURL) WithBasePath(bp string) *GetLikedArticlesURL {
+func (o *GetLikeURL) WithBasePath(bp string) *GetLikeURL {
 	o.SetBasePath(bp)
 	return o
 }
@@ -27,15 +32,22 @@ func (o *GetLikedArticlesURL) WithBasePath(bp string) *GetLikedArticlesURL {
 // SetBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *GetLikedArticlesURL) SetBasePath(bp string) {
+func (o *GetLikeURL) SetBasePath(bp string) {
 	o._basePath = bp
 }
 
 // Build a url path and query string
-func (o *GetLikedArticlesURL) Build() (*url.URL, error) {
+func (o *GetLikeURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/users/me/likes"
+	var _path = "/users/me/likes/{article_id}"
+
+	articleID := o.ArticleID
+	if articleID != "" {
+		_path = strings.Replace(_path, "{article_id}", articleID, -1)
+	} else {
+		return nil, errors.New("articleId is required on GetLikeURL")
+	}
 
 	_basePath := o._basePath
 	if _basePath == "" {
@@ -47,7 +59,7 @@ func (o *GetLikedArticlesURL) Build() (*url.URL, error) {
 }
 
 // Must is a helper function to panic when the url builder returns an error
-func (o *GetLikedArticlesURL) Must(u *url.URL, err error) *url.URL {
+func (o *GetLikeURL) Must(u *url.URL, err error) *url.URL {
 	if err != nil {
 		panic(err)
 	}
@@ -58,17 +70,17 @@ func (o *GetLikedArticlesURL) Must(u *url.URL, err error) *url.URL {
 }
 
 // String returns the string representation of the path with query string
-func (o *GetLikedArticlesURL) String() string {
+func (o *GetLikeURL) String() string {
 	return o.Must(o.Build()).String()
 }
 
 // BuildFull builds a full url with scheme, host, path and query string
-func (o *GetLikedArticlesURL) BuildFull(scheme, host string) (*url.URL, error) {
+func (o *GetLikeURL) BuildFull(scheme, host string) (*url.URL, error) {
 	if scheme == "" {
-		return nil, errors.New("scheme is required for a full url on GetLikedArticlesURL")
+		return nil, errors.New("scheme is required for a full url on GetLikeURL")
 	}
 	if host == "" {
-		return nil, errors.New("host is required for a full url on GetLikedArticlesURL")
+		return nil, errors.New("host is required for a full url on GetLikeURL")
 	}
 
 	base, err := o.Build()
@@ -82,6 +94,6 @@ func (o *GetLikedArticlesURL) BuildFull(scheme, host string) (*url.URL, error) {
 }
 
 // StringFull returns the string representation of a complete url
-func (o *GetLikedArticlesURL) StringFull(scheme, host string) string {
+func (o *GetLikeURL) StringFull(scheme, host string) string {
 	return o.Must(o.BuildFull(scheme, host)).String()
 }
