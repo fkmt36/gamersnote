@@ -14,7 +14,6 @@ import (
 
 // PutCommentURL generates an URL for the put comment operation
 type PutCommentURL struct {
-	ArticleID string
 	CommentID string
 
 	_basePath string
@@ -41,14 +40,7 @@ func (o *PutCommentURL) SetBasePath(bp string) {
 func (o *PutCommentURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/articles/{article_id}/comments/{comment_id}"
-
-	articleID := o.ArticleID
-	if articleID != "" {
-		_path = strings.Replace(_path, "{article_id}", articleID, -1)
-	} else {
-		return nil, errors.New("articleId is required on PutCommentURL")
-	}
+	var _path = "/comments/{comment_id}"
 
 	commentID := o.CommentID
 	if commentID != "" {

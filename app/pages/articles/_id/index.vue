@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <div class="article-wrapper">
     <article>
       <div class="thumbnail">
-        <img :src="thumbnailUrl" />
+        <img :src="thumbnail" />
       </div>
       <div class="content">
         <div class="title">
           <h1>{{ title }}</h1>
         </div>
         <div class="information">
-          <BaseAvatar :src="avatarURL" :size="30" />
+          <BaseAvatar :src="avatar" :size="30" />
           <div>
             <div class="username">{{ username }}</div>
             <div class="date">{{ createdAt }}</div>
@@ -21,7 +21,13 @@
         </div>
         <div class="article-body" v-html="body"></div>
       </div>
-      <div v-if="showLikeBtn">
+      <div>
+        <NuxtLink
+          class="comment-btn"
+          :to="`/articles/${articleId}/comments`"
+        ></NuxtLink>
+      </div>
+      <div>
         <button v-show="!liked" class="like-btn" @click="like"></button>
         <button v-show="liked" class="liked-btn" @click="like"></button>
       </div>
@@ -31,86 +37,59 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { $articleApi, $likeApi } from '@/plugins/api'
-import { meStore } from '@/store'
+import { meStore, currentArticleStore } from '@/store'
 import BaseAvatar from '@/components/BaseAvatar.vue'
-
-interface Data {
-  articleId: string
-  thumbnailUrl: string
-  title: string
-  body: string
-  avatarURL: string
-  username: string
-  createdAt: string
-  likeCount: number
-  liked: boolean
-}
 
 export default Vue.extend({
   components: {
     BaseAvatar,
   },
-  async asyncData({ params, redirect, req }): Promise<Data | void> {
+  async asyncData({ params, redirect, req }) {
     try {
-      // TODO: 並列実行
-      const { data } = await $articleApi().getArticle(params.id)
-      if (!data) {
-        redirect('/')
-      }
-      const liked = await (async (): Promise<boolean> => {
-        try {
-          if (process.server) {
-            await $likeApi().getLike(params.id, {
-              headers: {
-                Cookie: req.headers.cookie,
-              },
-            })
-          } else {
-            await $likeApi().getLike(params.id)
-          }
-          return true
-        } catch {
-          return false
-        }
-      })()
-      return {
-        articleId: params.id,
-        thumbnailUrl: data.thumbnail_url,
-        title: data.title,
-        body: data.body,
-        avatarURL: data.author
-          ? data.author.avatar_url || '/default.png'
-          : '/default.png',
-        username: data.author ? data.author.username : '',
-        createdAt: data.created_at ? data.created_at : '',
-        likeCount: data.like_count ? data.like_count : 0,
-        liked,
-      }
-    } catch {
-    } finally {
+      await currentArticleStore.fetchArticle(params.id, req?.headers.cookie)
+    } catch (err) {
+      console.error(err)
+      redirect('/')
     }
   },
-  data(): Data {
-    return {} as Data
-  },
   computed: {
-    showLikeBtn(): boolean {
-      return meStore.getMe !== null
+    articleId() {
+      return currentArticleStore.getArticleId
+    },
+    thumbnail() {
+      return currentArticleStore.getThumbnail
+    },
+    title() {
+      return currentArticleStore.getTitle
+    },
+    body() {
+      return currentArticleStore.getBody
+    },
+    avatar() {
+      return currentArticleStore.getAvatar
+    },
+    username() {
+      return currentArticleStore.getUsername
+    },
+    createdAt() {
+      return currentArticleStore.getCreatedAt
+    },
+    likeCount() {
+      return currentArticleStore.getLikeCount
+    },
+    liked() {
+      return currentArticleStore.getLiked
     },
   },
   methods: {
     async like() {
-      try {
-        if (!this.liked) {
-          await $likeApi().putLike(this.articleId)
-          this.likeCount += 1
-        } else {
-          await $likeApi().deleteLike(this.articleId)
-          this.likeCount -= 1
-        }
-        this.liked = !this.liked
-      } catch {}
+      if (meStore.getMe === null) {
+        this.$router.push('/signin')
+      } else if (!this.liked) {
+        await currentArticleStore.like()
+      } else {
+        await currentArticleStore.dislike()
+      }
     },
   },
 })
@@ -191,6 +170,17 @@ article {
   }
   .liked-btn {
     background-image: url('/liked.png');
+  }
+  .comment-btn {
+    width: 60px;
+    height: 60px;
+    background-size: contain;
+    border-radius: 50%;
+    position: fixed;
+    right: 100px;
+    bottom: 25px;
+    background-image: url('/comment.png');
+    box-shadow: 0 15px 30px -5px rgb(0 0 0 / 15%), 0 0 5px rgb(0 0 0 / 10%);
   }
 }
 </style>

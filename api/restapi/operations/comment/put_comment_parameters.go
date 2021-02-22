@@ -35,11 +35,6 @@ type PutCommentParams struct {
 
 	/*
 	  Required: true
-	  In: path
-	*/
-	ArticleID string
-	/*
-	  Required: true
 	  In: body
 	*/
 	Body *models.Comment
@@ -58,11 +53,6 @@ func (o *PutCommentParams) BindRequest(r *http.Request, route *middleware.Matche
 	var res []error
 
 	o.HTTPRequest = r
-
-	rArticleID, rhkArticleID, _ := route.Params.GetOK("article_id")
-	if err := o.bindArticleID(rArticleID, rhkArticleID, route.Formats); err != nil {
-		res = append(res, err)
-	}
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
@@ -94,21 +84,6 @@ func (o *PutCommentParams) BindRequest(r *http.Request, route *middleware.Matche
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-// bindArticleID binds and validates parameter ArticleID from path.
-func (o *PutCommentParams) bindArticleID(rawData []string, hasKey bool, formats strfmt.Registry) error {
-	var raw string
-	if len(rawData) > 0 {
-		raw = rawData[len(rawData)-1]
-	}
-
-	// Required: true
-	// Parameter is provided by construction from the route
-
-	o.ArticleID = raw
-
 	return nil
 }
 

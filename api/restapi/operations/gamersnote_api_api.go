@@ -546,7 +546,7 @@ func (o *GamersnoteAPIAPI) initHandlerCache() {
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
-	o.handlers["DELETE"]["/articles/{article_id}/comments/{comment_id}"] = comment.NewDeleteComment(o.context, o.CommentDeleteCommentHandler)
+	o.handlers["DELETE"]["/comments/{comment_id}"] = comment.NewDeleteComment(o.context, o.CommentDeleteCommentHandler)
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
@@ -650,7 +650,7 @@ func (o *GamersnoteAPIAPI) initHandlerCache() {
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
-	o.handlers["PUT"]["/articles/{article_id}/comments/{comment_id}"] = comment.NewPutComment(o.context, o.CommentPutCommentHandler)
+	o.handlers["PUT"]["/comments/{comment_id}"] = comment.NewPutComment(o.context, o.CommentPutCommentHandler)
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}

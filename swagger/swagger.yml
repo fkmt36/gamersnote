@@ -488,17 +488,13 @@ paths:
         201:
           description: Created
           schema:
-            $ref: "#/definitions/article"
+            $ref: "#/definitions/comment"
         default:
           description: error
           schema:
             $ref: "#/definitions/error"
-  /articles/{article_id}/comments/{comment_id}:
+  /comments/{comment_id}:
     parameters:
-      - type: string
-        name: article_id
-        in: path
-        required: true
       - type: string
         name: comment_id
         in: path

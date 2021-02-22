@@ -29,7 +29,7 @@ func NewPutComment(ctx *middleware.Context, handler PutCommentHandler) *PutComme
 	return &PutComment{Context: ctx, Handler: handler}
 }
 
-/*PutComment swagger:route PUT /articles/{article_id}/comments/{comment_id} comment putComment
+/*PutComment swagger:route PUT /comments/{comment_id} comment putComment
 
 PutComment put comment API
 

@@ -60,6 +60,12 @@ func configureAPI(api *operations.GamersnoteAPIAPI) http.Handler {
 	api.LikePutLikeHandler = di.PutLikeHandler
 	api.LikeDeleteLikeHandler = di.DeleteLikeHandler
 
+	// comment
+	api.CommentGetCommentsHandler = di.GetCommentsHandler
+	api.CommentPostCommentHandler = di.PostCommentHandler
+	api.CommentPutCommentHandler = di.PutCommentHandler
+	api.CommentDeleteCommentHandler = di.DeleteCommentHandler
+
 	api.PreServerShutdown = func() {}
 
 	api.ServerShutdown = func() {}

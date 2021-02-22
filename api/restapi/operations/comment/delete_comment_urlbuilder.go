@@ -14,7 +14,6 @@ import (
 
 // DeleteCommentURL generates an URL for the delete comment operation
 type DeleteCommentURL struct {
-	ArticleID string
 	CommentID string
 
 	_basePath string
@@ -41,14 +40,7 @@ func (o *DeleteCommentURL) SetBasePath(bp string) {
 func (o *DeleteCommentURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/articles/{article_id}/comments/{comment_id}"
-
-	articleID := o.ArticleID
-	if articleID != "" {
-		_path = strings.Replace(_path, "{article_id}", articleID, -1)
-	} else {
-		return nil, errors.New("articleId is required on DeleteCommentURL")
-	}
+	var _path = "/comments/{comment_id}"
 
 	commentID := o.CommentID
 	if commentID != "" {

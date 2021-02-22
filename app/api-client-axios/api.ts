@@ -998,22 +998,16 @@ export const CommentApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
-         * @param {string} articleId 
          * @param {string} commentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteComment: async (articleId: string, commentId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'articleId' is not null or undefined
-            if (articleId === null || articleId === undefined) {
-                throw new RequiredError('articleId','Required parameter articleId was null or undefined when calling deleteComment.');
-            }
+        deleteComment: async (commentId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'commentId' is not null or undefined
             if (commentId === null || commentId === undefined) {
                 throw new RequiredError('commentId','Required parameter commentId was null or undefined when calling deleteComment.');
             }
-            const localVarPath = `/articles/{article_id}/comments/{comment_id}`
-                .replace(`{${"article_id"}}`, encodeURIComponent(String(articleId)))
+            const localVarPath = `/comments/{comment_id}`
                 .replace(`{${"comment_id"}}`, encodeURIComponent(String(commentId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -1136,17 +1130,12 @@ export const CommentApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {string} articleId 
          * @param {string} commentId 
          * @param {Comment} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putComment: async (articleId: string, commentId: string, body: Comment, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'articleId' is not null or undefined
-            if (articleId === null || articleId === undefined) {
-                throw new RequiredError('articleId','Required parameter articleId was null or undefined when calling putComment.');
-            }
+        putComment: async (commentId: string, body: Comment, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'commentId' is not null or undefined
             if (commentId === null || commentId === undefined) {
                 throw new RequiredError('commentId','Required parameter commentId was null or undefined when calling putComment.');
@@ -1155,8 +1144,7 @@ export const CommentApiAxiosParamCreator = function (configuration?: Configurati
             if (body === null || body === undefined) {
                 throw new RequiredError('body','Required parameter body was null or undefined when calling putComment.');
             }
-            const localVarPath = `/articles/{article_id}/comments/{comment_id}`
-                .replace(`{${"article_id"}}`, encodeURIComponent(String(articleId)))
+            const localVarPath = `/comments/{comment_id}`
                 .replace(`{${"comment_id"}}`, encodeURIComponent(String(commentId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -1201,13 +1189,12 @@ export const CommentApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} articleId 
          * @param {string} commentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteComment(articleId: string, commentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await CommentApiAxiosParamCreator(configuration).deleteComment(articleId, commentId, options);
+        async deleteComment(commentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await CommentApiAxiosParamCreator(configuration).deleteComment(commentId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -1233,7 +1220,7 @@ export const CommentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postComment(articleId: string, body: Comment, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Article>> {
+        async postComment(articleId: string, body: Comment, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>> {
             const localVarAxiosArgs = await CommentApiAxiosParamCreator(configuration).postComment(articleId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -1242,14 +1229,13 @@ export const CommentApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} articleId 
          * @param {string} commentId 
          * @param {Comment} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async putComment(articleId: string, commentId: string, body: Comment, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>> {
-            const localVarAxiosArgs = await CommentApiAxiosParamCreator(configuration).putComment(articleId, commentId, body, options);
+        async putComment(commentId: string, body: Comment, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Comment>> {
+            const localVarAxiosArgs = await CommentApiAxiosParamCreator(configuration).putComment(commentId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -1266,13 +1252,12 @@ export const CommentApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
-         * @param {string} articleId 
          * @param {string} commentId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteComment(articleId: string, commentId: string, options?: any): AxiosPromise<void> {
-            return CommentApiFp(configuration).deleteComment(articleId, commentId, options).then((request) => request(axios, basePath));
+        deleteComment(commentId: string, options?: any): AxiosPromise<void> {
+            return CommentApiFp(configuration).deleteComment(commentId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1290,19 +1275,18 @@ export const CommentApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postComment(articleId: string, body: Comment, options?: any): AxiosPromise<Article> {
+        postComment(articleId: string, body: Comment, options?: any): AxiosPromise<Comment> {
             return CommentApiFp(configuration).postComment(articleId, body, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} articleId 
          * @param {string} commentId 
          * @param {Comment} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        putComment(articleId: string, commentId: string, body: Comment, options?: any): AxiosPromise<Comment> {
-            return CommentApiFp(configuration).putComment(articleId, commentId, body, options).then((request) => request(axios, basePath));
+        putComment(commentId: string, body: Comment, options?: any): AxiosPromise<Comment> {
+            return CommentApiFp(configuration).putComment(commentId, body, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1316,14 +1300,13 @@ export const CommentApiFactory = function (configuration?: Configuration, basePa
 export class CommentApi extends BaseAPI {
     /**
      * 
-     * @param {string} articleId 
      * @param {string} commentId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CommentApi
      */
-    public deleteComment(articleId: string, commentId: string, options?: any) {
-        return CommentApiFp(this.configuration).deleteComment(articleId, commentId, options).then((request) => request(this.axios, this.basePath));
+    public deleteComment(commentId: string, options?: any) {
+        return CommentApiFp(this.configuration).deleteComment(commentId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1351,15 +1334,14 @@ export class CommentApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} articleId 
      * @param {string} commentId 
      * @param {Comment} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CommentApi
      */
-    public putComment(articleId: string, commentId: string, body: Comment, options?: any) {
-        return CommentApiFp(this.configuration).putComment(articleId, commentId, body, options).then((request) => request(this.axios, this.basePath));
+    public putComment(commentId: string, body: Comment, options?: any) {
+        return CommentApiFp(this.configuration).putComment(commentId, body, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

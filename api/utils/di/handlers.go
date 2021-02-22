@@ -2,6 +2,7 @@ package di
 
 import (
 	"gamersnote.com/v1/handlers/article"
+	"gamersnote.com/v1/handlers/comment"
 	"gamersnote.com/v1/handlers/image"
 	"gamersnote.com/v1/handlers/like"
 	"gamersnote.com/v1/handlers/user"
@@ -37,6 +38,12 @@ var PutLikeHandler *like.PutLikeHandler
 var DeleteLikeHandler *like.DeleteLikeHandler
 var GetLikeHandler *like.GetLikeHandler
 
+// comment
+var GetCommentsHandler *comment.GetCommentsHandler
+var PostCommentHandler *comment.PostCommentHandler
+var PutCommentHandler *comment.PutCommentHandler
+var DeleteCommentHandler *comment.DeleteCommentHandler
+
 func initHdlr() {
 	GetAllArticlesHandler = article.NewGetAllArticlesHandler(ArticleRepository)
 	GetArticleByArticleIDHandler = article.NewGetArticleByArticleIDHandler(ArticleRepository)
@@ -60,4 +67,8 @@ func initHdlr() {
 	DeleteLikeHandler = like.NewDeleteLikeHandler(LikeRepository, CtxuidService)
 	GetLikedArticleHandler = article.NewGetArticleByUserLikedHandler(ArticleRepository, CtxuidService)
 	GetLikeHandler = like.NewGetLikeHandler(LikeRepository, CtxuidService)
+	GetCommentsHandler = comment.NewGetCommentsHandler(CommentRepository)
+	PostCommentHandler = comment.NewPostCommentHandler(CommentRepository, CtxuidService)
+	PutCommentHandler = comment.NewPutCommentHandler(CommentRepository, CtxuidService)
+	DeleteCommentHandler = comment.NewDeleteCommentHandler(CommentRepository, CtxuidService)
 }

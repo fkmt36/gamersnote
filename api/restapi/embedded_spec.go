@@ -221,7 +221,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/article"
+              "$ref": "#/definitions/comment"
             }
           },
           "default": {
@@ -241,7 +241,7 @@ func init() {
         }
       ]
     },
-    "/articles/{article_id}/comments/{comment_id}": {
+    "/comments/{comment_id}": {
       "put": {
         "tags": [
           "comment"
@@ -290,12 +290,6 @@ func init() {
         }
       },
       "parameters": [
-        {
-          "type": "string",
-          "name": "article_id",
-          "in": "path",
-          "required": true
-        },
         {
           "type": "string",
           "name": "comment_id",
@@ -1488,7 +1482,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/article"
+              "$ref": "#/definitions/comment"
             }
           },
           "default": {
@@ -1508,7 +1502,7 @@ func init() {
         }
       ]
     },
-    "/articles/{article_id}/comments/{comment_id}": {
+    "/comments/{comment_id}": {
       "put": {
         "tags": [
           "comment"
@@ -1557,12 +1551,6 @@ func init() {
         }
       },
       "parameters": [
-        {
-          "type": "string",
-          "name": "article_id",
-          "in": "path",
-          "required": true
-        },
         {
           "type": "string",
           "name": "comment_id",

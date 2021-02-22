@@ -29,7 +29,7 @@ func NewDeleteComment(ctx *middleware.Context, handler DeleteCommentHandler) *De
 	return &DeleteComment{Context: ctx, Handler: handler}
 }
 
-/*DeleteComment swagger:route DELETE /articles/{article_id}/comments/{comment_id} comment deleteComment
+/*DeleteComment swagger:route DELETE /comments/{comment_id} comment deleteComment
 
 DeleteComment delete comment API
 

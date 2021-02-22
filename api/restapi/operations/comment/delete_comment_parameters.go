@@ -33,11 +33,6 @@ type DeleteCommentParams struct {
 	  Required: true
 	  In: path
 	*/
-	ArticleID string
-	/*
-	  Required: true
-	  In: path
-	*/
 	CommentID string
 }
 
@@ -50,11 +45,6 @@ func (o *DeleteCommentParams) BindRequest(r *http.Request, route *middleware.Mat
 
 	o.HTTPRequest = r
 
-	rArticleID, rhkArticleID, _ := route.Params.GetOK("article_id")
-	if err := o.bindArticleID(rArticleID, rhkArticleID, route.Formats); err != nil {
-		res = append(res, err)
-	}
-
 	rCommentID, rhkCommentID, _ := route.Params.GetOK("comment_id")
 	if err := o.bindCommentID(rCommentID, rhkCommentID, route.Formats); err != nil {
 		res = append(res, err)
@@ -63,21 +53,6 @@ func (o *DeleteCommentParams) BindRequest(r *http.Request, route *middleware.Mat
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
-	return nil
-}
-
-// bindArticleID binds and validates parameter ArticleID from path.
-func (o *DeleteCommentParams) bindArticleID(rawData []string, hasKey bool, formats strfmt.Registry) error {
-	var raw string
-	if len(rawData) > 0 {
-		raw = rawData[len(rawData)-1]
-	}
-
-	// Required: true
-	// Parameter is provided by construction from the route
-
-	o.ArticleID = raw
-
 	return nil
 }
 

@@ -25,7 +25,7 @@ type PostCommentCreated struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.Article `json:"body,omitempty"`
+	Payload *models.Comment `json:"body,omitempty"`
 }
 
 // NewPostCommentCreated creates PostCommentCreated with default headers values
@@ -35,13 +35,13 @@ func NewPostCommentCreated() *PostCommentCreated {
 }
 
 // WithPayload adds the payload to the post comment created response
-func (o *PostCommentCreated) WithPayload(payload *models.Article) *PostCommentCreated {
+func (o *PostCommentCreated) WithPayload(payload *models.Comment) *PostCommentCreated {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the post comment created response
-func (o *PostCommentCreated) SetPayload(payload *models.Article) {
+func (o *PostCommentCreated) SetPayload(payload *models.Comment) {
 	o.Payload = payload
 }
 
