@@ -40,7 +40,7 @@
 import Vue from 'vue'
 import { $commentApi } from '@/plugins/api'
 import { Comment } from '@/api-client-axios'
-import { BaseAvatar } from '@/components/BaseAvatar.vue'
+import BaseAvatar from '@/components/BaseAvatar.vue'
 import { meStore } from '@/store'
 
 interface Data {
