@@ -23,15 +23,15 @@ resource "aws_security_group" "alb" {
   }
 }
 
-resource "aws_security_group_rule" "http" {
-  type      = "ingress"
-  from_port = 80
-  to_port   = 80
-  protocol  = "tcp"
-  # cidr_blocks = ["0.0.0.0/0"]
-  cidr_blocks       = ["133.200.211.64/32"]
-  security_group_id = aws_security_group.alb.id
-}
+# resource "aws_security_group_rule" "http" {
+#   type      = "ingress"
+#   from_port = 80
+#   to_port   = 80
+#   protocol  = "tcp"
+#   # cidr_blocks = ["0.0.0.0/0"]
+#   cidr_blocks       = ["133.200.211.64/32"]
+#   security_group_id = aws_security_group.alb.id
+# }
 
 # ドメインの紐付け
 data "aws_route53_zone" "this" {
