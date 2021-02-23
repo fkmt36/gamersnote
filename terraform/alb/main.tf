@@ -108,15 +108,22 @@ module "aws_alb" {
         status_code = "HTTP_301"
         host        = "gamersnote.com"
         protocol    = "HTTPS"
-        },
+      }]
+
+      conditions = [{
+        host_header = ["54.64.220.254"]
+      }]
+    },
+    {
+      https_listener_index = 0
+
+      actions = [
         {
           type               = "forward"
           target_group_index = 0
       }]
 
-      conditions = [{
-        host_header = ["54.64.220.254"]
-        },
+      conditions = [
         {
           path_patterns = ["/api/*"]
       }]
