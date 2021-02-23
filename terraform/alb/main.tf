@@ -104,10 +104,10 @@ module "aws_alb" {
       https_listener_index = 0
 
       actions = [{
-          type        = "redirect"
-          status_code = "HTTP_301"
-          host        = "gamersnote.com"
-          protocol    = "HTTPS"
+        type        = "redirect"
+        status_code = "HTTP_301"
+        host        = "gamersnote.com"
+        protocol    = "HTTPS"
         },
         {
           type               = "forward"
