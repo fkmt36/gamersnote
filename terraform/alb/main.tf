@@ -111,7 +111,7 @@ module "aws_alb" {
       }]
 
       conditions = [{
-        host_header = ["54.64.220.254"]
+        host_headers = ["54.64.220.254"]
       }]
     },
     {
