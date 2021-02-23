@@ -8,8 +8,7 @@ resource "aws_security_group" "alb" {
     from_port = 443
     to_port   = 443
     protocol  = "tcp"
-    # cidr_blocks = ["0.0.0.0/0"]
-    cidr_blocks = ["133.200.211.64/32"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -29,8 +28,7 @@ resource "aws_security_group_rule" "http" {
   from_port = 80
   to_port   = 80
   protocol  = "tcp"
-  # cidr_blocks = ["0.0.0.0/0"]
-  cidr_blocks       = ["133.200.211.64/32"]
+  cidr_blocks = ["0.0.0.0/0"]
   security_group_id = aws_security_group.alb.id
 }
 
