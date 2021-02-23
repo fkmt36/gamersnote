@@ -64,7 +64,6 @@ export default Vue.extend({
       try {
         const result = await $userApi().getUser(params.username)
         const result2 = await $articleApi().getTheUsersArticles(params.username)
-        console.log(result2.data)
         return {
           username: result.data.username,
           avatarURL: result.data.avatar_url || '/default.png',
@@ -72,9 +71,7 @@ export default Vue.extend({
           articles: result2.data,
           isMe: false,
         }
-      } catch (err) {
-        console.error(err)
-      }
+      } catch (err) {}
     }
   },
   data(): Data {
