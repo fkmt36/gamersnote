@@ -108,6 +108,7 @@ module "aws_alb" {
         status_code = "HTTP_301"
         host        = "gamersnote.com"
         protocol    = "HTTPS"
+        port        = "443"
       }]
 
       conditions = [{
