@@ -104,12 +104,22 @@ module "aws_alb" {
       https_listener_index = 0
 
       actions = [{
-        type               = "forward"
-        target_group_index = 0
+        type = "redirect"
+        redirect = {
+          host        = "gamersnote.com"
+          status_code = "HTTP_301"
+        }
+        },
+        {
+          type               = "forward"
+          target_group_index = 0
       }]
 
       conditions = [{
-        path_patterns = ["/api/*"]
+        host_header = ["54.64.220.254"]
+        },
+        {
+          path_patterns = ["/api/*"]
       }]
     }
   ]

@@ -7,14 +7,7 @@ export async function nuxtServerInit(
   _: ActionContext<any, any>,
   { res, redirect, route, req }: Context
 ) {
-  // ipアドレス直打ちをリダイレクトする.GoogleにIPの方がインデックスされるため.
-  // TODO: ロードバランサー側でリダイレクトしたいが、ロードバランサーのIPが変わるかつルールに否定条件が使えないため難しい
-  if (
-    req.headers.host !== 'localhost' &&
-    req.headers.host !== 'gamersnote.com'
-  ) {
-    redirect('https://gamersnote.com')
-  } else if (route.path === '/verify-code') {
+  if (route.path === '/verify-code') {
     try {
       if (
         typeof route.query.code === 'string' &&
