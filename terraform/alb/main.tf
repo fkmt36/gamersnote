@@ -100,26 +100,34 @@ module "aws_alb" {
   ]
 
   https_listener_rules = [
+    # {
+    #   https_listener_index = 0
+
+    #   actions = [{
+    #     type        = "redirect"
+    #     status_code = "HTTP_301"
+    #     host        = "gamersnote.com"
+    #     protocol    = "HTTPS"
+    #     port        = "443"
+    #   }]
+
+    #   conditions = [{
+    #     host_headers = ["54.64.220.254"]
+    #   }]
+    # },
     {
       https_listener_index = 0
 
-      actions = [{
-        type        = "redirect"
-        status_code = "HTTP_301"
-        host        = "gamersnote.com"
-        protocol    = "HTTPS"
+      actions = [
+        {
+          type               = "forward"
+          target_group_index = 0
       }]
-      #   {
-      #     type               = "forward"
-      #     target_group_index = 0
-      # }]
 
-      conditions = [{
-        host_header = ["54.64.220.254"]
+      conditions = [
+        {
+          path_patterns = ["/api/*"]
       }]
-      #   {
-      #     path_patterns = ["/api/*"]
-      # }]
     }
   ]
 
@@ -129,6 +137,7 @@ module "aws_alb" {
       protocol    = "HTTP"
       action_type = "redirect"
       redirect = {
+        host        = "gamersnote.com"
         port        = "443"
         protocol    = "HTTPS"
         status_code = "HTTP_301"
