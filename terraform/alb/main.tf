@@ -100,21 +100,21 @@ module "aws_alb" {
   ]
 
   https_listener_rules = [
-    {
-      https_listener_index = 0
+    # {
+    #   https_listener_index = 0
 
-      actions = [{
-        type        = "redirect"
-        status_code = "HTTP_301"
-        host        = "gamersnote.com"
-        protocol    = "HTTPS"
-        port        = "443"
-      }]
+    #   actions = [{
+    #     type        = "redirect"
+    #     status_code = "HTTP_301"
+    #     host        = "gamersnote.com"
+    #     protocol    = "HTTPS"
+    #     port        = "443"
+    #   }]
 
-      conditions = [{
-        host_headers = ["54.64.220.254"]
-      }]
-    },
+    #   conditions = [{
+    #     host_headers = ["54.64.220.254"]
+    #   }]
+    # },
     {
       https_listener_index = 0
 
@@ -137,6 +137,7 @@ module "aws_alb" {
       protocol    = "HTTP"
       action_type = "redirect"
       redirect = {
+        host        = "gamersnote.com"
         port        = "443"
         protocol    = "HTTPS"
         status_code = "HTTP_301"
