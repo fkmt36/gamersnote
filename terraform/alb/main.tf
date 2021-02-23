@@ -91,40 +91,37 @@ module "aws_alb" {
     }
   ]
 
-  # https_listeners = [
-  #   {
-  #     port               = 443
-  #     certificate_arn    = var.certificate_arn
-  #     target_group_index = 1
-  #   }
-  # ]
+  https_listeners = [
+    {
+      port               = 443
+      certificate_arn    = var.certificate_arn
+      target_group_index = 1
+    }
+  ]
 
-  # https_listener_rules = [
-  #   {
-  #     https_listener_index = 0
+  https_listener_rules = [
+    {
+      https_listener_index = 0
 
-  #     actions = []
-  #     # actions = [{
-  #     #   type        = "redirect"
-  #     #   status_code = "HTTP_301"
-  #     #   host        = "gamersnote.com"
-  #     #   protocol    = "HTTPS"
-  #     #   },
-  #     #   {
-  #     #     type               = "forward"
-  #     #     target_group_index = 0
-  #     # }]
+      actions = [{
+        type        = "redirect"
+        status_code = "HTTP_301"
+        host        = "gamersnote.com"
+        protocol    = "HTTPS"
+      }]
+      #   {
+      #     type               = "forward"
+      #     target_group_index = 0
+      # }]
 
-  #     conditions = []
-
-  #     # conditions = [{
-  #     #   host_header = ["54.64.220.254"]
-  #     #   },
-  #     #   {
-  #     #     path_patterns = ["/api/*"]
-  #     # }]
-  #   }
-  # ]
+      conditions = [{
+        host_header = ["54.64.220.254"]
+      }]
+      #   {
+      #     path_patterns = ["/api/*"]
+      # }]
+    }
+  ]
 
   http_tcp_listeners = [
     {
