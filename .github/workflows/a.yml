@@ -12,7 +12,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: CheckoutFromTerraform
+        if: github.ref == 'refs/heads/terraform'
+        uses: actions/checkout@v2
+        with:
+          ref: 'terraform'
+
       - name: Checkout
+        if: github.ref != 'refs/heads/terraform'
         uses: actions/checkout@v2
 
       - name: Configure AWS Credentials
