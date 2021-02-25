@@ -9,12 +9,15 @@ import (
 	"errors"
 	"net/url"
 	golangswaggerpaths "path"
+
+	"github.com/go-openapi/swag"
 )
 
 // GetArticlesURL generates an URL for the get articles operation
 type GetArticlesURL struct {
 	Keyword *string
-	Since   *string
+	Offset  *int64
+	Order   *string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -58,12 +61,20 @@ func (o *GetArticlesURL) Build() (*url.URL, error) {
 		qs.Set("keyword", keywordQ)
 	}
 
-	var sinceQ string
-	if o.Since != nil {
-		sinceQ = *o.Since
+	var offsetQ string
+	if o.Offset != nil {
+		offsetQ = swag.FormatInt64(*o.Offset)
 	}
-	if sinceQ != "" {
-		qs.Set("since", sinceQ)
+	if offsetQ != "" {
+		qs.Set("offset", offsetQ)
+	}
+
+	var orderQ string
+	if o.Order != nil {
+		orderQ = *o.Order
+	}
+	if orderQ != "" {
+		qs.Set("order", orderQ)
 	}
 
 	_result.RawQuery = qs.Encode()

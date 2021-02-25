@@ -440,12 +440,13 @@ export const ArticleApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {string} [since] 
+         * @param {number} [offset] 
          * @param {string} [keyword] 
+         * @param {string} [order] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getArticles: async (since?: string, keyword?: string, options: any = {}): Promise<RequestArgs> => {
+        getArticles: async (offset?: number, keyword?: string, order?: string, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/articles`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -457,12 +458,16 @@ export const ArticleApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (since !== undefined) {
-                localVarQueryParameter['since'] = since;
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
             }
 
             if (keyword !== undefined) {
                 localVarQueryParameter['keyword'] = keyword;
+            }
+
+            if (order !== undefined) {
+                localVarQueryParameter['order'] = order;
             }
 
 
@@ -485,11 +490,11 @@ export const ArticleApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @param {string} [since] 
+         * @param {number} [offset] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFollowsArticles: async (since?: string, options: any = {}): Promise<RequestArgs> => {
+        getFollowsArticles: async (offset?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/users/me/follows/articles`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -501,8 +506,8 @@ export const ArticleApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (since !== undefined) {
-                localVarQueryParameter['since'] = since;
+            if (offset !== undefined) {
+                localVarQueryParameter['offset'] = offset;
             }
 
 
@@ -730,13 +735,14 @@ export const ArticleApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} [since] 
+         * @param {number} [offset] 
          * @param {string} [keyword] 
+         * @param {string} [order] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getArticles(since?: string, keyword?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Article>>> {
-            const localVarAxiosArgs = await ArticleApiAxiosParamCreator(configuration).getArticles(since, keyword, options);
+        async getArticles(offset?: number, keyword?: string, order?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Article>>> {
+            const localVarAxiosArgs = await ArticleApiAxiosParamCreator(configuration).getArticles(offset, keyword, order, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -744,12 +750,12 @@ export const ArticleApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} [since] 
+         * @param {number} [offset] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getFollowsArticles(since?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Article>>> {
-            const localVarAxiosArgs = await ArticleApiAxiosParamCreator(configuration).getFollowsArticles(since, options);
+        async getFollowsArticles(offset?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Article>>> {
+            const localVarAxiosArgs = await ArticleApiAxiosParamCreator(configuration).getFollowsArticles(offset, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -836,22 +842,23 @@ export const ArticleApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @param {string} [since] 
+         * @param {number} [offset] 
          * @param {string} [keyword] 
+         * @param {string} [order] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getArticles(since?: string, keyword?: string, options?: any): AxiosPromise<Array<Article>> {
-            return ArticleApiFp(configuration).getArticles(since, keyword, options).then((request) => request(axios, basePath));
+        getArticles(offset?: number, keyword?: string, order?: string, options?: any): AxiosPromise<Array<Article>> {
+            return ArticleApiFp(configuration).getArticles(offset, keyword, order, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} [since] 
+         * @param {number} [offset] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getFollowsArticles(since?: string, options?: any): AxiosPromise<Array<Article>> {
-            return ArticleApiFp(configuration).getFollowsArticles(since, options).then((request) => request(axios, basePath));
+        getFollowsArticles(offset?: number, options?: any): AxiosPromise<Array<Article>> {
+            return ArticleApiFp(configuration).getFollowsArticles(offset, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -923,25 +930,26 @@ export class ArticleApi extends BaseAPI {
 
     /**
      * 
-     * @param {string} [since] 
+     * @param {number} [offset] 
      * @param {string} [keyword] 
+     * @param {string} [order] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleApi
      */
-    public getArticles(since?: string, keyword?: string, options?: any) {
-        return ArticleApiFp(this.configuration).getArticles(since, keyword, options).then((request) => request(this.axios, this.basePath));
+    public getArticles(offset?: number, keyword?: string, order?: string, options?: any) {
+        return ArticleApiFp(this.configuration).getArticles(offset, keyword, order, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} [since] 
+     * @param {number} [offset] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleApi
      */
-    public getFollowsArticles(since?: string, options?: any) {
-        return ArticleApiFp(this.configuration).getFollowsArticles(since, options).then((request) => request(this.axios, this.basePath));
+    public getFollowsArticles(offset?: number, options?: any) {
+        return ArticleApiFp(this.configuration).getFollowsArticles(offset, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

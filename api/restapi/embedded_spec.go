@@ -42,13 +42,18 @@ func init() {
         "operationId": "getArticles",
         "parameters": [
           {
-            "type": "string",
-            "name": "since",
+            "type": "integer",
+            "name": "offset",
             "in": "query"
           },
           {
             "type": "string",
             "name": "keyword",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "order",
             "in": "query"
           }
         ],
@@ -508,8 +513,8 @@ func init() {
         "operationId": "getFollowsArticles",
         "parameters": [
           {
-            "type": "string",
-            "name": "since",
+            "type": "number",
+            "name": "offset",
             "in": "query"
           }
         ],
@@ -1303,13 +1308,18 @@ func init() {
         "operationId": "getArticles",
         "parameters": [
           {
-            "type": "string",
-            "name": "since",
+            "type": "integer",
+            "name": "offset",
             "in": "query"
           },
           {
             "type": "string",
             "name": "keyword",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "order",
             "in": "query"
           }
         ],
@@ -1769,8 +1779,8 @@ func init() {
         "operationId": "getFollowsArticles",
         "parameters": [
           {
-            "type": "string",
-            "name": "since",
+            "type": "number",
+            "name": "offset",
             "in": "query"
           }
         ],

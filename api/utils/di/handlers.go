@@ -9,7 +9,7 @@ import (
 )
 
 // article
-var GetAllArticlesHandler *article.GetAllArticlesHandler
+var GetArticlesHandler *article.GetArticlesHandler
 var GetArticleByArticleIDHandler *article.GetArticleByArticleIDHandler
 var PostArticleHandler *article.PostArticleHandler
 var GetArticleByUsernameHandler *article.GetArticleByUsernameHandler
@@ -45,7 +45,7 @@ var PutCommentHandler *comment.PutCommentHandler
 var DeleteCommentHandler *comment.DeleteCommentHandler
 
 func initHdlr() {
-	GetAllArticlesHandler = article.NewGetAllArticlesHandler(ArticleRepository)
+	GetArticlesHandler = article.NewGetArticlesHandler(ArticleRepository)
 	GetArticleByArticleIDHandler = article.NewGetArticleByArticleIDHandler(ArticleRepository)
 	PostArticleHandler = article.NewPostArticleHandler(ArticleRepository, CtxuidService)
 	GetArticleByUsernameHandler = article.NewGetArticleByUsernameHandler(ArticleRepository, UserRepository)

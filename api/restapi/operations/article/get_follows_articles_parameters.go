@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 )
 
 // NewGetFollowsArticlesParams creates a new GetFollowsArticlesParams object
@@ -33,7 +34,7 @@ type GetFollowsArticlesParams struct {
 	/*
 	  In: query
 	*/
-	Since *string
+	Offset *float64
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -47,8 +48,8 @@ func (o *GetFollowsArticlesParams) BindRequest(r *http.Request, route *middlewar
 
 	qs := runtime.Values(r.URL.Query())
 
-	qSince, qhkSince, _ := qs.GetOK("since")
-	if err := o.bindSince(qSince, qhkSince, route.Formats); err != nil {
+	qOffset, qhkOffset, _ := qs.GetOK("offset")
+	if err := o.bindOffset(qOffset, qhkOffset, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -58,8 +59,8 @@ func (o *GetFollowsArticlesParams) BindRequest(r *http.Request, route *middlewar
 	return nil
 }
 
-// bindSince binds and validates parameter Since from query.
-func (o *GetFollowsArticlesParams) bindSince(rawData []string, hasKey bool, formats strfmt.Registry) error {
+// bindOffset binds and validates parameter Offset from query.
+func (o *GetFollowsArticlesParams) bindOffset(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
@@ -71,7 +72,11 @@ func (o *GetFollowsArticlesParams) bindSince(rawData []string, hasKey bool, form
 		return nil
 	}
 
-	o.Since = &raw
+	value, err := swag.ConvertFloat64(raw)
+	if err != nil {
+		return errors.InvalidType("offset", "query", "float64", raw)
+	}
+	o.Offset = &value
 
 	return nil
 }

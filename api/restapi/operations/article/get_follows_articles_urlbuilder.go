@@ -9,11 +9,13 @@ import (
 	"errors"
 	"net/url"
 	golangswaggerpaths "path"
+
+	"github.com/go-openapi/swag"
 )
 
 // GetFollowsArticlesURL generates an URL for the get follows articles operation
 type GetFollowsArticlesURL struct {
-	Since *string
+	Offset *float64
 
 	_basePath string
 	// avoid unkeyed usage
@@ -49,12 +51,12 @@ func (o *GetFollowsArticlesURL) Build() (*url.URL, error) {
 
 	qs := make(url.Values)
 
-	var sinceQ string
-	if o.Since != nil {
-		sinceQ = *o.Since
+	var offsetQ string
+	if o.Offset != nil {
+		offsetQ = swag.FormatFloat64(*o.Offset)
 	}
-	if sinceQ != "" {
-		qs.Set("since", sinceQ)
+	if offsetQ != "" {
+		qs.Set("offset", offsetQ)
 	}
 
 	_result.RawQuery = qs.Encode()

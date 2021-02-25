@@ -274,27 +274,30 @@ paths:
   ############################################################
   /articles:
     get:
-      tags:
-        - article
-      operationId: getArticles
-      parameters:
-        - type: string
-          name: since
-          in: query
-        - type: string
-          name: keyword
-          in: query
-      responses:
-        200:
-          description: Get articles
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/article"
-        default:
-          description: error
-          schema:
-            $ref: "#/definitions/error"
+        tags:
+          - article
+        operationId: getArticles
+        parameters:
+          - type: integer
+            name: offset
+            in: query
+          - type: string
+            name: keyword
+            in: query
+          - type: string
+            name: order
+            in: query
+        responses:
+          200:
+            description: Get articles
+            schema:
+              type: array
+              items:
+                $ref: "#/definitions/article"
+          default:
+            description: error
+            schema:
+              $ref: "#/definitions/error"
     post:
       tags:
         - article
@@ -390,9 +393,9 @@ paths:
         - article
       operationId: getFollowsArticles
       parameters:
-        - name: since
+        - name: offset
           in: query
-          type: string
+          type: number
       responses:
         200:
           description: get follows articles

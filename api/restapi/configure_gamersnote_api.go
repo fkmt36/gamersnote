@@ -48,7 +48,7 @@ func configureAPI(api *operations.GamersnoteAPIAPI) http.Handler {
 
 	// article
 	api.ArticlePostArticleHandler = di.PostArticleHandler
-	api.ArticleGetArticlesHandler = di.GetAllArticlesHandler
+	api.ArticleGetArticlesHandler = di.GetArticlesHandler
 	api.ArticleGetArticleHandler = di.GetArticleByArticleIDHandler
 	api.ArticleGetTheUsersArticlesHandler = di.GetArticleByUsernameHandler
 	api.ArticleDeleteArticleHandler = di.DeleteArticleHandler

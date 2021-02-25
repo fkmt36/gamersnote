@@ -12,6 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 )
 
 // NewGetArticlesParams creates a new GetArticlesParams object
@@ -37,7 +38,11 @@ type GetArticlesParams struct {
 	/*
 	  In: query
 	*/
-	Since *string
+	Offset *int64
+	/*
+	  In: query
+	*/
+	Order *string
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -56,8 +61,13 @@ func (o *GetArticlesParams) BindRequest(r *http.Request, route *middleware.Match
 		res = append(res, err)
 	}
 
-	qSince, qhkSince, _ := qs.GetOK("since")
-	if err := o.bindSince(qSince, qhkSince, route.Formats); err != nil {
+	qOffset, qhkOffset, _ := qs.GetOK("offset")
+	if err := o.bindOffset(qOffset, qhkOffset, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	qOrder, qhkOrder, _ := qs.GetOK("order")
+	if err := o.bindOrder(qOrder, qhkOrder, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -85,8 +95,8 @@ func (o *GetArticlesParams) bindKeyword(rawData []string, hasKey bool, formats s
 	return nil
 }
 
-// bindSince binds and validates parameter Since from query.
-func (o *GetArticlesParams) bindSince(rawData []string, hasKey bool, formats strfmt.Registry) error {
+// bindOffset binds and validates parameter Offset from query.
+func (o *GetArticlesParams) bindOffset(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
@@ -98,7 +108,29 @@ func (o *GetArticlesParams) bindSince(rawData []string, hasKey bool, formats str
 		return nil
 	}
 
-	o.Since = &raw
+	value, err := swag.ConvertInt64(raw)
+	if err != nil {
+		return errors.InvalidType("offset", "query", "int64", raw)
+	}
+	o.Offset = &value
+
+	return nil
+}
+
+// bindOrder binds and validates parameter Order from query.
+func (o *GetArticlesParams) bindOrder(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+	// AllowEmptyValue: false
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	o.Order = &raw
 
 	return nil
 }
