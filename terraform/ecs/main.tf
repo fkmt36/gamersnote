@@ -239,6 +239,12 @@ resource "aws_ecs_task_definition" "app" {
         "awslogs-stream-prefix": "${var.name}-app"
       }
     },
+    "secrets": [
+      {
+        "valueFrom": "gamersnote-s3-base-url",
+        "name": "S3_URL"
+      }
+    ],
     "environment": [
       {
         "name": "API_URL",

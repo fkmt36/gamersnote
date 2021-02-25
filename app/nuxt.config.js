@@ -8,7 +8,7 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
-      { property: 'og:url', content: process.env.API_URL },
+      { property: 'og:url', content: process.env.S3_URL },
       { property: 'og:type', content: 'website' },
       { property: 'og:title', content: 'GamersNote' },
       {
@@ -17,7 +17,7 @@ export default {
           'GamersNoteはゲームに関する記事を投稿して交流できるメディアプラットフォームです。',
       },
       { property: 'og:site_name', content: 'GamersNote' },
-      { property: 'og:image', content: process.env.API_URL + '/ogp.png' },
+      { property: 'og:image', content: process.env.S3_URL + '/ogp.png' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
