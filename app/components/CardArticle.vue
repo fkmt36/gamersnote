@@ -115,7 +115,7 @@ export default Vue.extend({
   display: flex;
   max-width: 475px;
   margin: 0 auto;
-  padding: 15px 0;
+  padding: 15px;
   border-bottom: 1px solid $base-grey;
   position: relative;
 
@@ -125,6 +125,7 @@ export default Vue.extend({
     right: 0;
     bottom: 0;
     left: 0;
+    z-index: 1;
   }
 
   .thumbnail img {
@@ -144,6 +145,9 @@ export default Vue.extend({
 
   .content .header {
     font-weight: bold;
+    height: 3em;
+    line-height: 1em;
+    overflow: hidden;
   }
 
   .content .footer {
@@ -198,6 +202,49 @@ export default Vue.extend({
   div {
     margin: auto 0;
     font-size: 1rem;
+  }
+}
+@media screen and (min-width: 768px) {
+  .card-article {
+    display: block;
+    min-width: 384px;
+    flex: 0 1 15px;
+    border: none;
+
+    .thumbnail {
+      position: relative;
+      padding-bottom: 56.25%;
+
+      img {
+        position: absolute;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .content {
+      margin: 0;
+
+      .header {
+        margin: 10px 0;
+        height: 2em;
+        line-height: 1em;
+        overflow: hidden;
+      }
+
+      .footer {
+        margin-top: auto;
+      }
+    }
+  }
+}
+@media screen and (min-width: 930px) {
+  .card-article {
+    display: block;
+    min-width: 310px;
+    flex: 0 1 15px;
+    border: none;
   }
 }
 </style>

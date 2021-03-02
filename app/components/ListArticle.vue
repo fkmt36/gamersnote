@@ -29,4 +29,12 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@media screen and (min-width: 768px) {
+  .list-article {
+    display: flex;
+    flex-wrap: wrap;
+    // justify-content: space-evenly;
+  }
+}
+</style>

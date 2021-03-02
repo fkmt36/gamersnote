@@ -134,7 +134,7 @@ export default Vue.extend({
 @import 'assets/global';
 
 .home {
-  max-width: 640px;
+  max-width: 1440px;
   margin: 0 auto;
   position: relative;
 }
@@ -168,9 +168,5 @@ export default Vue.extend({
   .sort-title {
     margin-right: 5px;
   }
-}
-
-.article-list {
-  padding: 0 15px;
 }
 </style>

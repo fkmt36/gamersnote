@@ -413,7 +413,7 @@ export default Vue.extend({
   }
 }
 #body-editor {
-  height: 100vh;
+  height: auto;
   border: none;
   .ql-editor {
     padding-top: 0;

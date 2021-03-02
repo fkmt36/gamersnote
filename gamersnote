@@ -23,6 +23,11 @@ if [ $1 = "dev" ]; then
     docker-compose down
   fi
 
+  if [ $2 = "restart" ]; then
+    ./gamersnote dev down
+    ./gamersnote dev up
+  fi
+
   if [ $2 = "clean" ]; then
     docker-compose down --rmi all --volumes --remove-orphans
     (cd app && rm -rf node_modules .nuxt)
