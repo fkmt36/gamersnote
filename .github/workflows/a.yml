@@ -56,7 +56,7 @@ jobs:
           APP_URL: ${{ secrets.APP_URL }}
           S3_URL: ${{ secrets.S3_URL }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg S3_URL=$S3_URL　--build-arg APP_URL=$APP_URL ./app
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg S3_URL=$S3_URL --build-arg APP_URL=$APP_URL ./app
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Setup Terraform
