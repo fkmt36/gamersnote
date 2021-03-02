@@ -18,6 +18,8 @@ export default {
       },
       { property: 'og:site_name', content: 'GamersNote' },
       { property: 'og:image', content: process.env.S3_URL + '/ogp.png' },
+      // Twitter
+      { name: 'twitter:card', content: 'summary_large_image' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
