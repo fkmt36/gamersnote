@@ -3,7 +3,7 @@
     <input
       ref="input"
       :type="type"
-      :value="text"
+      :value="value"
       @input="onInput($event.target.value)"
     />
     <button
@@ -48,6 +48,7 @@ export default Vue.extend({
   data() {
     return {
       passwordVisible: false,
+      value: this.text,
     }
   },
 
@@ -60,6 +61,7 @@ export default Vue.extend({
       } else {
         e.type = 'password'
       }
+      this.value = e.value
     },
   },
 })
