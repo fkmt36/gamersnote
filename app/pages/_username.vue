@@ -1,20 +1,22 @@
 <template>
   <div class="userpage">
-    <div class="header">
-      <BaseAvatar :size="70" :src="avatarURL" />
-      <div class="username">
-        {{ username }}
+    <div class="top">
+      <div class="header">
+        <BaseAvatar :size="70" :src="avatarURL" />
+        <div class="username">
+          {{ username }}
+        </div>
       </div>
-    </div>
-    <div class="message">
-      <p>{{ message }}</p>
-    </div>
-    <div v-if="isMe" class="profile-edit-btn">
-      <ButtonLink text="プロフィールを編集する" to="/settings/profile" />
-    </div>
-    <div class="action">
-      <span class="sort-title">記事</span>
-      <font-awesome-icon :icon="['fas', 'sort']" />
+      <div class="message">
+        <p>{{ message }}</p>
+      </div>
+      <div v-if="isMe" class="profile-edit-btn">
+        <ButtonLink text="プロフィールを編集する" to="/settings/profile" />
+      </div>
+      <div class="action">
+        <span class="sort-title">記事</span>
+        <font-awesome-icon :icon="['fas', 'sort']" />
+      </div>
     </div>
     <div class="article-list">
       <ListArticle :articles="articles" />
@@ -83,7 +85,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import 'assets/global';
 
-.userpage {
+.top {
   padding: 30px 20px;
   max-width: 500px;
   margin: 0 auto;
