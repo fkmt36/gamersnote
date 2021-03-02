@@ -8,7 +8,7 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
-      { property: 'og:url', content: process.env.S3_URL },
+      { property: 'og:url', content: process.env.APP_URL },
       { property: 'og:type', content: 'website' },
       { property: 'og:title', content: 'GamersNote' },
       {
