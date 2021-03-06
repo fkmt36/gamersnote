@@ -36,7 +36,7 @@
       <div id="body-editor"></div>
     </div>
     <VideoUrlInput
-      v-show="showVideoUrlInput"
+      v-if="showVideoUrlInput"
       :on-click-cancel="closeVideoUrlInput"
       :on-click-ok="embedVideo"
       :on-input="updateVideoUrl"
@@ -238,20 +238,25 @@ export default Vue.extend({
 
     closeVideoUrlInput() {
       this.showVideoUrlInput = false
+      this.videoUrl = ''
     },
     embedVideo() {
-      const range = this.bodyEditor.getSelection(true)
-      this.bodyEditor.insertText(range.index, '\n', 'user')
-      let url = ''
-      const urlObj = new URL(this.videoUrl)
-      if (urlObj.host === 'www.youtube.com') {
-        const params = urlObj.searchParams
-        const videoId = params.get('v')
-        url = `https://www.youtube.com/embed/${videoId}?showinfo=0`
+      try {
+        const range = this.bodyEditor.getSelection(true)
+        this.bodyEditor.insertText(range.index, '\n', 'user')
+        let url = ''
+        const urlObj = new URL(this.videoUrl)
+        if (urlObj.host === 'www.youtube.com') {
+          const params = urlObj.searchParams
+          const videoId = params.get('v')
+          url = `https://www.youtube.com/embed/${videoId}?showinfo=0`
+        }
+        this.bodyEditor.insertEmbed(range.index + 1, 'video', url, 'user')
+        this.bodyEditor.setSelection(range.index + 2, 0, 'silent')
+        this.closeVideoUrlInput()
+      } catch {
+        this.closeVideoUrlInput()
       }
-      this.bodyEditor.insertEmbed(range.index + 1, 'video', url, 'user')
-      this.bodyEditor.setSelection(range.index + 2, 0, 'silent')
-      this.closeVideoUrlInput()
     },
     updateVideoUrl(url: string) {
       this.videoUrl = url
