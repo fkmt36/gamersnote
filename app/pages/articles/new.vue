@@ -97,7 +97,15 @@ export default Vue.extend({
         this.titleEditor.deleteText(this.titleEditor.getLength() - 1, 1)
       }
     })
-
+    // 貼り付け時にplain textにする
+    this.titleEditor.clipboard.addMatcher(
+      Node.ELEMENT_NODE,
+      (node: any, _: any) => {
+        const plaintext = node.textContent
+        const Delta = Quill.import('delta')
+        return new Delta().insert(plaintext)
+      }
+    )
     class VideoBlot extends BlockEmbed {
       static create(url: string) {
         const node = super.create() as HTMLElement
@@ -154,6 +162,15 @@ export default Vue.extend({
       theme: 'snow',
     })
     this.bodyEditor.getModule('toolbar').addHandler('image', this.selectImage)
+    // 貼り付け時にplain textにする
+    this.bodyEditor.clipboard.addMatcher(
+      Node.ELEMENT_NODE,
+      (node: any, _: any) => {
+        const plaintext = node.textContent
+        const Delta = Quill.import('delta')
+        return new Delta().insert(plaintext)
+      }
+    )
     const youtubeBtn = this.$refs.youtubeBtn as HTMLButtonElement
     youtubeBtn.onclick = () => {
       this.showVideoUrlInput = true
