@@ -1117,7 +1117,7 @@ func init() {
     "article_title": {
       "type": "string",
       "maxLength": 50,
-      "minLength": 1
+      "minLength": 2
     },
     "base_count": {
       "type": "integer",
@@ -2383,7 +2383,7 @@ func init() {
     "article_title": {
       "type": "string",
       "maxLength": 50,
-      "minLength": 1
+      "minLength": 2
     },
     "base_count": {
       "type": "integer",

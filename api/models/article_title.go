@@ -20,7 +20,7 @@ type ArticleTitle string
 func (m ArticleTitle) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := validate.MinLength("", "body", string(m), 1); err != nil {
+	if err := validate.MinLength("", "body", string(m), 2); err != nil {
 		return err
 	}
 
