@@ -117,7 +117,7 @@ export default Vue.extend({
 
     class VideoBlot extends BlockEmbed {
       static create(url: string) {
-        const node = super.create() as HTMLElement
+        const node = super.create(url) as HTMLElement
         const child = node.appendChild(
           document.createElement('iframe')
         ) as HTMLIFrameElement
@@ -142,7 +142,7 @@ export default Vue.extend({
       }
 
       static value(node: HTMLElement) {
-        return node.getAttribute('src')
+        return node.firstElementChild?.getAttribute('src')
       }
 
       format(name: string, value: string) {
