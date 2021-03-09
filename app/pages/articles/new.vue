@@ -32,8 +32,6 @@
       <div v-show="showThumbnail" class="thumbnail" @click="selectThumbnail">
         <img :src="thumbnail" />
       </div>
-      <button @click="titleFocus">title</button>
-      <button @click="bodyFocus">body</button>
       <div id="title-editor"></div>
       <div id="body-editor"></div>
     </div>
