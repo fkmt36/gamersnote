@@ -32,6 +32,8 @@
       <div v-show="showThumbnail" class="thumbnail" @click="selectThumbnail">
         <img :src="thumbnail" />
       </div>
+      <button @click="titleFocus">title</button>
+      <button @click="bodyFocus">body</button>
       <div id="title-editor"></div>
       <div id="body-editor"></div>
     </div>
@@ -271,6 +273,8 @@ export default Vue.extend({
         this.bodyEditor.insertEmbed(range.index + 1, 'video', url, 'user')
         this.bodyEditor.setSelection(range.index + 2, 0, 'silent')
         this.closeVideoUrlInput()
+        const docElm = document.documentElement
+        window.scroll(0, docElm.scrollHeight - docElm.clientHeight)
       } catch {
         this.closeVideoUrlInput()
       }
@@ -383,6 +387,7 @@ export default Vue.extend({
 #body-editor {
   height: auto;
   border: none;
+  padding-bottom: 50vh;
   .ql-editor {
     padding-top: 0;
     padding-bottom: 0;
