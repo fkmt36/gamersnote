@@ -184,9 +184,20 @@ export default Vue.extend({
         const btn = this.$refs.postBtn as HTMLButtonElement
         btn.setAttribute('disabled', 'disabled')
 
-        // 記事投稿APIを叩く
+        // タイトルは1文字以上か
         this.title = this.titleEditor.getText()
+        if (this.title.length < 2) {
+          console.log('hit')
+          throw new Error('Too short title')
+        }
+
+        // ボディは1文字以上か
         this.body = this.bodyEditor.container.firstChild.innerHTML
+        if (this.bodyEditor.getText().length < 2) {
+          throw new Error('Too short body')
+        }
+
+        // 記事投稿APIを叩く
         const { data } = await $articleApi().postArticle({
           thumbnail_url: this.thumbnail,
           title: this.title,
@@ -198,10 +209,23 @@ export default Vue.extend({
           this.$router.push(`/articles/${data.article_id}`)
         }
       } catch (err) {
-        baseModalState.setModal({
-          showModal: true,
-          message: '記事の投稿に失敗しました',
-        })
+        const msg = err.message
+        if (msg === 'Too short title') {
+          baseModalState.setModal({
+            showModal: true,
+            message: 'タイトルを入力してください',
+          })
+        } else if (msg === 'Too short body') {
+          baseModalState.setModal({
+            showModal: true,
+            message: '記事の内容を入力してください',
+          })
+        } else {
+          baseModalState.setModal({
+            showModal: true,
+            message: '記事の投稿に失敗しました',
+          })
+        }
       } finally {
         // ボタンのdisabledを解除
         const btn = this.$refs.postBtn as HTMLButtonElement
