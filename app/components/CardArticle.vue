@@ -187,6 +187,7 @@ export default Vue.extend({
 }
 .modal-wrapper {
   position: relative;
+  z-index: 2;
 }
 .modal {
   width: 180px;
