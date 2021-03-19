@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { baseModalState } from '@/store'
+import { baseModalState, meStore } from '@/store'
 import { $userApi } from '@/plugins/api'
 import BaseHeadline from '@/components/BaseHeadline.vue'
 import BaseInput from '@/components/BaseInput.vue'
@@ -26,6 +26,13 @@ export default Vue.extend({
     BaseHeadline,
     BaseInput,
     BaseButton,
+  },
+
+  fetch({ redirect, route }) {
+    const me = meStore.getMe
+    if (me === null) {
+      redirect('/signin?from=' + route.path)
+    }
   },
 
   data() {

@@ -50,7 +50,7 @@ import BaseHeadline from '@/components/BaseHeadline.vue'
 import BaseInput from '@/components/BaseInput.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import { $userApi } from '@/plugins/api'
-import { baseModalState, signupState } from '@/store'
+import { baseModalState, signupState, meStore } from '@/store'
 import { isAxiosError } from '@/utils/is-axios-error'
 
 export default Vue.extend({
@@ -58,6 +58,13 @@ export default Vue.extend({
     BaseHeadline,
     BaseInput,
     BaseButton,
+  },
+
+  fetch({ redirect }) {
+    const me = meStore.getMe
+    if (me !== null) {
+      return redirect('/')
+    }
   },
 
   data() {

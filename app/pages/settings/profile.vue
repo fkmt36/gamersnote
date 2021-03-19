@@ -79,10 +79,10 @@ export default Vue.extend({
     ButtonLink,
   },
 
-  asyncData({ redirect }): Data | void {
+  asyncData({ redirect, route }): Data | void {
     const me = meStore.getMe
-    if (!me) {
-      return redirect('/')
+    if (me === null) {
+      return redirect('/signin?from=' + route.path)
     }
     return {
       avatarUrl: me.avatar_url || '/default.png',

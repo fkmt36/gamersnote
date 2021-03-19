@@ -16,11 +16,18 @@
 <script lang="ts">
 import Vue from 'vue'
 import BaseHeadline from '@/components/BaseHeadline.vue'
-import { signupState } from '@/store'
+import { signupState, meStore } from '@/store'
 
 export default Vue.extend({
   components: {
     BaseHeadline,
+  },
+
+  fetch({ redirect }) {
+    const me = meStore.getMe
+    if (me !== null) {
+      return redirect('/')
+    }
   },
 
   computed: {

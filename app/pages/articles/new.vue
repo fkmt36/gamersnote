@@ -49,7 +49,7 @@ import Vue from 'vue'
 import { $articleApi, $imageApi } from '@/plugins/api'
 import 'quill/dist/quill.snow.css'
 import VideoUrlInput from '@/components/VideoUrlInput.vue'
-import { baseModalState } from '~/store'
+import { baseModalState, meStore } from '~/store'
 
 interface data {
   thumbnail: string
@@ -64,6 +64,13 @@ interface data {
 export default Vue.extend({
   components: {
     VideoUrlInput,
+  },
+
+  fetch({ redirect, route }) {
+    const me = meStore.getMe
+    if (me === null) {
+      return redirect('/signin?from=' + route.path)
+    }
   },
 
   data(): data {

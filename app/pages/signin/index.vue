@@ -46,6 +46,13 @@ export default Vue.extend({
     BaseButton,
   },
 
+  fetch({ redirect }) {
+    const me = meStore.getMe
+    if (me !== null) {
+      return redirect('/')
+    }
+  },
+
   data() {
     return {
       email: '',
@@ -75,7 +82,12 @@ export default Vue.extend({
           password: this.password,
         })
         meStore.setMe(result.data)
-        await this.$router.push('/')
+        const to = this.$route.query.from as string
+        if (to === undefined || to === null || to === '') {
+          await this.$router.push('/')
+        } else {
+          await this.$router.push(to)
+        }
       } catch (err) {
         const message = 'ログインに失敗しました'
         baseModalState.setModal({ showModal: true, message })

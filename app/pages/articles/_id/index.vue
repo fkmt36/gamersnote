@@ -84,7 +84,7 @@ export default Vue.extend({
   methods: {
     async like() {
       if (meStore.getMe === null) {
-        this.$router.push('/signin')
+        this.$router.push('/signin?from=' + this.$route.path)
       } else if (!this.liked) {
         await currentArticleStore.like()
       } else {

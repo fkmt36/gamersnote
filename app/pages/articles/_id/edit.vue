@@ -52,7 +52,7 @@ import Vue from 'vue'
 import { $articleApi, $imageApi } from '@/plugins/api'
 import 'quill/dist/quill.snow.css'
 import VideoUrlInput from '@/components/VideoUrlInput.vue'
-import { baseModalState } from '~/store'
+import { baseModalState, meStore } from '~/store'
 
 interface Data {
   thumbnail: string
@@ -70,20 +70,22 @@ export default Vue.extend({
   },
 
   async asyncData({ route, redirect }): Promise<Data | void> {
-    try {
-      const result = await $articleApi().getArticle(route.params.id as string)
-      return {
-        thumbnail: result.data.thumbnail_url,
-        title: result.data.title,
-        body: result.data.body,
-        titleEditor: null,
-        bodyEditor: null,
-        showVideoUrlInput: false,
-        videoUrl: '',
-      }
-    } catch (err) {
-      console.error(err)
-      redirect('/signin')
+    const result = await $articleApi().getArticle(route.params.id as string)
+    const me = meStore.getMe
+    if (me === null) {
+      return redirect('/signin?from=' + route.path)
+    }
+    if (me.user_id !== result.data.author?.user_id) {
+      return redirect('/articles' + result.data.article_id)
+    }
+    return {
+      thumbnail: result.data.thumbnail_url,
+      title: result.data.title,
+      body: result.data.body,
+      titleEditor: null,
+      bodyEditor: null,
+      showVideoUrlInput: false,
+      videoUrl: '',
     }
   },
 
