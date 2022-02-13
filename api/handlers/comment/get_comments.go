@@ -8,17 +8,19 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
+// NewGetCommentsHandler GetCommentsHandlerのコンストラクタ
 func NewGetCommentsHandler(r comment.Repository) *GetCommentsHandler {
 	return &GetCommentsHandler{
 		commentRepo: r,
 	}
 }
 
+// GetCommentsHandler コメントの取得
 type GetCommentsHandler struct {
 	commentRepo comment.Repository
 }
 
-// Handle Usernameで記事を検索して返します。
+// Handle 記事IDを指定してコメントを全て取得します
 func (h GetCommentsHandler) Handle(params o.GetCommentsParams) middleware.Responder {
 	// コメント取得
 	c, err := h.commentRepo.GetByArticle(params.ArticleID)

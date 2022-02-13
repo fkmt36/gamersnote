@@ -7,6 +7,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
+// NewPutArticleHandler PutArticleHandlerのコンストラクタ
 func NewPutArticleHandler(r article.Repository, s ctxuid.Service) *PutArticleHandler {
 	return &PutArticleHandler{
 		articleRepo: r,
@@ -14,6 +15,7 @@ func NewPutArticleHandler(r article.Repository, s ctxuid.Service) *PutArticleHan
 	}
 }
 
+// PutArticleHandler 記事の更新
 type PutArticleHandler struct {
 	articleRepo article.Repository
 	ctxuidSvc   ctxuid.Service

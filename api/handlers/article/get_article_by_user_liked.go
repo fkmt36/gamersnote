@@ -9,6 +9,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
+// NewGetArticleByUserLikedHandler GetArticleByUserLikedHandlerのコンストラクタ
 func NewGetArticleByUserLikedHandler(r article.Repository, c ctxuid.Service) *GetArticleByUserLikedHandler {
 	return &GetArticleByUserLikedHandler{
 		articleRepo: r,
@@ -16,12 +17,13 @@ func NewGetArticleByUserLikedHandler(r article.Repository, c ctxuid.Service) *Ge
 	}
 }
 
+// GetArticleByUserLikedHandler ユーザーがいいねした記事を取得
 type GetArticleByUserLikedHandler struct {
 	articleRepo article.Repository
 	ctxuidSvc   ctxuid.Service
 }
 
-// Handle Usernameで記事を検索して返します。
+// Handle uidを使用してユーザーがいいねした記事を取得します
 func (h GetArticleByUserLikedHandler) Handle(params o.GetLikedArticlesParams) middleware.Responder {
 	// uidを取得
 	uid := h.ctxuidSvc.GetUID(params.HTTPRequest)

@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// NewPostCommentHandler PostCommentHandlerのコンストラクタ
 func NewPostCommentHandler(r comment.Repository, c ctxuid.Service) *PostCommentHandler {
 	return &PostCommentHandler{
 		commentRepo: r,
@@ -16,12 +17,13 @@ func NewPostCommentHandler(r comment.Repository, c ctxuid.Service) *PostCommentH
 	}
 }
 
+// PostCommentHandler コメントの投稿
 type PostCommentHandler struct {
 	commentRepo comment.Repository
 	ctxuidSvc   ctxuid.Service
 }
 
-// Handle Usernameで記事を検索して返します。
+// Handle コメントを投稿します
 func (h PostCommentHandler) Handle(params o.PostCommentParams) middleware.Responder {
 	// uidを取得
 	uid := h.ctxuidSvc.GetUID(params.HTTPRequest)

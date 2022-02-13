@@ -7,6 +7,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 )
 
+// NewDeleteArticleHandler DeleteArticleHandlerのコンストラクタ
 func NewDeleteArticleHandler(r article.Repository, s ctxuid.Service) *DeleteArticleHandler {
 	return &DeleteArticleHandler{
 		articleRepo: r,
@@ -14,12 +15,13 @@ func NewDeleteArticleHandler(r article.Repository, s ctxuid.Service) *DeleteArti
 	}
 }
 
+// DeleteArticleHandler 記事削除
 type DeleteArticleHandler struct {
 	articleRepo article.Repository
 	ctxuidSvc   ctxuid.Service
 }
 
-// Handle 記事を投稿します。
+// Handle IDを指定して記事を削除します
 func (h DeleteArticleHandler) Handle(params o.DeleteArticleParams) middleware.Responder {
 	// uidを取得
 	uid := h.ctxuidSvc.GetUID(params.HTTPRequest)

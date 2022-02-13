@@ -21,20 +21,21 @@ type GetArticlesHandler struct {
 
 // Handle 記事を取得します。offset, keyword, sortを指定してください。
 func (h GetArticlesHandler) Handle(params o.GetArticlesParams) middleware.Responder {
+	// ソート順 popular: 人気、その他: 最新
 	var order string
 	if params.Order != nil {
 		order = *params.Order
 	} else {
 		order = ""
 	}
-
+	// 何記事目から取得するか offset+1記事目から取得します(0スタート)。
 	var offset int
 	if params.Offset != nil {
 		offset = utils.Int64ToInt(*params.Offset)
 	} else {
 		offset = -1
 	}
-
+	// 検索する文字列
 	var keyword string
 	if params.Keyword != nil {
 		keyword = *params.Keyword

@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// NewDeleteCommentHandler DeleteCommentHandlerのコンストラクタ
 func NewDeleteCommentHandler(r comment.Repository, c ctxuid.Service) *DeleteCommentHandler {
 	return &DeleteCommentHandler{
 		commentRepo: r,
@@ -16,12 +17,13 @@ func NewDeleteCommentHandler(r comment.Repository, c ctxuid.Service) *DeleteComm
 	}
 }
 
+// DeleteCommentHandler コメントの削除
 type DeleteCommentHandler struct {
 	commentRepo comment.Repository
 	ctxuidSvc   ctxuid.Service
 }
 
-// Handle Usernameで記事を検索して返します。
+// Handle IDを指定してコメントを削除します
 func (h DeleteCommentHandler) Handle(params o.DeleteCommentParams) middleware.Responder {
 	// uidを取得
 	uid := h.ctxuidSvc.GetUID(params.HTTPRequest)

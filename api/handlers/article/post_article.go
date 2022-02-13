@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// NewPostArticleHandler PostArticleHandlerのコンストラクタ
 func NewPostArticleHandler(r article.Repository, s ctxuid.Service) *PostArticleHandler {
 	return &PostArticleHandler{
 		articleRepo: r,
@@ -16,6 +17,7 @@ func NewPostArticleHandler(r article.Repository, s ctxuid.Service) *PostArticleH
 	}
 }
 
+// PostArticleHandler 記事の投稿
 type PostArticleHandler struct {
 	articleRepo article.Repository
 	ctxuidSvc   ctxuid.Service
